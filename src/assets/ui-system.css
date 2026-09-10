@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600&display=swap');
+
+/* Compact, clean UI system shared by the portfolio's real interface. */
+:root {
+  font-family: 'Inter Tight', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ui-title-size: 22px;
+  --ui-title-line: 28px;
+  --ui-section-size: 19px;
+  --ui-section-line: 24px;
+  --ui-body-size: 14.5px;
+  --ui-body-line: 18px;
+  --ui-line: #e7e9ed;
+  --ui-shadow: 0 10px 30px rgba(24, 34, 52, 0.07);
+  --ui-highlight: inset 0 6px 10px rgba(255, 255, 255, 0.22);
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: var(--ui-body-size);
+  line-height: var(--ui-body-line);
+  letter-spacing: 0.3px;
+}
+
+.page-heading h1,
+.modal-header h2,
+.card-copy h3,
+.creator-strip h3,
+.empty-state h2,
+.case-study-grid h3,
+.technology-grid h3,
+.feature-grid h3,
+.story-content h3,
+.insight-card h2,
+.insight-panel h2 {
+  font-size: var(--ui-title-size);
+  line-height: var(--ui-title-line);
+  font-weight: 600;
+  letter-spacing: -0.7px;
+}
+
+.section-heading h2,
+.project-overview h2,
+.story-side h2,
+.detail-cta h2,
+.about-section h2,
+.process-section h2 {
+  font-size: var(--ui-section-size);
+  line-height: var(--ui-section-line);
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
+
+p,
+small,
+.detail-meta,
+.results-count,
+.category-label,
+.tech-tags,
+.detail-tech,
+.case-study-grid small,
+.insight-label,
+.ranking-label,
+.device-legend {
+  font-size: var(--ui-body-size);
+  line-height: var(--ui-body-line);
+  letter-spacing: 0.3px;
+}
+
+.button {
+  min-height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: var(--ui-body-size);
+  line-height: 18px;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+  box-shadow: var(--ui-highlight), 0 5px 14px rgba(0, 102, 204, 0.18);
+}
+
+.button.small {
+  min-height: 38px;
+  padding: 0 17px;
+  font-size: var(--ui-body-size);
+}
+
+.button.secondary {
+  box-shadow: inset 0 6px 10px rgba(255, 255, 255, 0.8), 0 4px 14px rgba(24, 34, 52, 0.06);
+}
+
+.icon-button,
+.mobile-menu-button {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 50%;
+  box-shadow: inset 0 6px 10px rgba(255, 255, 255, 0.75);
+}
+
+.category-tabs button {
+  min-height: 38px;
+  padding: 0 18px;
+  font-size: var(--ui-body-size);
+  line-height: 18px;
+  letter-spacing: 0.3px;
+  box-shadow: inset 0 6px 10px rgba(255, 255, 255, 0.18);
+}
+
+.project-card,
+.creator-strip,
+.case-study-grid article,
+.technology-grid article,
+.feature-grid article,
+.insight-card,
+.insight-panel,
+.search-field,
+.detail-brief {
+  border-color: var(--ui-line);
+  box-shadow: var(--ui-shadow), inset 0 1px rgba(255, 255, 255, 0.8);
+}
+
+.text-link,
+.desktop-nav a,
+.contact-nav,
+.footer-top,
+.footer-bottom {
+  font-size: var(--ui-body-size);
+  line-height: var(--ui-body-line);
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --radius: 20px;
+  }
+
+  .container {
+    width: calc(100% - 32px);
+  }
+
+  .section-pad {
+    padding: 42px 0;
+  }
+
+  .hero-copy h1,
+  .detail-heading h1,
+  .about-heading h1,
+  .insights-hero h1 {
+    font-size: 34px;
+    line-height: 40px;
+    letter-spacing: -0.9px;
+  }
+
+  .page-heading h1,
+  .card-copy h3,
+  .case-study-grid h3,
+  .technology-grid h3,
+  .feature-grid h3,
+  .story-content h3 {
+    font-size: var(--ui-title-size);
+    line-height: var(--ui-title-line);
+    letter-spacing: -0.7px;
+  }
+
+  .section-heading h2,
+  .project-overview h2,
+  .story-side h2,
+  .detail-cta h2 {
+    font-size: var(--ui-section-size);
+    line-height: var(--ui-section-line);
+    letter-spacing: 0.6px;
+  }
+
+  .mobile-nav a,
+  .mobile-nav button,
+  .card-copy p,
+  .creator-strip p,
+  .feature-grid p,
+  .process-grid p,
+  .about-description,
+  .story-content p {
+    font-size: var(--ui-body-size);
+    line-height: var(--ui-body-line);
+    letter-spacing: 0.3px;
+  }
+
+  .project-card {
+    border-width: 1px;
+    border-radius: 22px;
+  }
+}

@@ -1,0 +1,659 @@
+[
+  {
+    "slug": "driver-theory",
+    "source": "D:\\project\\a\\Driverapp\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\Driverapp\\app\\build.gradle",
+      "D:\\project\\a\\Driverapp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码同时包含不同 Gradle 配置：minSdk 26/30，compileSdk 34/35。购买前需确认使用的构建文件与运行版本。"
+  },
+  {
+    "slug": "memorandum",
+    "source": "D:\\project\\a\\Finally\\Finally\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\Finally\\Finally\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 33。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "flower-assistant",
+    "source": "D:\\project\\a\\flowershop\\flower-shop\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\flowershop\\flower-shop\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "OkHttp",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "fresh-market",
+    "source": "D:\\project\\a\\FreshFruitandVegetableEcommerceShopping\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\FreshFruitandVegetableEcommerceShopping\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Retrofit",
+      "OkHttp",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "fruit-market",
+    "source": "D:\\project\\a\\FruitEcommerce\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\FruitEcommerce\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Kotlin",
+      "Retrofit",
+      "OkHttp",
+      "Glide",
+      "Jetpack Compose"
+    ],
+    "runtime": "源码配置 minSdk 21、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "farm-market",
+    "source": "D:\\project\\a\\fupinzhunong\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\fupinzhunong\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 28、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "amap-demo",
+    "source": "D:\\project\\a\\gaode\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\gaode\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "高德地图 SDK"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "health-records",
+    "source": "D:\\project\\a\\HealthManagementTool\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\HealthManagementTool\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "heritage-learning",
+    "source": "D:\\project\\a\\HeritageInheritanceNavigator\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\HeritageInheritanceNavigator\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "expense-tracker",
+    "source": "D:\\project\\a\\keepaccountsapp\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\keepaccountsapp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "library-manager",
+    "source": "D:\\project\\a\\LibraryManager\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\LibraryManager\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Kotlin",
+      "SQLite",
+      "Jetpack Compose",
+      "ZXing"
+    ],
+    "runtime": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "mental-health",
+    "source": "D:\\project\\a\\MentalHealthCounselingPlatform\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\MentalHealthCounselingPlatform\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Kotlin",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "Glide",
+      "Jetpack Compose"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "campus-swap-plus",
+    "source": "D:\\project\\a\\NewCampusSwap\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\NewCampusSwap\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "convenience-store",
+    "source": "D:\\project\\a\\OnlineConvenienceStore\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\OnlineConvenienceStore\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "recipe-book",
+    "source": "D:\\project\\a\\phoneRecipe\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\phoneRecipe\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Kotlin",
+      "Room",
+      "Retrofit",
+      "Glide",
+      "Jetpack Compose"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 36。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "waste-recognition",
+    "source": "D:\\project\\a\\Recognition\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\Recognition\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Kotlin",
+      "Jetpack Compose",
+      "PyTorch"
+    ],
+    "runtime": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "news-reader",
+    "source": "D:\\project\\a\\SimpleNewsReader\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\SimpleNewsReader\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "cashier",
+    "source": "D:\\project\\a\\SmallSupermarketCashier\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\SmallSupermarketCashier\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "Glide",
+      "ZXing"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "smart-todo",
+    "source": "D:\\project\\a\\SmartTodoApp\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\SmartTodoApp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Retrofit",
+      "OkHttp"
+    ],
+    "runtime": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "student-profile",
+    "source": "D:\\project\\a\\StudentProfileManager\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\StudentProfileManager\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "supermarket-system",
+    "source": "D:\\project\\a\\SupermarketInformationManagementSystem\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\SupermarketInformationManagementSystem\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "ZXing"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "travel-service",
+    "source": "D:\\project\\a\\travel\\travel\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\travel\\travel\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "waste-sorting",
+    "source": "D:\\project\\a\\WasteSortingApp\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\WasteSortingApp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "standalone-commerce",
+    "source": "D:\\project\\a\\e-commerce\\e-commerce\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\e-commerce\\e-commerce\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "fresh-market-rewrite",
+    "source": "D:\\project\\a\\重写后FreshFruitandVegetableEcommerceShopping - 副本\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\重写后FreshFruitandVegetableEcommerceShopping - 副本\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Retrofit",
+      "OkHttp",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "custom-login-shop",
+    "source": "D:\\project\\项目截图\\_合集与生成文件\\静态预览临时源码\\定制-Login电商app\\Login\\app\\src\\main",
+    "builds": [
+      "Login\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 25、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "custom-jd-shop",
+    "source": "D:\\project\\项目截图\\_合集与生成文件\\静态预览临时源码\\定制-京东app\\e-commerce\\e-commerce\\app\\src\\main",
+    "builds": [
+      "e-commerce\\e-commerce\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "custom-dessert",
+    "source": "D:\\project\\项目截图\\_合集与生成文件\\静态预览临时源码\\定制-甜品定制\\DessertApp\\DessertApp\\app\\src\\main",
+    "builds": [
+      "DessertApp\\DessertApp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "document-dessert",
+    "source": "D:\\project\\a\\定制\\甜品源码文档\\DessertApp\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\定制\\甜品源码文档\\DessertApp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "document-flower",
+    "source": "D:\\project\\a\\定制\\花店源码文档\\flower-shop\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\定制\\花店源码文档\\flower-shop\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "daily-planning",
+    "source": "D:\\project\\a\\咸鱼可出\\F1066_事账通App\\F1066_事账通App\\项目源码\\dailyPlanning-main\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\F1066_事账通App\\F1066_事账通App\\项目源码\\dailyPlanning-main\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 31、compileSdk 33。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "resale-jd-shop",
+    "source": "D:\\project\\项目截图\\_合集与生成文件\\静态预览临时源码\\咸鱼-京东电商\\flower-shop\\app\\src\\main",
+    "builds": [],
+    "tags": [
+      "Android"
+    ],
+    "runtime": "已同步项目页面素材；当前可读取资料未能确认构建配置，开发语言、数据库与最低运行版本需购买前确认。"
+  },
+  {
+    "slug": "switch-account-chat",
+    "source": "D:\\project\\项目截图\\_合集与生成文件\\静态预览临时源码\\咸鱼-切换账号聊天\\chatapp\\app\\src\\main",
+    "builds": [
+      "chatapp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "OkHttp",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "boxuegu-classic",
+    "source": "D:\\project\\a\\咸鱼可出\\博学谷\\Boxuegu1\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\博学谷\\Boxuegu1\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 19、compileSdk 26。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "notes-classic",
+    "source": "D:\\project\\a\\咸鱼可出\\备忘录\\beiwanglu\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\备忘录\\beiwanglu\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "food-delivery",
+    "source": "D:\\project\\a\\咸鱼可出\\外卖订餐\\4.delivery\\delivery\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\外卖订餐\\4.delivery\\delivery\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "wechat-ai-chat",
+    "source": "D:\\project\\项目截图\\_合集与生成文件\\静态预览临时源码\\咸鱼-微信AI聊天\\chatapp\\app\\src\\main",
+    "builds": [
+      "chatapp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "OkHttp",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "campus-trading",
+    "source": "D:\\project\\a\\咸鱼可出静态预览\\校园交易二手平台\\app\\src\\main",
+    "builds": [],
+    "tags": [
+      "Android"
+    ],
+    "runtime": "已同步项目页面素材；当前可读取资料未能确认构建配置，开发语言、数据库与最低运行版本需购买前确认。"
+  },
+  {
+    "slug": "daily-news",
+    "source": "D:\\project\\a\\咸鱼可出\\每日新闻app内置api接口\\Animal新闻接口\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\每日新闻app内置api接口\\Animal新闻接口\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 21、compileSdk 36。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "fruit-two",
+    "source": "D:\\project\\a\\咸鱼可出\\水果商城Fruit2\\Fruit2\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\水果商城Fruit2\\Fruit2\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "OkHttp",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 16、compileSdk 29。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "dessert-classic",
+    "source": "D:\\project\\a\\咸鱼可出\\甜品商城\\DessertApp\\DessertApp\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\甜品商城\\DessertApp\\DessertApp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "multi-category-shop",
+    "source": "D:\\project\\a\\咸鱼可出\\电商2app衣服饮料电子商品\\Login\\Login\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\电商2app衣服饮料电子商品\\Login\\Login\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 25、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "cinema-tickets",
+    "source": "D:\\project\\a\\咸鱼可出\\电影购票系统\\CineFlow\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\电影购票系统\\CineFlow\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "runtime": "源码配置 minSdk 24、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "flower-original",
+    "source": "D:\\project\\a\\咸鱼可出\\线上花店app\\线上花店-文档-源码-演示视频\\aflowershop\\flower-shop\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\线上花店app\\线上花店-文档-源码-演示视频\\aflowershop\\flower-shop\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "flower-unmodified",
+    "source": "D:\\project\\a\\咸鱼可出\\线上花店app\\[线上花店APP]源码未修改图片版本\\flower-shop\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\线上花店app\\[线上花店APP]源码未修改图片版本\\flower-shop\\app\\build.gradle"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "questionnaires",
+    "source": "D:\\project\\a\\咸鱼可出\\问卷星springboot后端sqlitte数据库\\Questionnaires\\app\\src\\main",
+    "builds": [
+      "D:\\project\\a\\咸鱼可出\\问卷星springboot后端sqlitte数据库\\Questionnaires\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit"
+    ],
+    "runtime": "源码配置 minSdk 26、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+  },
+  {
+    "slug": "driver-classic",
+    "source": "D:\\project\\项目截图\\_合集与生成文件\\静态预览临时源码\\咸鱼-驾考宝典\\Driverapp\\app\\src\\main",
+    "builds": [
+      "Driverapp\\app\\build.gradle",
+      "Driverapp\\app\\build.gradle.kts"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "runtime": "源码同时包含不同 Gradle 配置：minSdk 26/30，compileSdk 34/35。购买前需确认使用的构建文件与运行版本。"
+  }
+]

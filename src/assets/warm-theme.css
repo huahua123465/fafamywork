@@ -1,0 +1,317 @@
+:root {
+  --text: #302b27;
+  --muted: #766e65;
+  --strong: #564538;
+  --blue: #a65332;
+  --track: #e8e1d8;
+  --line: var(--track);
+  --surface: #f7f3ed;
+  --ui-line: transparent;
+  --radius: 18px;
+  --shadow: 0 2px 5px #62452404, 0 12px 30px #62452409;
+  --ui-shadow: var(--shadow);
+  background: #fffcf8;
+  color: var(--text);
+}
+body,
+.site-footer,
+.technology-section,
+.project-story {
+  background: #fffcf8;
+}
+.site-header {
+  background: #fffcf8f2;
+  border-bottom-color: var(--track);
+}
+.mobile-nav {
+  background: #fffcf8;
+}
+.home-hero {
+  background: linear-gradient(180deg, #fffcf8, #f7f0e7);
+}
+.catalog-page,
+.discovery,
+.insights-page,
+.project-overview,
+.feature-section,
+.related-section {
+  background: var(--surface);
+}
+.hero-copy h1 span,
+.detail-dot,
+.category-label,
+.real-project-card .category-label {
+  color: var(--blue);
+}
+.brand-mark {
+  background: linear-gradient(145deg, #c98961, #a55434);
+}
+.button,
+.button:hover {
+  border: 0;
+  color: #fffaf5;
+  background: linear-gradient(165deg, #bd7955, #9d4e30);
+  box-shadow:
+    inset 0 6px 10px #ffffff24,
+    0 2px 4px #76432914,
+    0 7px 16px #76432920;
+}
+.button.secondary,
+.button.secondary:hover,
+.icon-button {
+  border: 0;
+  color: var(--strong);
+  background: linear-gradient(160deg, #fffefd, #f0e9df);
+  box-shadow:
+    inset 0 6px 9px #ffffffb3,
+    0 2px 4px #61482708,
+    0 6px 14px #6148270d;
+}
+.text-link,
+.contact-nav:hover {
+  color: var(--blue);
+}
+.text-link:hover {
+  color: #713c28;
+}
+.category-tabs {
+  padding-top: 7px;
+  padding-bottom: 9px;
+}
+.category-tabs button.active {
+  background: linear-gradient(160deg, #fffdf9, #efe5d8);
+  color: var(--strong);
+  box-shadow: var(--shadow);
+}
+.category-tabs button:hover {
+  background: #eee5d9;
+}
+.project-card,
+.project-card.peach,
+.project-card.mint,
+.project-card.lavender,
+.project-card.cream,
+.project-card.rose {
+  background: linear-gradient(145deg, #fffdf9, #f5eee5);
+  border: 0;
+  border-radius: 18px;
+  box-shadow:
+    inset 0 1px #fff,
+    var(--shadow);
+}
+.creator-strip,
+.modal,
+.insight-card,
+.metric-grid article,
+.data-scope,
+.search-field,
+.card-peek,
+.technology-grid article {
+  border: 0;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  background: #fffdfa;
+}
+.detail-brief {
+  border: 0;
+  border-radius: 16px;
+  background: #f7f1e8;
+  padding: 22px 26px;
+}
+.detail-brief > p,
+.card-copy p,
+.technology-grid p,
+.story-content p,
+.section-intro,
+.purchase-section p {
+  color: var(--muted);
+}
+.detail-tech span,
+.card-tech span,
+.tech-tags span {
+  border: 0;
+  background: #eee6dc;
+  color: var(--strong);
+}
+.detail-tech,
+.card-tech,
+.tech-tags {
+  box-shadow: none;
+}
+.gallery-stage.real-gallery,
+.screenshot-viewport {
+  background: linear-gradient(135deg, #f5ebde, #faf5ed);
+  border: 0;
+  border-radius: 18px;
+}
+.screen-tile,
+.gallery-thumbnails button {
+  border: 0;
+  border-radius: 12px;
+  background: #f6f0e8;
+  box-shadow: var(--shadow);
+}
+.gallery-thumbnails button.selected {
+  border: 0;
+  box-shadow:
+    0 0 0 2px #b87350,
+    0 4px 10px #76533412;
+}
+.gallery-label,
+.gallery-expand,
+.cover-hint {
+  color: var(--strong);
+  background: #fffdf7ed;
+  border: 0;
+}
+.image-fallback {
+  background: #f3eee7;
+  color: var(--muted);
+}
+.image-retry {
+  padding: 8px 15px;
+  border-radius: 30px;
+  background: #fffaf4;
+  color: var(--blue);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  font-size: 14px;
+}
+.image-retry:focus-visible {
+  outline: 2px solid var(--blue);
+}
+.footer-top,
+.usage-details,
+.project-facts > div {
+  border-color: var(--track);
+}
+.purchase-section {
+  background: #f5efe6;
+  scroll-margin-top: 86px;
+}
+.purchase-section .section-heading {
+  margin-bottom: 26px;
+}
+.purchase-section h2,
+.technology-section h2 {
+  font-size: 28px;
+  line-height: 1.3;
+  letter-spacing: -0.7px;
+  font-weight: 600;
+}
+.purchase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.purchase-grid article {
+  padding: 26px 28px;
+  background: #fffcf8;
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px #fff,
+    var(--shadow);
+}
+.spec-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--blue);
+  font-size: 13px;
+  letter-spacing: 0.3px;
+}
+.spec-label span:last-child {
+  color: #a3988b;
+}
+.purchase-section h3 {
+  font-size: 22px;
+  line-height: 28px;
+  letter-spacing: -0.7px;
+  font-weight: 600;
+  margin: 18px 0 12px;
+}
+.purchase-section p,
+.technology-grid p {
+  font-size: 14.5px;
+  line-height: 1.8;
+}
+.purchase-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-top: 30px;
+  padding: 30px;
+  border-radius: 18px;
+  background: #ece1d2;
+}
+.purchase-summary h3 {
+  font-size: 19px;
+  line-height: 28px;
+  margin-top: 12px;
+}
+.purchase-summary .button {
+  margin-top: 20px;
+}
+.technology-grid article {
+  padding: 24px;
+  background: #f8f2e9;
+}
+.technology-grid h3 {
+  margin-top: 16px;
+}
+.detail-cta {
+  background: #f0e5d7;
+  border-radius: 18px;
+}
+.section-heading h2,
+.project-overview h2,
+.story-side h2,
+.detail-cta h2 {
+  letter-spacing: -0.6px;
+}
+.modal-header {
+  background: #fffcf8f5;
+}
+.screen-title,
+.screenshot-position,
+.breadcrumb,
+.detail-meta,
+.eyebrow {
+  color: var(--muted);
+}
+.real-project-card .card-copy h3 {
+  color: var(--text);
+  font-weight: 600;
+}
+.technology-grid article > span {
+  color: var(--muted);
+}
+@media (max-width: 767px) {
+  .purchase-grid,
+  .purchase-summary {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .purchase-grid article,
+  .purchase-summary {
+    padding: 22px;
+  }
+  .purchase-section h2,
+  .technology-section h2 {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  .purchase-section h3 {
+    font-size: 19px;
+    line-height: 26px;
+  }
+  .purchase-section .section-heading {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .section-intro {
+    max-width: none;
+  }
+  .detail-brief {
+    padding: 18px;
+  }
+}

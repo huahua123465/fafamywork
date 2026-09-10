@@ -1,0 +1,2974 @@
+[
+  {
+    "slug": "driver-theory",
+    "name": "驾考题库与练习",
+    "english": "Driverapp",
+    "category": "校园学习",
+    "summary": "章节练习、错题回顾与题库管理。",
+    "tagline": "章节练习、错题回顾与题库管理。",
+    "description": "驾考题库与练习是一款 Android 项目，页面覆盖章节题库、题目搜索、错题练习、题库与用户管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "Driverapp",
+      "驾考题库与练习",
+      "章节题库",
+      "题目搜索",
+      "错题练习",
+      "题库与用户管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "章节题库",
+        "text": "已有对应的章节题库页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "题目搜索",
+        "text": "已有对应的题目搜索页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "错题练习",
+        "text": "已有对应的错题练习页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "题库与用户管理",
+        "text": "已有对应的题库与用户管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖章节题库、题目搜索、错题练习、题库与用户管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码同时包含不同 Gradle 配置：minSdk 26/30，compileSdk 34/35。购买前需确认使用的构建文件与运行版本。"
+      }
+    ],
+    "runtime": {
+      "minSdk": null,
+      "compileSdk": null,
+      "note": "源码同时包含不同 Gradle 配置：minSdk 26/30，compileSdk 34/35。购买前需确认使用的构建文件与运行版本。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "memorandum",
+    "name": "随记 · 备忘录",
+    "english": "Finally",
+    "category": "旅行生活",
+    "summary": "记录日常事项，编辑内容与提醒。",
+    "tagline": "记录日常事项，编辑内容与提醒。",
+    "description": "随记 · 备忘录是一款 Android 项目，页面覆盖账户登录、备忘录列表、内容编辑。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "Finally",
+      "随记 · 备忘录",
+      "账户登录",
+      "备忘录列表",
+      "内容编辑"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "账户登录",
+        "text": "已有对应的账户登录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "备忘录列表",
+        "text": "已有对应的备忘录列表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "内容编辑",
+        "text": "已有对应的内容编辑页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖账户登录、备忘录列表、内容编辑，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 24、compileSdk 33。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 33,
+      "note": "源码配置 minSdk 24、compileSdk 33。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "flower-assistant",
+    "name": "花店商城 · 助手版",
+    "english": "flowershop",
+    "category": "电商购物",
+    "summary": "鲜花选购、商品维护与助手入口。",
+    "tagline": "鲜花选购、商品维护与助手入口。",
+    "description": "花店商城 · 助手版是一款 Android 项目，页面覆盖鲜花详情、购物车、商品编辑、客服与助手。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "flowershop",
+      "花店商城 · 助手版",
+      "鲜花详情",
+      "购物车",
+      "商品编辑",
+      "客服与助手"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "OkHttp",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "鲜花详情",
+        "text": "已有对应的鲜花详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品编辑",
+        "text": "已有对应的商品编辑页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "客服与助手",
+        "text": "已有对应的客服与助手页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖鲜花详情、购物车、商品编辑、客服与助手，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、OkHttp、Glide。源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 21,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "fresh-market",
+    "name": "生鲜果蔬商城",
+    "english": "FreshFruitandVegetableEcommerceShopping",
+    "category": "电商购物",
+    "summary": "买家选购与商家订单管理。",
+    "tagline": "买家选购与商家订单管理。",
+    "description": "生鲜果蔬商城是一款 Android 项目，页面覆盖商品分类、购物车与结算、地址与订单、商家中心。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "FreshFruitandVegetableEcommerceShopping",
+      "生鲜果蔬商城",
+      "商品分类",
+      "购物车与结算",
+      "地址与订单",
+      "商家中心"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Retrofit",
+      "OkHttp",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品分类",
+        "text": "已有对应的商品分类页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车与结算",
+        "text": "已有对应的购物车与结算页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "地址与订单",
+        "text": "已有对应的地址与订单页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商家中心",
+        "text": "已有对应的商家中心页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品分类、购物车与结算、地址与订单、商家中心，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Retrofit、OkHttp、Glide。源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "fruit-market",
+    "name": "水果电商平台",
+    "english": "FruitEcommerce",
+    "category": "电商购物",
+    "summary": "水果选购与后台商品管理。",
+    "tagline": "水果选购与后台商品管理。",
+    "description": "水果电商平台是一款 Android 项目，页面覆盖商品详情、购物车结算、订单查询、商品分类管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "FruitEcommerce",
+      "水果电商平台",
+      "商品详情",
+      "购物车结算",
+      "订单查询",
+      "商品分类管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Kotlin",
+      "Retrofit",
+      "OkHttp",
+      "Glide",
+      "Jetpack Compose"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车结算",
+        "text": "已有对应的购物车结算页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单查询",
+        "text": "已有对应的订单查询页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品分类管理",
+        "text": "已有对应的商品分类管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、购物车结算、订单查询、商品分类管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Kotlin、Retrofit、OkHttp、Glide、Jetpack Compose。源码配置 minSdk 21、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 21,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 21、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java",
+        "Kotlin"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "farm-market",
+    "name": "助农产品商城",
+    "english": "fupinzhunong",
+    "category": "电商购物",
+    "summary": "连接农产品展示、选购与助农资讯。",
+    "tagline": "连接农产品展示、选购与助农资讯。",
+    "description": "助农产品商城是一款 Android 项目，页面覆盖农户商品、助农资讯、订单与结算、收货地址。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "fupinzhunong",
+      "助农产品商城",
+      "农户商品",
+      "助农资讯",
+      "订单与结算",
+      "收货地址"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "农户商品",
+        "text": "已有对应的农户商品页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "助农资讯",
+        "text": "已有对应的助农资讯页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单与结算",
+        "text": "已有对应的订单与结算页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "收货地址",
+        "text": "已有对应的收货地址页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖农户商品、助农资讯、订单与结算、收货地址，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 28、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 28,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 28、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "amap-demo",
+    "name": "高德地图示例",
+    "english": "gaode",
+    "category": "旅行生活",
+    "summary": "一个聚焦地图能力的 Android 示例。",
+    "tagline": "一个聚焦地图能力的 Android 示例。",
+    "description": "高德地图示例是一款 Android 项目，页面覆盖地图主界面。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "gaode",
+      "高德地图示例",
+      "地图主界面"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "高德地图 SDK"
+    ],
+    "features": [
+      {
+        "title": "地图主界面",
+        "text": "已有对应的地图主界面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖地图主界面，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、高德地图 SDK。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "health-records",
+    "name": "健康档案管理",
+    "english": "HealthManagementTool",
+    "category": "管理系统",
+    "summary": "会员档案、健康记录与统计。",
+    "tagline": "会员档案、健康记录与统计。",
+    "description": "健康档案管理是一款 Android 项目，页面覆盖会员管理、健康记录、统计分析。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "HealthManagementTool",
+      "健康档案管理",
+      "会员管理",
+      "健康记录",
+      "统计分析"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room"
+    ],
+    "features": [
+      {
+        "title": "会员管理",
+        "text": "已有对应的会员管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "健康记录",
+        "text": "已有对应的健康记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "统计分析",
+        "text": "已有对应的统计分析页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖会员管理、健康记录、统计分析，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "heritage-learning",
+    "name": "非遗传承学习平台",
+    "english": "HeritageInheritanceNavigator",
+    "category": "校园学习",
+    "summary": "课程学习、通知与日程安排。",
+    "tagline": "课程学习、通知与日程安排。",
+    "description": "非遗传承学习平台是一款 Android 项目，页面覆盖课程详情、我的课程、通知公告、课程日程。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "HeritageInheritanceNavigator",
+      "非遗传承学习平台",
+      "课程详情",
+      "我的课程",
+      "通知公告",
+      "课程日程"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "课程详情",
+        "text": "已有对应的课程详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "我的课程",
+        "text": "已有对应的我的课程页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "通知公告",
+        "text": "已有对应的通知公告页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "课程日程",
+        "text": "已有对应的课程日程页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖课程详情、我的课程、通知公告、课程日程，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 26,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "expense-tracker",
+    "name": "日常记账",
+    "english": "keepaccountsapp",
+    "category": "旅行生活",
+    "summary": "预算、收支记录与统计图表。",
+    "tagline": "预算、收支记录与统计图表。",
+    "description": "日常记账是一款 Android 项目，页面覆盖预算列表、交易记录、收支统计。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "keepaccountsapp",
+      "日常记账",
+      "预算列表",
+      "交易记录",
+      "收支统计"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room"
+    ],
+    "features": [
+      {
+        "title": "预算列表",
+        "text": "已有对应的预算列表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "交易记录",
+        "text": "已有对应的交易记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "收支统计",
+        "text": "已有对应的收支统计页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖预算列表、交易记录、收支统计，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "library-manager",
+    "name": "图书借阅管理",
+    "english": "LibraryManager",
+    "category": "管理系统",
+    "summary": "图书录入、扫码与借阅记录。",
+    "tagline": "图书录入、扫码与借阅记录。",
+    "description": "图书借阅管理是一款 Android 项目，页面覆盖图书管理、扫码入口、历史记录。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "LibraryManager",
+      "图书借阅管理",
+      "图书管理",
+      "扫码入口",
+      "历史记录"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Kotlin",
+      "SQLite",
+      "Jetpack Compose",
+      "ZXing"
+    ],
+    "features": [
+      {
+        "title": "图书管理",
+        "text": "已有对应的图书管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "扫码入口",
+        "text": "已有对应的扫码入口页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "历史记录",
+        "text": "已有对应的历史记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖图书管理、扫码入口、历史记录，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Kotlin、SQLite、Jetpack Compose、ZXing。源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 26,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java",
+        "Kotlin"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "mental-health",
+    "name": "心理咨询服务平台",
+    "english": "MentalHealthCounselingPlatform",
+    "category": "旅行生活",
+    "summary": "咨询师展示、预约与社区交流。",
+    "tagline": "咨询师展示、预约与社区交流。",
+    "description": "心理咨询服务平台是一款 Android 项目，页面覆盖咨询师与预约、测评页面、社区交流、咨询记录。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "MentalHealthCounselingPlatform",
+      "心理咨询服务平台",
+      "咨询师与预约",
+      "测评页面",
+      "社区交流",
+      "咨询记录"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Kotlin",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "Glide",
+      "Jetpack Compose"
+    ],
+    "features": [
+      {
+        "title": "咨询师与预约",
+        "text": "已有对应的咨询师与预约页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "测评页面",
+        "text": "已有对应的测评页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "社区交流",
+        "text": "已有对应的社区交流页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "咨询记录",
+        "text": "已有对应的咨询记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖咨询师与预约、测评页面、社区交流、咨询记录，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Kotlin、Room、Retrofit、OkHttp、Glide、Jetpack Compose。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java",
+        "Kotlin"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "campus-swap-plus",
+    "name": "校园闲置 · 进阶版",
+    "english": "NewCampusSwap",
+    "category": "校园学习",
+    "summary": "从闲置商品到交流与交易管理。",
+    "tagline": "从闲置商品到交流与交易管理。",
+    "description": "校园闲置 · 进阶版是一款 Android 项目，页面覆盖商品与收藏、聊天与关注、评价与交易、后台管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "NewCampusSwap",
+      "校园闲置 · 进阶版",
+      "商品与收藏",
+      "聊天与关注",
+      "评价与交易",
+      "后台管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品与收藏",
+        "text": "已有对应的商品与收藏页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "聊天与关注",
+        "text": "已有对应的聊天与关注页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "评价与交易",
+        "text": "已有对应的评价与交易页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "后台管理",
+        "text": "已有对应的后台管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品与收藏、聊天与关注、评价与交易、后台管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room、Glide。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "convenience-store",
+    "name": "线上便利店",
+    "english": "OnlineConvenienceStore",
+    "category": "电商购物",
+    "summary": "商品搜索、地址订单与商店管理。",
+    "tagline": "商品搜索、地址订单与商店管理。",
+    "description": "线上便利店是一款 Android 项目，页面覆盖商品列表、收藏与搜索、地址与订单、管理后台。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "OnlineConvenienceStore",
+      "线上便利店",
+      "商品列表",
+      "收藏与搜索",
+      "地址与订单",
+      "管理后台"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品列表",
+        "text": "已有对应的商品列表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "收藏与搜索",
+        "text": "已有对应的收藏与搜索页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "地址与订单",
+        "text": "已有对应的地址与订单页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "管理后台",
+        "text": "已有对应的管理后台页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品列表、收藏与搜索、地址与订单、管理后台，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 26,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "recipe-book",
+    "name": "掌上食谱",
+    "english": "phoneRecipe",
+    "category": "旅行生活",
+    "summary": "发现菜谱、收藏与发布自己的食谱。",
+    "tagline": "发现菜谱、收藏与发布自己的食谱。",
+    "description": "掌上食谱是一款 Android 项目，页面覆盖食谱详情、收藏与历史、发布食谱、健康管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "phoneRecipe",
+      "掌上食谱",
+      "食谱详情",
+      "收藏与历史",
+      "发布食谱",
+      "健康管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Kotlin",
+      "Room",
+      "Retrofit",
+      "Glide",
+      "Jetpack Compose"
+    ],
+    "features": [
+      {
+        "title": "食谱详情",
+        "text": "已有对应的食谱详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "收藏与历史",
+        "text": "已有对应的收藏与历史页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "发布食谱",
+        "text": "已有对应的发布食谱页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "健康管理",
+        "text": "已有对应的健康管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖食谱详情、收藏与历史、发布食谱、健康管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Kotlin、Room、Retrofit、Glide、Jetpack Compose。源码配置 minSdk 30、compileSdk 36。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 36,
+      "note": "源码配置 minSdk 30、compileSdk 36。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java",
+        "Kotlin"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "waste-recognition",
+    "name": "垃圾图像识别",
+    "english": "Recognition",
+    "category": "校园学习",
+    "summary": "从选择垃圾图像到展示模型分类结果。",
+    "tagline": "从选择垃圾图像到展示模型分类结果。",
+    "description": "垃圾图像识别是一款 Android 项目，页面覆盖选择图像、垃圾分类识别结果。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "Recognition",
+      "垃圾图像识别",
+      "选择图像",
+      "垃圾分类识别结果"
+    ],
+    "tags": [
+      "Android",
+      "Kotlin",
+      "Jetpack Compose",
+      "PyTorch"
+    ],
+    "features": [
+      {
+        "title": "选择图像",
+        "text": "已有对应的选择图像页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "垃圾分类识别结果",
+        "text": "已有对应的垃圾分类识别结果页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖选择图像、垃圾分类识别结果，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Kotlin、Jetpack Compose、PyTorch。源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 26,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Kotlin"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "news-reader",
+    "name": "轻量新闻阅读器",
+    "english": "SimpleNewsReader",
+    "category": "旅行生活",
+    "summary": "阅读新闻，维护文章内容。",
+    "tagline": "阅读新闻，维护文章内容。",
+    "description": "轻量新闻阅读器是一款 Android 项目，页面覆盖新闻列表、新闻详情、新增与编辑。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "SimpleNewsReader",
+      "轻量新闻阅读器",
+      "新闻列表",
+      "新闻详情",
+      "新增与编辑"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "新闻列表",
+        "text": "已有对应的新闻列表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "新闻详情",
+        "text": "已有对应的新闻详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "新增与编辑",
+        "text": "已有对应的新增与编辑页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖新闻列表、新闻详情、新增与编辑，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "cashier",
+    "name": "小型超市收银",
+    "english": "SmallSupermarketCashier",
+    "category": "管理系统",
+    "summary": "商品维护、收银与销售报表。",
+    "tagline": "商品维护、收银与销售报表。",
+    "description": "小型超市收银是一款 Android 项目，页面覆盖商品管理、收银台、订单列表、销售报表。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "SmallSupermarketCashier",
+      "小型超市收银",
+      "商品管理",
+      "收银台",
+      "订单列表",
+      "销售报表"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "Glide",
+      "ZXing"
+    ],
+    "features": [
+      {
+        "title": "商品管理",
+        "text": "已有对应的商品管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "收银台",
+        "text": "已有对应的收银台页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单列表",
+        "text": "已有对应的订单列表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "销售报表",
+        "text": "已有对应的销售报表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品管理、收银台、订单列表、销售报表，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room、Retrofit、OkHttp、Glide、ZXing。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "smart-todo",
+    "name": "智能待办",
+    "english": "SmartTodoApp",
+    "category": "旅行生活",
+    "summary": "任务管理与 AI 助手页面。",
+    "tagline": "任务管理与 AI 助手页面。",
+    "description": "智能待办是一款 Android 项目，页面覆盖账户登录、任务新增、个人中心、AI 页面。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "SmartTodoApp",
+      "智能待办",
+      "账户登录",
+      "任务新增",
+      "个人中心",
+      "AI 页面"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Retrofit",
+      "OkHttp"
+    ],
+    "features": [
+      {
+        "title": "账户登录",
+        "text": "已有对应的账户登录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "任务新增",
+        "text": "已有对应的任务新增页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "个人中心",
+        "text": "已有对应的个人中心页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "AI 页面",
+        "text": "已有对应的AI 页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖账户登录、任务新增、个人中心、AI 页面，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Retrofit、OkHttp。源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 26,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 26、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "student-profile",
+    "name": "学生档案管理",
+    "english": "StudentProfileManager",
+    "category": "校园学习",
+    "summary": "个人档案、课表、成绩与奖励。",
+    "tagline": "个人档案、课表、成绩与奖励。",
+    "description": "学生档案管理是一款 Android 项目，页面覆盖个人档案、课程安排、成绩分析、奖励记录。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "StudentProfileManager",
+      "学生档案管理",
+      "个人档案",
+      "课程安排",
+      "成绩分析",
+      "奖励记录"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "个人档案",
+        "text": "已有对应的个人档案页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "课程安排",
+        "text": "已有对应的课程安排页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "成绩分析",
+        "text": "已有对应的成绩分析页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "奖励记录",
+        "text": "已有对应的奖励记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖个人档案、课程安排、成绩分析、奖励记录，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "supermarket-system",
+    "name": "超市信息管理",
+    "english": "SupermarketInformationManagementSystem",
+    "category": "管理系统",
+    "summary": "面向用户与管理员的超市业务管理。",
+    "tagline": "面向用户与管理员的超市业务管理。",
+    "description": "超市信息管理是一款 Android 项目，页面覆盖商品与购物车、订单统计、用户管理、条码扫描。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "SupermarketInformationManagementSystem",
+      "超市信息管理",
+      "商品与购物车",
+      "订单统计",
+      "用户管理",
+      "条码扫描"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "ZXing"
+    ],
+    "features": [
+      {
+        "title": "商品与购物车",
+        "text": "已有对应的商品与购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单统计",
+        "text": "已有对应的订单统计页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "用户管理",
+        "text": "已有对应的用户管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "条码扫描",
+        "text": "已有对应的条码扫描页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品与购物车、订单统计、用户管理、条码扫描，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room、Retrofit、OkHttp、ZXing。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "travel-service",
+    "name": "旅行服务 · 管理版",
+    "english": "travel",
+    "category": "旅行生活",
+    "summary": "目的地、旅行服务与后台内容管理。",
+    "tagline": "目的地、旅行服务与后台内容管理。",
+    "description": "旅行服务 · 管理版是一款 Android 项目，页面覆盖目的地详情、旅行计划、服务详情、目的地与音乐管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "travel",
+      "旅行服务 · 管理版",
+      "目的地详情",
+      "旅行计划",
+      "服务详情",
+      "目的地与音乐管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "目的地详情",
+        "text": "已有对应的目的地详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "旅行计划",
+        "text": "已有对应的旅行计划页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "服务详情",
+        "text": "已有对应的服务详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "目的地与音乐管理",
+        "text": "已有对应的目的地与音乐管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖目的地详情、旅行计划、服务详情、目的地与音乐管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room、Retrofit、OkHttp、Glide。源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "waste-sorting",
+    "name": "垃圾分类助手",
+    "english": "WasteSortingApp",
+    "category": "旅行生活",
+    "summary": "分类查询、环保知识与分类测试。",
+    "tagline": "分类查询、环保知识与分类测试。",
+    "description": "垃圾分类助手是一款 Android 项目，页面覆盖分类查询、环保知识、分类测试、个人条目管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "WasteSortingApp",
+      "垃圾分类助手",
+      "分类查询",
+      "环保知识",
+      "分类测试",
+      "个人条目管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "分类查询",
+        "text": "已有对应的分类查询页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "环保知识",
+        "text": "已有对应的环保知识页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "分类测试",
+        "text": "已有对应的分类测试页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "个人条目管理",
+        "text": "已有对应的个人条目管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖分类查询、环保知识、分类测试、个人条目管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "standalone-commerce",
+    "name": "综合商城 · 独立版",
+    "english": "e-commerce独立项目",
+    "category": "电商购物",
+    "summary": "商品选购、评价、支付页面与客服入口。",
+    "tagline": "商品选购、评价、支付页面与客服入口。",
+    "description": "综合商城 · 独立版是一款 Android 项目，页面覆盖商品详情、购物车与支付、商品管理、收藏与客服。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "e-commerce独立项目",
+      "综合商城 · 独立版",
+      "商品详情",
+      "购物车与支付",
+      "商品管理",
+      "收藏与客服"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车与支付",
+        "text": "已有对应的购物车与支付页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品管理",
+        "text": "已有对应的商品管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "收藏与客服",
+        "text": "已有对应的收藏与客服页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、购物车与支付、商品管理、收藏与客服，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 21,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "fresh-market-rewrite",
+    "name": "生鲜果蔬 · 重写版",
+    "english": "重写后FreshFruitandVegetableEcommerceShopping",
+    "category": "电商购物",
+    "summary": "用户选购与商家管理的生鲜项目。",
+    "tagline": "用户选购与商家管理的生鲜项目。",
+    "description": "生鲜果蔬 · 重写版是一款 Android 项目，页面覆盖商品分类、购物车与结算、订单管理、商家中心。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "重写后FreshFruitandVegetableEcommerceShopping",
+      "生鲜果蔬 · 重写版",
+      "商品分类",
+      "购物车与结算",
+      "订单管理",
+      "商家中心"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Retrofit",
+      "OkHttp",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品分类",
+        "text": "已有对应的商品分类页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车与结算",
+        "text": "已有对应的购物车与结算页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单管理",
+        "text": "已有对应的订单管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商家中心",
+        "text": "已有对应的商家中心页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品分类、购物车与结算、订单管理、商家中心，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Retrofit、OkHttp、Glide。源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "custom-login-shop",
+    "name": "综合电商 · 定制版",
+    "english": "定制静态预览/Login电商app",
+    "category": "电商购物",
+    "summary": "商品展示、购物与账户管理。",
+    "tagline": "商品展示、购物与账户管理。",
+    "description": "综合电商 · 定制版是一款 Android 项目，页面覆盖商品详情、订单页面、购物页面、账户资料。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "定制静态预览/Login电商app",
+      "综合电商 · 定制版",
+      "商品详情",
+      "订单页面",
+      "购物页面",
+      "账户资料"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单页面",
+        "text": "已有对应的订单页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物页面",
+        "text": "已有对应的购物页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "账户资料",
+        "text": "已有对应的账户资料页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、订单页面、购物页面、账户资料，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 25、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 25,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 25、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "custom-jd-shop",
+    "name": "京东风格商城 · 定制版",
+    "english": "定制静态预览/京东app",
+    "category": "电商购物",
+    "summary": "电商界面、商品管理与店铺信息。",
+    "tagline": "电商界面、商品管理与店铺信息。",
+    "description": "京东风格商城 · 定制版是一款 Android 项目，页面覆盖商品详情、购物车、商品编辑、店铺信息。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "定制静态预览/京东app",
+      "京东风格商城 · 定制版",
+      "商品详情",
+      "购物车",
+      "商品编辑",
+      "店铺信息"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品编辑",
+        "text": "已有对应的商品编辑页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "店铺信息",
+        "text": "已有对应的店铺信息页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、购物车、商品编辑、店铺信息，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 21,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "custom-dessert",
+    "name": "甜品商城 · 定制版",
+    "english": "定制静态预览/甜品定制文档",
+    "category": "电商购物",
+    "summary": "甜品选购、地址与订单管理。",
+    "tagline": "甜品选购、地址与订单管理。",
+    "description": "甜品商城 · 定制版是一款 Android 项目，页面覆盖商品分类、购物车、订单与地址、收藏与客服。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "定制静态预览/甜品定制文档",
+      "甜品商城 · 定制版",
+      "商品分类",
+      "购物车",
+      "订单与地址",
+      "收藏与客服"
+    ],
+    "tags": [
+      "Android",
+      "Java"
+    ],
+    "features": [
+      {
+        "title": "商品分类",
+        "text": "已有对应的商品分类页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单与地址",
+        "text": "已有对应的订单与地址页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "收藏与客服",
+        "text": "已有对应的收藏与客服页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品分类、购物车、订单与地址、收藏与客服，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java。源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "document-dessert",
+    "name": "甜品商城 · 文档配套版",
+    "english": "定制静态预览/甜品源码文档-甜品项目",
+    "category": "电商购物",
+    "summary": "配套资料中的甜品应用界面。",
+    "tagline": "配套资料中的甜品应用界面。",
+    "description": "甜品商城 · 文档配套版是一款 Android 项目，页面覆盖商品分类、购物车、订单列表、个人中心。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "定制静态预览/甜品源码文档-甜品项目",
+      "甜品商城 · 文档配套版",
+      "商品分类",
+      "购物车",
+      "订单列表",
+      "个人中心"
+    ],
+    "tags": [
+      "Android",
+      "Java"
+    ],
+    "features": [
+      {
+        "title": "商品分类",
+        "text": "已有对应的商品分类页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单列表",
+        "text": "已有对应的订单列表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "个人中心",
+        "text": "已有对应的个人中心页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品分类、购物车、订单列表、个人中心，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java。源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "document-flower",
+    "name": "花店商城 · 文档配套版",
+    "english": "定制静态预览/花店源码文档-花店项目",
+    "category": "电商购物",
+    "summary": "鲜花选购与商品维护页面。",
+    "tagline": "鲜花选购与商品维护页面。",
+    "description": "花店商城 · 文档配套版是一款 Android 项目，页面覆盖商品详情、购物车、商品管理、个人记录。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "定制静态预览/花店源码文档-花店项目",
+      "花店商城 · 文档配套版",
+      "商品详情",
+      "购物车",
+      "商品管理",
+      "个人记录"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品管理",
+        "text": "已有对应的商品管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "个人记录",
+        "text": "已有对应的个人记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、购物车、商品管理、个人记录，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 21,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "daily-planning",
+    "name": "事账通 · 日程与账单",
+    "english": "咸鱼可出静态预览/F1066事账通",
+    "category": "旅行生活",
+    "summary": "把日常计划和账单记录放在一起。",
+    "tagline": "把日常计划和账单记录放在一起。",
+    "description": "事账通 · 日程与账单是一款 Android 项目，页面覆盖日常计划、事项列表、新增记录、账单管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/F1066事账通",
+      "事账通 · 日程与账单",
+      "日常计划",
+      "事项列表",
+      "新增记录",
+      "账单管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "日常计划",
+        "text": "已有对应的日常计划页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "事项列表",
+        "text": "已有对应的事项列表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "新增记录",
+        "text": "已有对应的新增记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "账单管理",
+        "text": "已有对应的账单管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖日常计划、事项列表、新增记录、账单管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 31、compileSdk 33。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 31,
+      "compileSdk": 33,
+      "note": "源码配置 minSdk 31、compileSdk 33。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "resale-jd-shop",
+    "name": "京东风格商城 · 展示版",
+    "english": "咸鱼可出静态预览/京东电商app",
+    "category": "电商购物",
+    "summary": "商品浏览、购物车和商品维护。",
+    "tagline": "商品浏览、购物车和商品维护。",
+    "description": "京东风格商城 · 展示版是一款 Android 项目，页面覆盖商品详情、购物车、商品管理、个人记录。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/京东电商app",
+      "京东风格商城 · 展示版",
+      "商品详情",
+      "购物车",
+      "商品管理",
+      "个人记录"
+    ],
+    "tags": [
+      "Android"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品管理",
+        "text": "已有对应的商品管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "个人记录",
+        "text": "已有对应的个人记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、购物车、商品管理、个人记录，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android。已同步项目页面素材；当前可读取资料未能确认构建配置，开发语言、数据库与最低运行版本需购买前确认。"
+      }
+    ],
+    "runtime": {
+      "minSdk": null,
+      "compileSdk": null,
+      "note": "已同步项目页面素材；当前可读取资料未能确认构建配置，开发语言、数据库与最低运行版本需购买前确认。",
+      "languages": []
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "switch-account-chat",
+    "name": "聊天应用 · 多账号版",
+    "english": "咸鱼可出静态预览/切换账号聊天app",
+    "category": "社交聊天",
+    "summary": "联系人、消息搜索与群聊页面。",
+    "tagline": "联系人、消息搜索与群聊页面。",
+    "description": "聊天应用 · 多账号版是一款 Android 项目，页面覆盖账户登录、消息搜索、联系人、群聊管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/切换账号聊天app",
+      "聊天应用 · 多账号版",
+      "账户登录",
+      "消息搜索",
+      "联系人",
+      "群聊管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "OkHttp",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "账户登录",
+        "text": "已有对应的账户登录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "消息搜索",
+        "text": "已有对应的消息搜索页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "联系人",
+        "text": "已有对应的联系人页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "群聊管理",
+        "text": "已有对应的群聊管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖账户登录、消息搜索、联系人、群聊管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、OkHttp、Glide。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "boxuegu-classic",
+    "name": "博学谷 · 课程版",
+    "english": "咸鱼可出静态预览/博学谷",
+    "category": "校园学习",
+    "summary": "课程、视频学习与练习页面。",
+    "tagline": "课程、视频学习与练习页面。",
+    "description": "博学谷 · 课程版是一款 Android 项目，页面覆盖课程学习、视频播放、习题页面、学习历史。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/博学谷",
+      "博学谷 · 课程版",
+      "课程学习",
+      "视频播放",
+      "习题页面",
+      "学习历史"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "课程学习",
+        "text": "已有对应的课程学习页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "视频播放",
+        "text": "已有对应的视频播放页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "习题页面",
+        "text": "已有对应的习题页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "学习历史",
+        "text": "已有对应的学习历史页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖课程学习、视频播放、习题页面、学习历史，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 19、compileSdk 26。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 19,
+      "compileSdk": 26,
+      "note": "源码配置 minSdk 19、compileSdk 26。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "notes-classic",
+    "name": "备忘录 · 简洁版",
+    "english": "咸鱼可出静态预览/备忘录",
+    "category": "旅行生活",
+    "summary": "列表与详情组成轻量备忘录。",
+    "tagline": "列表与详情组成轻量备忘录。",
+    "description": "备忘录 · 简洁版是一款 Android 项目，页面覆盖首页、备忘录列表、内容详情。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/备忘录",
+      "备忘录 · 简洁版",
+      "首页",
+      "备忘录列表",
+      "内容详情"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room"
+    ],
+    "features": [
+      {
+        "title": "首页",
+        "text": "已有对应的首页页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "备忘录列表",
+        "text": "已有对应的备忘录列表页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "内容详情",
+        "text": "已有对应的内容详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖首页、备忘录列表、内容详情，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "food-delivery",
+    "name": "外卖订餐系统",
+    "english": "咸鱼可出静态预览/外卖订餐",
+    "category": "电商购物",
+    "summary": "餐品选购、购物车与店铺管理。",
+    "tagline": "餐品选购、购物车与店铺管理。",
+    "description": "外卖订餐系统是一款 Android 项目，页面覆盖餐品浏览、购物车、餐品管理、店铺管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/外卖订餐",
+      "外卖订餐系统",
+      "餐品浏览",
+      "购物车",
+      "餐品管理",
+      "店铺管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "餐品浏览",
+        "text": "已有对应的餐品浏览页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "餐品管理",
+        "text": "已有对应的餐品管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "店铺管理",
+        "text": "已有对应的店铺管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖餐品浏览、购物车、餐品管理、店铺管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 24、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 24、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "wechat-ai-chat",
+    "name": "聊天应用 · AI 回复版",
+    "english": "咸鱼可出静态预览/微信聊天AI回复",
+    "category": "社交聊天",
+    "summary": "聊天、群组与 AI 助手页面。",
+    "tagline": "聊天、群组与 AI 助手页面。",
+    "description": "聊天应用 · AI 回复版是一款 Android 项目，页面覆盖联系人、消息搜索、群聊、AI 助手。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/微信聊天AI回复",
+      "聊天应用 · AI 回复版",
+      "联系人",
+      "消息搜索",
+      "群聊",
+      "AI 助手"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "OkHttp",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "联系人",
+        "text": "已有对应的联系人页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "消息搜索",
+        "text": "已有对应的消息搜索页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "群聊",
+        "text": "已有对应的群聊页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "AI 助手",
+        "text": "已有对应的AI 助手页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖联系人、消息搜索、群聊、AI 助手，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、OkHttp、Glide。源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 30,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 30、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "campus-trading",
+    "name": "校园二手交易 · 展示版",
+    "english": "咸鱼可出静态预览/校园交易二手平台",
+    "category": "校园学习",
+    "summary": "通过项目自带页面了解校园交易应用。",
+    "tagline": "通过项目自带页面了解校园交易应用。",
+    "description": "校园二手交易 · 展示版是一款 Android 项目，页面覆盖项目界面展示、页面细节预览。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/校园交易二手平台",
+      "校园二手交易 · 展示版",
+      "项目界面展示",
+      "页面细节预览"
+    ],
+    "tags": [
+      "Android"
+    ],
+    "features": [
+      {
+        "title": "项目界面展示",
+        "text": "已有对应的项目界面展示页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "页面细节预览",
+        "text": "已有对应的页面细节预览页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖项目界面展示、页面细节预览，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android。已同步项目页面素材；当前可读取资料未能确认构建配置，开发语言、数据库与最低运行版本需购买前确认。"
+      }
+    ],
+    "runtime": {
+      "minSdk": null,
+      "compileSdk": null,
+      "note": "已同步项目页面素材；当前可读取资料未能确认构建配置，开发语言、数据库与最低运行版本需购买前确认。",
+      "languages": []
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "daily-news",
+    "name": "每日新闻",
+    "english": "咸鱼可出静态预览/每日新闻app",
+    "category": "旅行生活",
+    "summary": "分类资讯与账户页面。",
+    "tagline": "分类资讯与账户页面。",
+    "description": "每日新闻是一款 Android 项目，页面覆盖资讯首页、财经栏目、科技栏目、个人中心。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/每日新闻app",
+      "每日新闻",
+      "资讯首页",
+      "财经栏目",
+      "科技栏目",
+      "个人中心"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit",
+      "OkHttp",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "资讯首页",
+        "text": "已有对应的资讯首页页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "财经栏目",
+        "text": "已有对应的财经栏目页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "科技栏目",
+        "text": "已有对应的科技栏目页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "个人中心",
+        "text": "已有对应的个人中心页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖资讯首页、财经栏目、科技栏目、个人中心，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room、Retrofit、OkHttp、Glide。源码配置 minSdk 21、compileSdk 36。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 21,
+      "compileSdk": 36,
+      "note": "源码配置 minSdk 21、compileSdk 36。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "fruit-two",
+    "name": "水果商城 · Fruit2",
+    "english": "咸鱼可出静态预览/水果商城Fruit2",
+    "category": "电商购物",
+    "summary": "水果浏览、订单与管理页面。",
+    "tagline": "水果浏览、订单与管理页面。",
+    "description": "水果商城 · Fruit2是一款 Android 项目，页面覆盖水果详情、订单页面、商品管理、账户资料。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/水果商城Fruit2",
+      "水果商城 · Fruit2",
+      "水果详情",
+      "订单页面",
+      "商品管理",
+      "账户资料"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "OkHttp",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "水果详情",
+        "text": "已有对应的水果详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单页面",
+        "text": "已有对应的订单页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品管理",
+        "text": "已有对应的商品管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "账户资料",
+        "text": "已有对应的账户资料页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖水果详情、订单页面、商品管理、账户资料，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、OkHttp、Glide。源码配置 minSdk 16、compileSdk 29。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 16,
+      "compileSdk": 29,
+      "note": "源码配置 minSdk 16、compileSdk 29。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "dessert-classic",
+    "name": "甜品商城 · 收藏版",
+    "english": "咸鱼可出静态预览/甜品商城",
+    "category": "电商购物",
+    "summary": "甜品分类、订单、地址与收藏。",
+    "tagline": "甜品分类、订单、地址与收藏。",
+    "description": "甜品商城 · 收藏版是一款 Android 项目，页面覆盖商品分类、购物车、订单地址、收藏与客服。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/甜品商城",
+      "甜品商城 · 收藏版",
+      "商品分类",
+      "购物车",
+      "订单地址",
+      "收藏与客服"
+    ],
+    "tags": [
+      "Android",
+      "Java"
+    ],
+    "features": [
+      {
+        "title": "商品分类",
+        "text": "已有对应的商品分类页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单地址",
+        "text": "已有对应的订单地址页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "收藏与客服",
+        "text": "已有对应的收藏与客服页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品分类、购物车、订单地址、收藏与客服，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java。源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 35,
+      "note": "源码配置 minSdk 24、compileSdk 35。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "multi-category-shop",
+    "name": "多品类商城 · 电商2",
+    "english": "咸鱼可出静态预览/电商2-服装饮料电子商品",
+    "category": "电商购物",
+    "summary": "服装、饮料与电子商品展示。",
+    "tagline": "服装、饮料与电子商品展示。",
+    "description": "多品类商城 · 电商2是一款 Android 项目，页面覆盖商品详情、订单页面、购物页面、账户管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/电商2-服装饮料电子商品",
+      "多品类商城 · 电商2",
+      "商品详情",
+      "订单页面",
+      "购物页面",
+      "账户管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "订单页面",
+        "text": "已有对应的订单页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物页面",
+        "text": "已有对应的购物页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "账户管理",
+        "text": "已有对应的账户管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、订单页面、购物页面、账户管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 25、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 25,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 25、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "cinema-tickets",
+    "name": "电影购票系统",
+    "english": "咸鱼可出静态预览/电影购票系统",
+    "category": "旅行生活",
+    "summary": "电影展示与影院相关页面。",
+    "tagline": "电影展示与影院相关页面。",
+    "description": "电影购票系统是一款 Android 项目，页面覆盖影片浏览、电影页面、零食页面。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/电影购票系统",
+      "电影购票系统",
+      "影片浏览",
+      "电影页面",
+      "零食页面"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite"
+    ],
+    "features": [
+      {
+        "title": "影片浏览",
+        "text": "已有对应的影片浏览页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "电影页面",
+        "text": "已有对应的电影页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "零食页面",
+        "text": "已有对应的零食页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖影片浏览、电影页面、零食页面，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite。源码配置 minSdk 24、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 24,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 24、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "flower-original",
+    "name": "线上花店 · aflowershop 版",
+    "english": "咸鱼可出静态预览/线上花店-aflowershop版",
+    "category": "电商购物",
+    "summary": "花店商品与个人中心。",
+    "tagline": "花店商品与个人中心。",
+    "description": "线上花店 · aflowershop 版是一款 Android 项目，页面覆盖商品详情、购物车、商品维护、个人记录。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/线上花店-aflowershop版",
+      "线上花店 · aflowershop 版",
+      "商品详情",
+      "购物车",
+      "商品维护",
+      "个人记录"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品维护",
+        "text": "已有对应的商品维护页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "个人记录",
+        "text": "已有对应的个人记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、购物车、商品维护、个人记录，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 21,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "flower-unmodified",
+    "name": "线上花店 · 原始素材版",
+    "english": "咸鱼可出静态预览/线上花店-未修改图片版",
+    "category": "电商购物",
+    "summary": "保留原始图片的花店界面。",
+    "tagline": "保留原始图片的花店界面。",
+    "description": "线上花店 · 原始素材版是一款 Android 项目，页面覆盖商品详情、购物车、商品维护、个人记录。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/线上花店-未修改图片版",
+      "线上花店 · 原始素材版",
+      "商品详情",
+      "购物车",
+      "商品维护",
+      "个人记录"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "商品详情",
+        "text": "已有对应的商品详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "购物车",
+        "text": "已有对应的购物车页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "商品维护",
+        "text": "已有对应的商品维护页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "个人记录",
+        "text": "已有对应的个人记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖商品详情、购物车、商品维护、个人记录，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 21,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 21、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "questionnaires",
+    "name": "问卷与投票平台",
+    "english": "咸鱼可出静态预览/问卷星",
+    "category": "校园学习",
+    "summary": "问卷填写、投票与测评页面。",
+    "tagline": "问卷填写、投票与测评页面。",
+    "description": "问卷与投票平台是一款 Android 项目，页面覆盖问卷详情、填写问卷、投票页面、心理测评。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/问卷星",
+      "问卷与投票平台",
+      "问卷详情",
+      "填写问卷",
+      "投票页面",
+      "心理测评"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Room",
+      "Retrofit"
+    ],
+    "features": [
+      {
+        "title": "问卷详情",
+        "text": "已有对应的问卷详情页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "填写问卷",
+        "text": "已有对应的填写问卷页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "投票页面",
+        "text": "已有对应的投票页面页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "心理测评",
+        "text": "已有对应的心理测评页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖问卷详情、填写问卷、投票页面、心理测评，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、Room、Retrofit。源码配置 minSdk 26、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。"
+      }
+    ],
+    "runtime": {
+      "minSdk": 26,
+      "compileSdk": 34,
+      "note": "源码配置 minSdk 26、compileSdk 34。请安装对应 Android SDK，并按工程的 Gradle 与 JDK 配置导入 Android Studio。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "driver-classic",
+    "name": "驾考宝典 · 展示版",
+    "english": "咸鱼可出静态预览/驾考宝典app",
+    "category": "校园学习",
+    "summary": "章节题库、错题与管理页面。",
+    "tagline": "章节题库、错题与管理页面。",
+    "description": "驾考宝典 · 展示版是一款 Android 项目，页面覆盖题目搜索、章节练习、错题记录、题库管理。可通过总览与独立界面了解功能范围，再结合技术与运行要求确认是否适合你的需求。",
+    "color": "cream",
+    "keywords": [
+      "咸鱼可出静态预览/驾考宝典app",
+      "驾考宝典 · 展示版",
+      "题目搜索",
+      "章节练习",
+      "错题记录",
+      "题库管理"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "SQLite",
+      "Glide"
+    ],
+    "features": [
+      {
+        "title": "题目搜索",
+        "text": "已有对应的题目搜索页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "章节练习",
+        "text": "已有对应的章节练习页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "错题记录",
+        "text": "已有对应的错题记录页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      },
+      {
+        "title": "题库管理",
+        "text": "已有对应的题库管理页面展示，可查看截图了解入口、字段和页面组织；具体业务效果以应用运行结果为准。",
+        "icon": "grid"
+      }
+    ],
+    "story": [
+      {
+        "title": "页面与功能组织",
+        "text": "本次页面清单覆盖题目搜索、章节练习、错题记录、题库管理，总览用于查看整体结构，独立截图用于查看页面细节。"
+      },
+      {
+        "title": "源码与技术组成",
+        "text": "在对应工程源码与依赖中核对到：Android、Java、SQLite、Glide。源码同时包含不同 Gradle 配置：minSdk 26/30，compileSdk 34/35。购买前需确认使用的构建文件与运行版本。"
+      }
+    ],
+    "runtime": {
+      "minSdk": null,
+      "compileSdk": null,
+      "note": "源码同时包含不同 Gradle 配置：minSdk 26/30，compileSdk 34/35。购买前需确认使用的构建文件与运行版本。",
+      "languages": [
+        "Java"
+      ]
+    },
+    "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  }
+]
