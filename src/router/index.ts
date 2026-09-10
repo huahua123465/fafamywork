@@ -12,6 +12,11 @@ const router = createRouter({
     { path: '/about', component: () => import('../pages/About.vue'), meta: { title: '关于我' } },
     { path: '/insights', component: () => import('../pages/Insights.vue'), meta: { title: '浏览数据' } },
     {
+      path: '/admin',
+      component: () => import('../pages/Admin.vue'),
+      meta: { title: '个人主页设置', noindex: true },
+    },
+    {
       path: '/:pathMatch(.*)*',
       component: () => import('../pages/NotFound.vue'),
       meta: { title: '页面未找到' },
@@ -36,6 +41,8 @@ router.afterEach((to) => {
           ? '一个喜欢创造的人，一些认真做的作品。了解作品背后的思考与创作过程。'
           : '发现实用工具与创意作品，一个独立开发者的项目展厅。'),
     )
+  const robots = document.querySelector('meta[name="robots"]')
+  robots?.setAttribute('content', to.meta.noindex ? 'noindex, nofollow' : 'index, follow')
   recordPageView(to.path, String(title || site.name))
 })
 export default router

@@ -1,0 +1,36 @@
+name: fafamywork
+
+services:
+  web:
+    image: nginx:1.27-alpine
+    container_name: fafamywork
+    restart: unless-stopped
+    depends_on: [api]
+    ports:
+      - "8080:80"
+    volumes:
+      - /root/fafamywork/dist:/usr/share/nginx/html:ro
+      - /root/fafamywork/deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  api:
+    image: node:22-alpine
+    container_name: fafamywork-api
+    restart: unless-stopped
+    command: ["node", "/app/server.js"]
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?需要在 .env 里设置 ADMIN_PASSWORD}
+      TOKEN_SECRET: ${TOKEN_SECRET:?需要在 .env 里设置 TOKEN_SECRET}
+      DATA_FILE: /data/profile.json
+    volumes:
+      - /root/fafamywork/deploy/api:/app:ro
+      - /root/fafamywork/deploy/data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Modal from './Modal.vue'
 import Icon from './Icon.vue'
 import { author } from '../content/author'
 import { contactOpen, notify } from '../composables/ui'
 import { safeUrl } from '../utils/projects'
+const hasContact = computed(() =>
+  Boolean(author.email || author.wechat || author.qq || author.phone || safeUrl(author.github) || safeUrl(author.blog)),
+)
 const copyError = ref(false)
 const copied = ref(false)
 watch(contactOpen, () => {
@@ -28,7 +31,7 @@ async function copy(value: string) {
     ><div class="contact-body">
       <div class="contact-symbol"><Icon name="mail" :size="32" /></div>
       <p class="contact-intro">请准备项目名称、功能清单与技术要求。<br />沟通价格、运行环境和交付范围。</p>
-      <div v-if="author.email || author.wechat || author.github" class="contact-options">
+      <div v-if="hasContact" class="contact-options">
         <div v-if="author.email" class="contact-option">
           <Icon name="mail" />
           <div>
@@ -47,6 +50,24 @@ async function copy(value: string) {
             <Icon name="copy" />
           </button>
         </div>
+        <div v-if="author.qq" class="contact-option">
+          <Icon name="phone" />
+          <div>
+            <small>QQ</small><span class="selectable">{{ author.qq }}</span>
+          </div>
+          <button class="icon-button" aria-label="复制 QQ" @click="copy(author.qq)">
+            <Icon name="copy" />
+          </button>
+        </div>
+        <div v-if="author.phone" class="contact-option">
+          <Icon name="phone" />
+          <div>
+            <small>手机</small><a :href="`tel:${author.phone}`">{{ author.phone }}</a>
+          </div>
+          <button class="icon-button" aria-label="复制手机号" @click="copy(author.phone)">
+            <Icon name="copy" />
+          </button>
+        </div>
         <a
           v-if="safeUrl(author.github)"
           class="contact-option"
@@ -55,6 +76,16 @@ async function copy(value: string) {
           rel="noopener noreferrer"
           ><Icon name="github" />
           <div><small>也可以在这里找到我</small><span>GitHub</span></div>
+          <Icon name="arrow"
+        /></a>
+        <a
+          v-if="safeUrl(author.blog)"
+          class="contact-option"
+          :href="safeUrl(author.blog)"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><Icon name="external" />
+          <div><small>个人主页</small><span>博客 / 主页</span></div>
           <Icon name="arrow"
         /></a>
       </div>
