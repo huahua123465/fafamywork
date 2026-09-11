@@ -820,8 +820,9 @@ main:focus {
   .category-tabs {
     gap: 1px;
     margin-bottom: 22px;
-    margin-right: -20px;
-    padding-right: 20px;
+    /* 延伸到屏幕右缘，数值要等于手机端页面留白（ui-system.css 里 .container 两侧各 16px） */
+    margin-right: -16px;
+    padding-right: 16px;
   }
   .category-tabs button {
     padding: 10px 16px;
