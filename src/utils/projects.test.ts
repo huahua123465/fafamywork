@@ -3,6 +3,11 @@ import { projects } from '../content/projects'
 import assets from '../content/project-assets.json'
 import { filterProjects, safeUrl } from './projects'
 describe('项目浏览规则', () => {
+  it('可以按技术标签搜索，并与题材筛选组合', () => {
+    const fixture = { ...projects[0]!, tags: ['UniqueFramework'], keywords: [] }
+    expect(filterProjects([fixture], 'uniqueframework', fixture.category)).toHaveLength(1)
+    expect(filterProjects([fixture], 'uniqueframework', '不存在的题材')).toHaveLength(0)
+  })
   it('组合分类和关键词，不跨分类返回结果', () => {
     expect(filterProjects(projects, '花店', '电商购物').map((p) => p.slug)).toEqual([
       'flower-shop',

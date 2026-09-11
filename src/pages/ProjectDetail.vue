@@ -10,6 +10,7 @@ import { openContact } from '../composables/ui'
 import { safeUrl } from '../utils/projects'
 import { describeTechnology } from '../content/technology'
 import PurchaseGuide from '../components/PurchaseGuide.vue'
+import BuyingSummary from '../components/BuyingSummary.vue'
 const route = useRoute(),
   router = useRouter()
 const project = computed(() => projects.find((p) => p.slug === route.params.slug))
@@ -64,7 +65,7 @@ function closePreview() {
             rel="noopener noreferrer"
             ><Icon name="github" :size="17" /> 查看源码 <Icon name="arrow" :size="15" /></a
           ><button v-else class="text-link" @click="openContact">
-            咨询购买 <Icon name="chevron" :size="16" />
+            咨询这个项目 <Icon name="chevron" :size="16" />
           </button>
         </div>
         <p class="detail-meta">
@@ -81,6 +82,7 @@ function closePreview() {
         </div>
         <a href="#project-specs" class="text-link">查看技术规格与购买说明 ↓</a>
       </div>
+      <BuyingSummary :project="project" />
       <ProjectGallery
         :project="project"
         :initial-open="route.query.view === 'preview'"

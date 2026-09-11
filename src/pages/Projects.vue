@@ -14,8 +14,9 @@ const category = computed(() =>
   categories.includes(queryString(route.query.category) as any) ? queryString(route.query.category) : '全部',
 )
 const results = computed(() =>
-  filterProjects(projects, queryString(route.query.q), category.value, 'featured'),
+  filterProjects(projects.filter(p => !route.query.platform || p.platform === route.query.platform), queryString(route.query.q), category.value, 'featured'),
 )
+const platforms = computed(() => [...new Set(projects.map(p => p.platform).filter(Boolean))] as string[])
 const count = computed(() => Math.max(12, Math.min(1000, Number(route.query.limit) || 12)))
 const visible = computed(() => results.value.slice(0, count.value))
 let timer: ReturnType<typeof setTimeout>
@@ -75,7 +76,7 @@ onBeforeUnmount(() => clearTimeout(timer))
             v-model="search"
             type="search"
             aria-label="搜索项目"
-            placeholder="搜索项目、功能或关键词"
+            placeholder="搜索项目、功能或技术，如 Java、SQLite"
             @input="onInput"
           /><button
             v-if="search"
@@ -88,6 +89,14 @@ onBeforeUnmount(() => clearTimeout(timer))
           </button>
         </form>
         <span class="catalog-summary">{{ projects.length }} 个项目 · 按推荐顺序浏览</span>
+      </div>
+      <div class="platform-filter">
+        <p>技术平台</p>
+        <div class="category-tabs" aria-label="技术平台">
+          <button :aria-pressed="!route.query.platform" :class="{ active: !route.query.platform }" @click="update({ platform: undefined })">全部平台</button>
+          <button v-for="item in platforms" :key="item" :aria-pressed="route.query.platform === item" :class="{ active: route.query.platform === item }" @click="update({ platform: item })">{{ item }}</button>
+        </div>
+        <p class="platform-note">Java Web、鸿蒙、小程序等项目将陆续上架。</p>
       </div>
       <div class="catalog-filters">
         <div class="category-tabs" aria-label="项目分类">

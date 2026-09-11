@@ -1,3 +1,31 @@
+.platform-filter { margin: 20px 0; }
+.platform-filter > p, .platform-note { font-size: 14px; color: var(--muted); }
+.platform-filter .category-tabs { margin: 8px 0; }
+.buying-summary { margin: 28px 0; padding: 28px; text-align: left; background: #f7f1e8; border-radius: 18px; }
+.buying-summary h2, .buying-guide h2 { font-size: 21px; font-weight: 500; line-height: 1.5; }
+.buying-summary .section-heading { margin-bottom: 20px; }
+.buying-summary .section-heading > span { font-size: 14px; color: var(--muted); }
+.buying-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin: 0 0 22px; }
+.buying-facts dt { font-size: 13px; color: var(--muted); margin-bottom: 7px; }
+.buying-facts dd { margin: 0; font-size: 15px; line-height: 1.7; }
+.buying-summary > p, .buying-guide article > p { color: var(--muted); font-size: 15px; line-height: 1.9; }
+.buying-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; margin-top: 26px; }
+.buying-actions > span { color: var(--muted); font-size: 14px; }
+.buying-guide .purchase-grid { margin-top: 30px; }
+.buying-guide h2 { margin: 12px 0; }
+.inquiry-box { text-align: left; margin: 20px 0; padding: 18px; background: var(--surface); border-radius: 14px; }
+.inquiry-box h3 { font-size: 18px; font-weight: 500; margin-bottom: 16px; }
+.inquiry-box label { display: block; font-size: 14px; margin: 12px 0 8px; }
+.inquiry-box textarea { display: block; width: 100%; box-sizing: border-box; padding: 12px; font: inherit; font-size: 14px; line-height: 1.7; color: var(--text); border: 0; border-radius: 10px; resize: vertical; background: #fffdf9; }
+.inquiry-box .button { margin-top: 14px; }
+.purchase-summary .text-link { display: inline-block; margin: 18px 0 0 16px; }
+@media (max-width: 767px) {
+  .buying-facts { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .buying-summary { padding: 20px; }
+  .buying-summary .section-heading { display: block; }
+  .buying-guide .page-heading h1 { font-size: 30px; line-height: 1.5; }
+}
+@media (max-width: 380px) { .buying-facts { grid-template-columns: 1fr; } }
 :root {
   --text: #302b27;
   --muted: #766e65;

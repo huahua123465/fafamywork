@@ -31,7 +31,7 @@ watch(
         ><RouterLink to="/projects" :class="{ current: route.path.startsWith('/projects') }"
           >全部项目</RouterLink
         ><RouterLink to="/about" :class="{ current: route.path === '/about' }">关于我</RouterLink>
-        <RouterLink to="/insights" :class="{ current: route.path === '/insights' }">浏览数据</RouterLink>
+        <RouterLink to="/buying-guide" :class="{ current: route.path === '/buying-guide' }">购买说明</RouterLink>
       </nav>
       <div class="nav-actions">
         <RouterLink class="icon-button" to="/projects?focus=search" aria-label="搜索项目"
@@ -49,7 +49,7 @@ watch(
     </div>
     <nav v-if="menu" class="mobile-nav" aria-label="移动端导航">
       <RouterLink to="/">首页</RouterLink><RouterLink to="/projects">全部项目</RouterLink
-      ><RouterLink to="/about">关于我</RouterLink><RouterLink to="/insights">浏览数据</RouterLink
+      ><RouterLink to="/about">关于我</RouterLink><RouterLink to="/buying-guide">购买说明</RouterLink
       ><button @click="contactFromMenu">联系我 <Icon name="arrow" :size="16" /></button>
     </nav>
   </header>
@@ -63,7 +63,7 @@ watch(
         ><span>{{ site.footerText }}</span>
         <div>
           <RouterLink to="/projects">全部项目</RouterLink><RouterLink to="/about">关于我</RouterLink
-          ><RouterLink to="/insights">浏览数据</RouterLink><button @click="openContact">联系我 ↗</button>
+          ><RouterLink to="/buying-guide">购买说明</RouterLink><button @click="openContact">联系我 ↗</button>
         </div>
       </div>
       <div class="footer-bottom">

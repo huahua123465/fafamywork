@@ -5,12 +5,19 @@ import Icon from './Icon.vue'
 import { author } from '../content/author'
 import { contactOpen, notify } from '../composables/ui'
 import { safeUrl } from '../utils/projects'
+import { useRoute } from 'vue-router'
+import { projects } from '../content/projects'
+const route = useRoute()
+const selected = computed(() => projects.find(p => p.slug === route.params.slug))
+const requirements = ref('')
+const inquiry = computed(() => selected.value ? `你好，我想咨询：${selected.value.name}\n项目编号：${selected.value.slug}\n项目链接：${location.origin}/projects/${selected.value.slug}\n技术：${selected.value.tags.join('、')}\n我的需求：${requirements.value || '希望确认价格、交付内容和运行环境。'}` : '')
 const hasContact = computed(() =>
   Boolean(author.email || author.wechat || author.qq || author.phone || safeUrl(author.github) || safeUrl(author.blog)),
 )
 const copyError = ref(false)
 const copied = ref(false)
 watch(contactOpen, () => {
+  requirements.value = ''
   copyError.value = false
   copied.value = false
 })
@@ -31,6 +38,14 @@ async function copy(value: string) {
     ><div class="contact-body">
       <div class="contact-symbol"><Icon name="mail" :size="32" /></div>
       <p class="contact-intro">请准备项目名称、功能清单与技术要求。<br />沟通价格、运行环境和交付范围。</p>
+      <div v-if="selected" class="inquiry-box">
+        <h3>{{ selected.name }}</h3>
+        <label for="inquiry-needs">你的技术或功能要求（选填）</label>
+        <textarea id="inquiry-needs" v-model="requirements" rows="2" placeholder="例如：需要 MySQL、管理员端，是否支持协助部署？"></textarea>
+        <label for="inquiry-message">咨询内容</label>
+        <textarea id="inquiry-message" :value="inquiry" readonly rows="6"></textarea>
+        <button class="button secondary" @click="copy(inquiry)">复制项目与需求</button>
+      </div>
       <div v-if="hasContact" class="contact-options">
         <div v-if="author.email" class="contact-option">
           <Icon name="mail" />

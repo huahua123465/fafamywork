@@ -6,7 +6,7 @@ export function filterProjects(items: Project[], query = '', category = '全部'
       (p) =>
         (category === '全部' || p.category === category) &&
         (!needle ||
-          [p.name, p.english, p.summary, p.category, ...p.keywords]
+          [p.name, p.english, p.summary, p.category, p.platform, ...p.tags, ...p.keywords]
             .join(' ')
             .toLocaleLowerCase()
             .includes(needle)),

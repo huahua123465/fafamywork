@@ -39,7 +39,8 @@ const info = computed(() => purchaseInfo(props.project))
           <p>
             请提供课程要求与希望实现的功能，确认价格、源码范围、APK、数据库脚本、部署文档及售后支持。具体交付内容以沟通确认为准。
           </p>
-          <button class="button" @click="openContact">咨询项目与报价 ↗</button>
+          <button class="button" @click="openContact">咨询这个项目 ↗</button>
+          <RouterLink to="/buying-guide" class="text-link">查看完整购买说明</RouterLink>
         </div>
       </div>
     </div>

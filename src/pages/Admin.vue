@@ -134,6 +134,7 @@ onMounted(() => {
       <p class="eyebrow">PROFILE</p>
       <h1>个人主页设置</h1>
       <p>在这里填写你的资料与联系方式，保存后立刻在全站生效，访客也能看到。</p>
+      <RouterLink v-if="token" to="/insights" class="text-link">查看本机浏览数据 ↗</RouterLink>
     </div>
 
     <!-- 未登录 -->

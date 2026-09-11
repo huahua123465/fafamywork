@@ -10,7 +10,8 @@ const router = createRouter({
     { path: '/projects', component: () => import('../pages/Projects.vue'), meta: { title: '全部项目' } },
     { path: '/projects/:slug', component: () => import('../pages/ProjectDetail.vue') },
     { path: '/about', component: () => import('../pages/About.vue'), meta: { title: '关于我' } },
-    { path: '/insights', component: () => import('../pages/Insights.vue'), meta: { title: '浏览数据' } },
+    { path: '/buying-guide', component: () => import('../pages/BuyingGuide.vue'), meta: { title: '购买说明' } },
+    { path: '/insights', component: () => import('../pages/Insights.vue'), meta: { title: '本机浏览数据', noindex: true } },
     {
       path: '/admin',
       component: () => import('../pages/Admin.vue'),
