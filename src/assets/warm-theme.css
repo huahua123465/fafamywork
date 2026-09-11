@@ -13,6 +13,83 @@
   background: #fffcf8;
   color: var(--text);
 }
+
+/* Chinese display text needs gentler weight and more room than Latin headings. */
+.hero-copy {
+  max-width: 940px;
+  margin-inline: auto;
+  padding: 64px 24px 0;
+}
+.hero-copy h1 {
+  font-size: clamp(34px, 3.8vw, 56px);
+  font-weight: 500;
+  line-height: 1.42;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.hero-copy h1 span,
+.about-copy h1 span,
+.about-contact h2 span {
+  color: #946349;
+}
+.hero-copy > .eyebrow,
+.about-copy .eyebrow {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+.hero-description {
+  max-width: 540px;
+  margin: 22px auto 0;
+  font-size: 17px;
+  line-height: 1.95;
+  letter-spacing: 0.015em;
+  text-wrap: pretty;
+}
+.hero-proof {
+  margin-top: 24px;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+.hero-proof strong { font-weight: 500; }
+.hero-copy .hero-actions { margin-top: 30px; }
+.about-hero {
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(36px, 6vw, 88px);
+  padding-top: 64px;
+  padding-bottom: 72px;
+}
+.about-copy h1 {
+  font-size: clamp(30px, 3vw, 44px);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+}
+.about-copy h1 span { display: block; }
+.about-role { font-size: 14px; color: var(--muted); margin-top: 24px; }
+.about-description {
+  max-width: 460px;
+  font-size: 16px;
+  line-height: 2;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  margin-top: 14px;
+  text-wrap: pretty;
+}
+.about-copy .hero-actions { margin-top: 28px; }
+.home-hero .button,
+.about-hero .button { font-weight: 500; font-size: 15px; }
+.about-photo .photo-caption { color: var(--muted); }
+@media (max-width: 767px) {
+  .hero-copy { padding: 42px 22px 0; }
+  .hero-copy h1 { font-size: clamp(28px, 7.6vw, 38px); line-height: 1.5; }
+  .hero-description { font-size: 15px; max-width: 340px; margin-top: 18px; }
+  .hero-copy > .eyebrow, .about-copy .eyebrow { font-size: 13px; margin-bottom: 16px; }
+  .about-hero { grid-template-columns: 1fr; gap: 32px; padding-top: 38px; padding-bottom: 44px; }
+  .about-copy h1 { font-size: clamp(28px, 7.5vw, 36px); }
+  .about-description { font-size: 15px; }
+}
 body,
 .site-footer,
 .technology-section,

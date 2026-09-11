@@ -3,8 +3,8 @@ import { reactive } from 'vue'
 // name 与 footerText 可在 /admin 个人主页里覆盖。
 export const site = reactive({
   name: '我的作品',
-  heroEyebrow: 'Android 项目 · 技术与源码',
-  heroTitle: ['让好点子，', '成为真实作品。'],
-  heroDescription: '从界面到技术，找到适合你的项目。查看功能、了解运行条件，联系咨询源码与交付。',
+  heroEyebrow: 'Android 项目集',
+  heroTitle: ['选一个喜欢的项目，', '从这里开始。'],
+  heroDescription: '浏览界面，了解功能与技术。找到适合自己的方向，再聊聊源码和交付。',
   footerText: '保持好奇，慢慢创造。',
 })

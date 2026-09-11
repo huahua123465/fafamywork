@@ -31,7 +31,7 @@ const totalScreens = computed(() =>
       <p class="hero-description">{{ site.heroDescription }}</p>
       <div class="hero-proof" aria-label="作品数据">
         <span
-          ><strong>{{ projects.length }}</strong> 个完整项目</span
+          ><strong>{{ projects.length }}</strong> 个项目</span
         ><i></i>
         <span
           ><strong>{{ totalScreens }}</strong> 张界面截图</span
@@ -103,8 +103,8 @@ const totalScreens = computed(() =>
     <div class="container">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">THE COLLECTION</p>
-          <h2>发现你的下一款宝藏。</h2>
+          <p class="eyebrow">精选项目</p>
+          <h2>从感兴趣的方向逛起</h2>
         </div>
         <RouterLink to="/projects" class="text-link"
           >查看全部项目 <Icon name="chevron" :size="17"

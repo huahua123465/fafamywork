@@ -16,8 +16,8 @@ const steps = [
 <template>
   <section class="about-hero container">
     <div class="about-copy">
-      <p class="eyebrow">HELLO, NICE TO MEET YOU</p>
-      <h1>用项目，<br /><span>记录创造。</span></h1>
+      <p class="eyebrow">很高兴在这里遇见你</p>
+      <h1>你好，<span>来看看我做的项目。</span></h1>
       <p class="about-role">{{ author.role }}</p>
       <p class="about-description">{{ author.introduction }}</p>
       <div class="hero-actions">
@@ -35,9 +35,9 @@ const steps = [
         eager
       />
       <div class="photo-caption">
-        <span>MAKE SOMETHING MEANINGFUL.</span><span>把想法，慢慢做出来。</span>
+        <span>日常里的开发时光</span><span>把一个个想法，慢慢做成作品。</span>
       </div>
-      <span class="photo-note">一张桌子。无限可能。</span>
+      <span class="photo-note">写代码，也记录灵感</span>
     </div>
   </section>
   <section class="about-story section-pad">
