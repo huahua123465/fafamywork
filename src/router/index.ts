@@ -6,7 +6,7 @@ import { recordPageView } from '../utils/analytics'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: Home, meta: { title: 'Android 项目展示' } },
+    { path: '/', component: Home, meta: { title: '项目作品集' } },
     { path: '/projects', component: () => import('../pages/Projects.vue'), meta: { title: '全部项目' } },
     { path: '/projects/:slug', component: () => import('../pages/ProjectDetail.vue') },
     { path: '/about', component: () => import('../pages/About.vue'), meta: { title: '关于我' } },
@@ -39,7 +39,7 @@ router.afterEach((to) => {
       project?.summary ||
         (to.path === '/about'
           ? '一个喜欢创造的人，一些认真做的作品。了解作品背后的思考与创作过程。'
-          : 'Android 原生项目展示：每个项目都有界面截图、功能说明和运行要求，源码可咨询。'),
+          : '浏览项目作品，查看界面截图、功能说明与技术要求，咨询源码与交付。'),
     )
   const robots = document.querySelector('meta[name="robots"]')
   robots?.setAttribute('content', to.meta.noindex ? 'noindex, nofollow' : 'index, follow')

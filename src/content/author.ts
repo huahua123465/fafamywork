@@ -4,7 +4,7 @@ import { reactive } from 'vue'
 // 把你在 /admin 个人主页里填写的内容覆盖上来（见 src/utils/profile.ts）。
 export const author = reactive({
   name: '作品创作者',
-  role: 'Android 开发 · 应用实践',
+  role: '软件开发 · 项目实践',
   introduction:
     '从校园闲置到鲜花选购，从旅行计划到仓库管理。这里收录我的应用项目，也记录每一个想法落到界面的过程。',
   sample: false,
