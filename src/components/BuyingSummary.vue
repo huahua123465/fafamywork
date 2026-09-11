@@ -3,8 +3,10 @@ import { computed } from 'vue'
 import type { Project } from '../types'
 import { purchaseInfo } from '../content/purchase'
 import { openContact } from '../composables/ui'
+import { site } from '../content/site'
 const props = defineProps<{ project: Project }>()
 const specs = computed(() => purchaseInfo(props.project))
+const price = computed(() => props.project.price || site.priceNote)
 </script>
 <template>
   <aside class="buying-summary" aria-label="购买前速览">
@@ -18,6 +20,6 @@ const specs = computed(() => purchaseInfo(props.project))
       <div><dt>展示状态</dt><dd>界面预览 · 运行效果购买前确认</dd></div>
     </dl>
     <p>主要功能：{{ specs.modules }}</p>
-    <div class="buying-actions"><span>价格与交付范围请咨询</span><button class="button" @click="openContact">咨询这个项目 ↗</button><RouterLink to="/buying-guide" class="text-link">查看购买说明</RouterLink></div>
+    <div class="buying-actions"><span>{{ price ? `参考价格：${price}` : '价格与交付范围请咨询' }}</span><button class="button" @click="openContact">咨询这个项目 ↗</button><RouterLink to="/buying-guide" class="text-link">查看购买说明</RouterLink></div>
   </aside>
 </template>

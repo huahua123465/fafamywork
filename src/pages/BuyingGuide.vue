@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { openContact } from '../composables/ui'
+import { site } from '../content/site'
 const items = [
   ['先确认适不适合', '把项目链接、所需技术和功能清单发给我。确认语言、框架、数据库、运行环境，以及是否需要后端或管理员端。'],
   ['看清效果再决定', '截图用于了解界面，不代表所有业务已经运行验证。购买前可咨询对应版本的运行演示、安装包或视频，以及截图与源码是否一致。'],
@@ -12,6 +13,7 @@ const items = [
   <section class="container buying-guide section-pad">
     <header class="page-heading"><p class="eyebrow">购买说明</p><h1>先了解清楚，再安心选择</h1><p>从选项目到拿到源码，每一步都提前沟通。</p></header>
     <div class="purchase-grid"><article v-for="(item, index) in items" :key="item[0]"><p class="eyebrow">0{{ index + 1 }}</p><h2>{{ item[0] }}</h2><p>{{ item[1] }}</p></article></div>
+    <p v-if="site.priceNote" class="purchase-price">参考价格：{{ site.priceNote }}</p>
     <div class="buying-actions"><RouterLink to="/projects" class="button">去选项目</RouterLink><button class="text-link" @click="openContact">咨询交付与报价 ↗</button></div>
   </section>
 </template>

@@ -420,3 +420,4 @@ body,
     padding: 18px;
   }
 }
+.purchase-price { margin-top: 14px; font-size: 15px; font-weight: 600; color: var(--strong); }

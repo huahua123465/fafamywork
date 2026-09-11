@@ -191,3 +191,52 @@
     grid-column: 1 / -1;
   }
 }
+
+.admin-field-invalid input {
+  border-color: #c0392b;
+}
+.admin-field-invalid input:focus {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.14);
+}
+.admin-field small.admin-field-error {
+  color: #c0392b;
+}
+.admin-unsaved {
+  color: #a4611c;
+  font-size: 14px;
+}
+.admin-relogin {
+  border: 1px solid #e8c9a0;
+  background: #fff8ee;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 0 0 8px;
+}
+.admin-relogin p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.admin-relogin > div {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.admin-relogin input {
+  flex: 1 1 180px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 14px;
+}
+.admin-relogin .admin-error {
+  margin: 10px 0 0;
+}
+.admin-actions .admin-relogin {
+  flex-basis: 100%;
+  margin: 0;
+}

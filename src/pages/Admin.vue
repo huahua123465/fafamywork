@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 import Icon from '../components/Icon.vue'
-import { applyProfile, fetchProfile, login, saveProfile, type Profile } from '../utils/profile'
+import {
+  ApiError,
+  applyProfile,
+  checkSession,
+  fetchProfile,
+  login,
+  saveProfile,
+  tokenExpired,
+  type Profile,
+} from '../utils/profile'
 import { notify } from '../composables/ui'
+import { ADMIN_TOKEN_KEY, readToken } from '../utils/admin-session'
 
-const TOKEN_KEY = 'portfolio-admin-token'
-
-const token = ref<string>(localStorage.getItem(TOKEN_KEY) || '')
+const token = ref(readToken())
 const password = ref('')
 const loginError = ref('')
 const loggingIn = ref(false)
@@ -14,6 +23,9 @@ const saving = ref(false)
 const loading = ref(false)
 const savedAt = ref('')
 const loadError = ref('')
+/** 保存时发现登录过期：保留表单内容，原地要求重新输入密码，登录后自动继续保存 */
+const reloginNeeded = ref(false)
+const fieldErrors = reactive<Partial<Record<keyof Profile, string>>>({})
 
 const form = reactive<Profile>({
   name: '',
@@ -30,30 +42,40 @@ const form = reactive<Profile>({
   avatar: '',
   siteName: '',
   footerText: '',
+  priceNote: '',
   stories: [],
   timeline: [],
 })
+/** 最近一次从服务器读取或保存成功时的表单快照，用来判断是否有未保存的修改 */
+const snapshot = ref('')
+const serialize = () => JSON.stringify({ ...form, stories: form.stories.filter((s) => s.trim()) })
+const dirty = computed(() => Boolean(snapshot.value) && serialize() !== snapshot.value)
 
 const contactCount = computed(
   () => [form.email, form.wechat, form.qq, form.phone, form.github, form.blog].filter((v) => v.trim()).length,
 )
 
-const textFields: { key: keyof Profile; label: string; hint?: string; type?: string }[] = [
+type Field = { key: keyof Profile; label: string; hint?: string; type?: string; inputmode?: 'url' | 'email' }
+const textFields: Field[] = [
   { key: 'name', label: '姓名 / 昵称', hint: '显示在「关于我」页面，替换默认的「作品创作者」' },
   { key: 'role', label: '身份标签', hint: '例如：Android 开发 · 在校学生' },
   { key: 'siteName', label: '站点名称', hint: '显示在导航栏和页脚，留空则用「我的作品」' },
   { key: 'location', label: '所在城市', hint: '可留空' },
 ]
-const contactFields: { key: keyof Profile; label: string; hint: string; type?: string }[] = [
-  { key: 'email', label: '邮箱', hint: '买家最常用的联系方式，建议至少填这个', type: 'email' },
+const contactFields: Field[] = [
+  { key: 'email', label: '邮箱', hint: '买家最常用的联系方式，建议至少填这个', type: 'email', inputmode: 'email' },
   { key: 'wechat', label: '微信号', hint: '填微信号本身，不是二维码链接' },
   { key: 'qq', label: 'QQ', hint: '可留空' },
-  { key: 'phone', label: '手机号', hint: '公开手机号会收到骚扰电话，按需填写' },
-  { key: 'github', label: 'GitHub 主页', hint: 'https:// 开头的完整地址', type: 'url' },
-  { key: 'blog', label: '个人博客 / 主页', hint: 'https:// 开头的完整地址', type: 'url' },
-  { key: 'resume', label: '简历链接', hint: 'https:// 开头，或站内路径 /files/resume.pdf', type: 'url' },
-  { key: 'avatar', label: '头像地址', hint: 'https:// 开头，或站内路径 /images/avatar.webp', type: 'url' },
+  { key: 'phone', label: '手机号', hint: '也可以填其他联系账号；只有填的是电话号码时，访客才能点击直接拨打' },
+  { key: 'github', label: 'GitHub 主页', hint: 'https:// 开头的完整地址', inputmode: 'url' },
+  { key: 'blog', label: '个人博客 / 主页', hint: 'https:// 开头的完整地址', inputmode: 'url' },
+  { key: 'resume', label: '简历链接', hint: 'https:// 开头，或站内路径 /files/resume.pdf', inputmode: 'url' },
+  { key: 'avatar', label: '头像地址', hint: 'https:// 开头，或站内路径 /images/avatar.webp', inputmode: 'url' },
 ]
+
+function clearErrors() {
+  for (const key of Object.keys(fieldErrors) as (keyof Profile)[]) delete fieldErrors[key]
+}
 
 async function loadCurrent() {
   loading.value = true
@@ -65,6 +87,7 @@ async function loadCurrent() {
       if (Array.isArray(value)) (form[key] as unknown) = [...value]
       else if (typeof value === 'string') (form[key] as unknown) = value
     }
+    snapshot.value = serialize()
     if (!form.stories.length) form.stories = ['']
   } catch {
     loadError.value = '读取当前资料失败，后端可能没有启动。'
@@ -78,9 +101,13 @@ async function doLogin() {
   loggingIn.value = true
   try {
     token.value = await login(password.value)
-    localStorage.setItem(TOKEN_KEY, token.value)
+    localStorage.setItem(ADMIN_TOKEN_KEY, token.value)
     password.value = ''
-    await loadCurrent()
+    if (reloginNeeded.value) {
+      // 表单里是还没保存的修改，不能再用服务器上的旧资料覆盖
+      reloginNeeded.value = false
+      await save()
+    } else await loadCurrent()
   } catch (e) {
     loginError.value = e instanceof Error ? e.message : '登录失败'
   } finally {
@@ -89,22 +116,39 @@ async function doLogin() {
 }
 
 function logout() {
+  if (dirty.value && !confirm('还有修改没有保存，确定退出登录吗？')) return
   token.value = ''
-  localStorage.removeItem(TOKEN_KEY)
+  reloginNeeded.value = false
+  snapshot.value = ''
+  localStorage.removeItem(ADMIN_TOKEN_KEY)
 }
 
 async function save() {
+  if (tokenExpired(token.value)) {
+    reloginNeeded.value = true
+    return
+  }
   saving.value = true
+  clearErrors()
   try {
     const payload = { ...form, stories: form.stories.filter((s) => s.trim()) }
     const result = await saveProfile(token.value, payload)
     applyProfile(result) // 立刻更新当前页面的导航栏、页脚等
+    snapshot.value = serialize()
     savedAt.value = new Date().toLocaleString('zh-CN')
     notify('已保存，全站已生效')
   } catch (e) {
+    if (e instanceof ApiError && e.status === 401) {
+      reloginNeeded.value = true
+      loginError.value = ''
+      return
+    }
     const message = e instanceof Error ? e.message : '保存失败'
-    notify(message)
-    if (message.includes('登录')) logout()
+    if (e instanceof ApiError && e.field) {
+      fieldErrors[e.field as keyof Profile] = message
+      document.getElementById(`admin-${e.field}`)?.focus()
+    }
+    notify(message, 'error')
   } finally {
     saving.value = false
   }
@@ -123,9 +167,32 @@ function removeTimeline(index: number) {
   form.timeline.splice(index, 1)
 }
 
-onMounted(() => {
-  if (token.value) loadCurrent()
+const reloginInput = ref<HTMLInputElement>()
+watch(reloginNeeded, async (needed) => {
+  if (!needed) return
+  await nextTick()
+  reloginInput.value?.focus()
 })
+
+function warnUnsaved(event: BeforeUnloadEvent) {
+  if (!dirty.value) return
+  event.preventDefault()
+  event.returnValue = ''
+}
+onBeforeRouteLeave(() => !dirty.value || confirm('还有修改没有保存，确定离开吗？'))
+
+onMounted(async () => {
+  window.addEventListener('beforeunload', warnUnsaved)
+  if (!token.value) return
+  if (tokenExpired(token.value) || (await checkSession(token.value)) === false) {
+    token.value = ''
+    localStorage.removeItem(ADMIN_TOKEN_KEY)
+    loginError.value = '上次登录已过期，请重新登录'
+    return
+  }
+  loadCurrent()
+})
+onBeforeUnmount(() => window.removeEventListener('beforeunload', warnUnsaved))
 </script>
 
 <template>
@@ -134,7 +201,7 @@ onMounted(() => {
       <p class="eyebrow">PROFILE</p>
       <h1>个人主页设置</h1>
       <p>在这里填写你的资料与联系方式，保存后立刻在全站生效，访客也能看到。</p>
-      <RouterLink v-if="token" to="/insights" class="text-link">查看本机浏览数据 ↗</RouterLink>
+      <RouterLink v-if="token" to="/insights" class="text-link">查看访问统计 ↗</RouterLink>
     </div>
 
     <!-- 未登录 -->
@@ -171,7 +238,7 @@ onMounted(() => {
         <legend>基本信息</legend>
         <label v-for="f in textFields" :key="f.key" class="admin-field">
           <span>{{ f.label }}</span>
-          <input v-model="(form as any)[f.key]" :type="f.type || 'text'" />
+          <input :id="`admin-${f.key}`" v-model="(form as any)[f.key]" :type="f.type || 'text'" />
           <small v-if="f.hint">{{ f.hint }}</small>
         </label>
         <label class="admin-field">
@@ -191,10 +258,38 @@ onMounted(() => {
         <p class="admin-group-note">
           填写的项会出现在「联系我」弹窗里，留空的自动隐藏。至少填一项，否则买家找不到你。
         </p>
-        <label v-for="f in contactFields" :key="f.key" class="admin-field">
+        <label
+          v-for="f in contactFields"
+          :key="f.key"
+          class="admin-field"
+          :class="{ 'admin-field-invalid': fieldErrors[f.key] }"
+        >
           <span>{{ f.label }}</span>
-          <input v-model="(form as any)[f.key]" :type="f.type || 'text'" />
-          <small>{{ f.hint }}</small>
+          <input
+            :id="`admin-${f.key}`"
+            v-model="(form as any)[f.key]"
+            :type="f.type || 'text'"
+            :inputmode="f.inputmode"
+            :aria-invalid="Boolean(fieldErrors[f.key])"
+            :aria-describedby="fieldErrors[f.key] ? `admin-${f.key}-error` : undefined"
+            @input="delete fieldErrors[f.key]"
+          />
+          <small v-if="fieldErrors[f.key]" :id="`admin-${f.key}-error`" class="admin-field-error">{{
+            fieldErrors[f.key]
+          }}</small>
+          <small v-else>{{ f.hint }}</small>
+        </label>
+      </fieldset>
+
+      <fieldset class="admin-group">
+        <legend>价格说明</legend>
+        <p class="admin-group-note">
+          显示在每个项目的「购买前速览」和购买说明页。留空则显示「价格与交付范围请咨询」。
+        </p>
+        <label class="admin-field">
+          <span>参考价格</span>
+          <input v-model="form.priceNote" type="text" maxlength="120" placeholder="例如：源码 ¥199 起，含部署指导另议" />
+          <small>单个项目的价格可以在项目数据的 price 字段里单独填写，填了会优先显示。</small>
         </label>
       </fieldset>
 
@@ -225,10 +320,29 @@ onMounted(() => {
       </fieldset>
 
       <div class="admin-actions">
-        <button class="button" type="submit" :disabled="saving">
+        <div v-if="reloginNeeded" class="admin-relogin" role="alert">
+          <p><strong>登录已过期。</strong>你填写的内容都还在，输入密码后会自动继续保存。</p>
+          <div>
+            <input
+              ref="reloginInput"
+              v-model="password"
+              type="password"
+              autocomplete="current-password"
+              aria-label="管理密码"
+              placeholder="管理密码"
+              @keydown.enter.prevent="doLogin"
+            />
+            <button class="button" type="button" :disabled="loggingIn || !password" @click="doLogin">
+              {{ loggingIn ? '登录中…' : '登录并保存' }}
+            </button>
+          </div>
+          <p v-if="loginError" class="admin-error">{{ loginError }}</p>
+        </div>
+        <button class="button" type="submit" :disabled="saving || reloginNeeded">
           {{ saving ? '保存中…' : '保存并生效' }} <Icon name="right" :size="17" />
         </button>
-        <span v-if="savedAt" class="admin-saved">上次保存：{{ savedAt }}</span>
+        <span v-if="dirty" class="admin-unsaved">有修改尚未保存</span>
+        <span v-else-if="savedAt" class="admin-saved">上次保存：{{ savedAt }}</span>
       </div>
     </form>
   </section>

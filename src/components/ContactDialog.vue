@@ -6,6 +6,7 @@ import { author } from '../content/author'
 import { contactOpen, notify } from '../composables/ui'
 import { safeUrl } from '../utils/projects'
 import { siteOrigin } from '../utils/seo'
+import { dialable } from '../utils/profile'
 import { useRoute } from 'vue-router'
 import { projects } from '../content/projects'
 const route = useRoute()
@@ -78,7 +79,8 @@ async function copy(value: string) {
         <div v-if="author.phone" class="contact-option">
           <Icon name="phone" />
           <div>
-            <small>手机</small><a :href="`tel:${author.phone}`">{{ author.phone }}</a>
+            <small>手机</small><a v-if="dialable(author.phone)" :href="`tel:${author.phone.replace(/[\s-]/g, '')}`">{{ author.phone }}</a
+            ><span v-else class="selectable">{{ author.phone }}</span>
           </div>
           <button class="icon-button" aria-label="复制手机号" @click="copy(author.phone)">
             <Icon name="copy" />

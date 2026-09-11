@@ -2,7 +2,8 @@
 // 个人资料 API：零依赖，把资料存成一个 JSON 文件。
 // GET  /api/profile  公开读取（站点启动时拉取）
 // POST /api/login    用密码换 token
-// PUT  /api/profile  带 token 保存
+// GET  /api/session  检查 token 是否仍有效
+// PUT  /api/profile  带 token 保存；格式不对的字段返回 400 和字段名，不再静默清空
 const http = require('node:http')
 const fs = require('node:fs')
 const path = require('node:path')
@@ -31,6 +32,7 @@ const TEXT_FIELDS = {
   location: 60,
   siteName: 30,
   footerText: 60,
+  priceNote: 120,
 }
 const URL_FIELDS = { github: 300, resume: 300, avatar: 500, blog: 300 }
 
@@ -50,13 +52,35 @@ function safeUrl(value, max) {
   if (v.length > max) return ''
   // 允许站内相对路径（头像可以放 /images/... ）
   if (v.startsWith('/') && !v.startsWith('//')) return v
-  if (v.startsWith('data:image/')) return v.slice(0, max)
   try {
     const u = new URL(v)
     return u.protocol === 'http:' || u.protocol === 'https:' ? u.href : ''
   } catch {
     return ''
   }
+}
+
+const FIELD_LABELS = {
+  email: '邮箱',
+  github: 'GitHub 主页',
+  blog: '个人博客 / 主页',
+  resume: '简历链接',
+  avatar: '头像地址',
+}
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+/** 返回第一个格式不对的字段，全部合格返回 null。手机号不校验：允许填微信号等其他联系账号。 */
+function validate(input) {
+  if (!input || typeof input !== 'object') return { field: '', error: '请求格式错误' }
+  const email = typeof input.email === 'string' ? input.email.trim() : ''
+  if (email && !EMAIL_RE.test(email)) return { field: 'email', error: '邮箱格式不正确' }
+  for (const [k, max] of Object.entries(URL_FIELDS)) {
+    const v = typeof input[k] === 'string' ? input[k].trim() : ''
+    if (!v) continue
+    if (v.length > max) return { field: k, error: `${FIELD_LABELS[k]}太长了，最多 ${max} 个字符` }
+    if (!safeUrl(v, max)) return { field: k, error: `${FIELD_LABELS[k]}需要以 https:// 开头，或填写以 / 开头的站内路径` }
+  }
+  return null
 }
 
 function sanitize(input) {
@@ -124,11 +148,20 @@ function checkPassword(candidate) {
   return crypto.timingSafeEqual(a, b)
 }
 
-// ---- 登录限速：同一 IP 连续失败后逐步拉长等待 ----
+// ---- 登录限速：同一 IP 连续失败后逐步拉长等待；15 分钟没有再失败就清零 ----
+const ATTEMPT_RESET_MS = 15 * 60 * 1000
 const attempts = new Map()
+setInterval(() => {
+  const now = Date.now()
+  for (const [ip, rec] of attempts) if (now - rec.last > ATTEMPT_RESET_MS) attempts.delete(ip)
+}, 60 * 1000).unref()
 function loginBlocked(ip) {
   const rec = attempts.get(ip)
   if (!rec) return 0
+  if (Date.now() - rec.last > ATTEMPT_RESET_MS) {
+    attempts.delete(ip)
+    return 0
+  }
   if (rec.count < 5) return 0
   const wait = Math.min(2 ** (rec.count - 4), 300) * 1000
   const left = rec.last + wait - Date.now()
@@ -136,7 +169,8 @@ function loginBlocked(ip) {
 }
 function noteLogin(ip, ok) {
   if (ok) return attempts.delete(ip)
-  const rec = attempts.get(ip) || { count: 0, last: 0 }
+  const old = attempts.get(ip)
+  const rec = old && Date.now() - old.last <= ATTEMPT_RESET_MS ? old : { count: 0, last: 0 }
   rec.count += 1
   rec.last = Date.now()
   attempts.set(ip, rec)
@@ -150,6 +184,10 @@ function send(res, code, body) {
     'X-Content-Type-Options': 'nosniff',
   })
   res.end(payload)
+}
+
+function bearer(req) {
+  return String(req.headers.authorization || '').replace(/^Bearer\s+/i, '')
 }
 
 function readBody(req, limit = 64 * 1024) {
@@ -201,15 +239,22 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, { token: issueToken(), expiresIn: TOKEN_TTL_MS })
   }
 
+  if (url.pathname === '/api/session' && req.method === 'GET') {
+    const token = bearer(req)
+    if (!verifyToken(token)) return send(res, 401, { error: '登录已过期，请重新登录' })
+    return send(res, 200, { ok: true, expiresAt: Number(token.split('.')[0]) })
+  }
+
   if (url.pathname === '/api/profile' && req.method === 'PUT') {
-    const auth = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '')
-    if (!verifyToken(auth)) return send(res, 401, { error: '登录已过期，请重新登录' })
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
     let body
     try {
       body = await readBody(req)
     } catch (e) {
       return send(res, 400, { error: e.message === 'too large' ? '内容过大' : '请求格式错误' })
     }
+    const invalid = validate(body)
+    if (invalid) return send(res, 400, invalid)
     const profile = sanitize(body)
     try {
       writeProfile(profile)

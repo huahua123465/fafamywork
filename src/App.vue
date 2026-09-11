@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import Icon from './components/Icon.vue'
 import ContactDialog from './components/ContactDialog.vue'
 import { site } from './content/site'
-import { openContact, toast } from './composables/ui'
+import { openContact, toast, toastKind } from './composables/ui'
 const menu = ref(false)
 const route = useRoute()
 function contactFromMenu() {
@@ -72,8 +72,8 @@ watch(
     </div>
   </footer>
   <ContactDialog /><Transition name="toast"
-    ><div v-if="toast" class="toast" role="status">
-      <Icon name="success" :size="18" />{{ toast }}
+    ><div v-if="toast" class="toast" :role="toastKind === 'error' ? 'alert' : 'status'">
+      <Icon :name="toastKind === 'error' ? 'info' : 'success'" :size="18" />{{ toast }}
     </div></Transition
   >
 </template>

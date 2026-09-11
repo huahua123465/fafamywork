@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest'
-import { applyProfile } from './profile'
+import { applyProfile, dialable, tokenExpired } from './profile'
 import { author } from '../content/author'
 import { site } from '../content/site'
 
@@ -20,6 +20,7 @@ beforeEach(() => {
   author.timeline = []
   site.name = defaults.siteName
   site.footerText = defaults.footerText
+  site.priceNote = ''
 })
 
 describe('applyProfile', () => {
@@ -59,5 +60,24 @@ describe('applyProfile', () => {
     applyProfile({ isAdmin: true, name: '李四' } as never)
     expect(author.name).toBe('李四')
     expect((author as Record<string, unknown>).isAdmin).toBeUndefined()
+  })
+})
+
+describe('管理登录与联系方式辅助函数', () => {
+  it('按 token 里的时间戳判断是否过期', () => {
+    expect(tokenExpired(`${Date.now() + 60_000}.sig`)).toBe(false)
+    expect(tokenExpired(`${Date.now() - 1}.sig`)).toBe(true)
+    expect(tokenExpired('')).toBe(true)
+    expect(tokenExpired('abc.sig')).toBe(true)
+  })
+  it('只有电话号码才生成拨号链接，微信号等账号原样显示', () => {
+    expect(dialable('13800138000')).toBe(true)
+    expect(dialable('+86 138-0013-8000')).toBe(true)
+    expect(dialable('Strive-after-H')).toBe(false)
+    expect(dialable('')).toBe(false)
+  })
+  it('参考价格写入站点配置', () => {
+    applyProfile({ priceNote: '源码 ¥199 起' })
+    expect(site.priceNote).toBe('源码 ¥199 起')
   })
 })
