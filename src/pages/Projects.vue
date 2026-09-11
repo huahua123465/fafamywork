@@ -18,13 +18,11 @@ const results = computed(() =>
 )
 const platforms = computed(() => [...new Set(['Android 应用', 'Java Web', '鸿蒙', '小程序', ...projects.map(p => p.platform).filter(Boolean)])] as string[])
 const emptyPlatform = computed(() => Boolean(route.query.platform) && !projects.some(p => p.platform === route.query.platform))
-const count = computed(() => Math.max(12, Math.min(1000, Number(route.query.limit) || 12)))
-const visible = computed(() => results.value.slice(0, count.value))
 let timer: ReturnType<typeof setTimeout>
 function update(values: Record<string, string | undefined>, replace = false) {
   const q = { ...route.query, ...values }
   delete q.focus
-  if (!('limit' in values)) delete q.limit
+  delete q.limit
   return replace ? router.replace({ query: q }) : router.push({ query: q })
 }
 function apply() {
@@ -112,8 +110,8 @@ onBeforeUnmount(() => clearTimeout(timer))
         </div>
         <span class="results-count" aria-live="polite">{{ results.length }} 个项目</span>
       </div>
-      <div v-if="visible.length" class="project-grid">
-        <ProjectCard v-for="project in visible" :key="project.id" :project="project" />
+      <div v-if="results.length" class="project-grid">
+        <ProjectCard v-for="project in results" :key="project.id" :project="project" />
       </div>
       <div v-else class="empty-state">
         <div class="empty-icon"><Icon name="search" :size="35" /></div>
@@ -123,12 +121,7 @@ onBeforeUnmount(() => clearTimeout(timer))
           清除筛选 <Icon name="right" :size="16" />
         </button>
       </div>
-      <div v-if="count < results.length" class="load-more">
-        <button class="button secondary" @click="update({ limit: String(count + 12) }, true)">
-          再看一些项目 <Icon name="plus" :size="16" />
-        </button>
-      </div>
-      <p v-else-if="results.length" class="catalog-end">
+      <p v-if="results.length" class="catalog-end">
         <span></span>
         {{ search || category !== '全部' ? '这些就是全部匹配的作品了' : '暂时到这里，新的想法正在发生' }}
         <span></span>
