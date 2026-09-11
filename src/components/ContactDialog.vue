@@ -5,12 +5,13 @@ import Icon from './Icon.vue'
 import { author } from '../content/author'
 import { contactOpen, notify } from '../composables/ui'
 import { safeUrl } from '../utils/projects'
+import { siteOrigin } from '../utils/seo'
 import { useRoute } from 'vue-router'
 import { projects } from '../content/projects'
 const route = useRoute()
 const selected = computed(() => projects.find(p => p.slug === route.params.slug))
 const requirements = ref('')
-const inquiry = computed(() => selected.value ? `你好，我想咨询：${selected.value.name}\n项目编号：${selected.value.slug}\n项目链接：${location.origin}/projects/${selected.value.slug}\n技术：${selected.value.tags.join('、')}\n我的需求：${requirements.value || '希望确认价格、交付内容和运行环境。'}` : '')
+const inquiry = computed(() => selected.value ? `你好，我想咨询：${selected.value.name}\n项目编号：${selected.value.slug}\n项目链接：${siteOrigin()}/projects/${selected.value.slug}\n技术：${selected.value.tags.join('、')}\n我的需求：${requirements.value || '希望确认价格、交付内容和运行环境。'}` : '')
 const hasContact = computed(() =>
   Boolean(author.email || author.wechat || author.qq || author.phone || safeUrl(author.github) || safeUrl(author.blog)),
 )

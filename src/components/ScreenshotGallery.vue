@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { Project, ProjectImage } from '../types'
 import Modal from './Modal.vue'
 import Icon from './Icon.vue'
@@ -61,14 +61,8 @@ function keydown(event: KeyboardEvent) {
     move(event.key === 'ArrowLeft' ? -1 : 1)
   }
 }
-watch(
-  open,
-  (value) => {
-    if (value) window.addEventListener('keydown', keydown)
-    else window.removeEventListener('keydown', keydown)
-  },
-  { immediate: true },
-)
+// 监听放在挂载后注册，构建时服务端渲染不会触碰 window
+onMounted(() => window.addEventListener('keydown', keydown))
 onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
 </script>
 <template>
