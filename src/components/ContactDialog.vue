@@ -8,6 +8,7 @@ import { safeUrl } from '../utils/projects'
 import { siteOrigin } from '../utils/seo'
 import { dialable } from '../utils/profile'
 import { trackEvent } from '../utils/analytics'
+import { copyText } from '../utils/clipboard'
 import { useRoute } from 'vue-router'
 import { projects } from '../content/projects'
 const route = useRoute()
@@ -26,16 +27,12 @@ watch(contactOpen, (open) => {
   copied.value = false
 })
 async function copy(value: string) {
-  try {
-    await navigator.clipboard.writeText(value)
-    trackEvent('copy', selected.value?.slug)
-    notify('已复制到剪贴板')
-    copyError.value = false
-    copied.value = true
-  } catch {
-    copyError.value = true
-    copied.value = false
-  }
+  const ok = await copyText(value)
+  copyError.value = !ok
+  copied.value = ok
+  if (!ok) return
+  trackEvent('copy', selected.value?.slug)
+  notify('已复制到剪贴板')
 }
 </script>
 <template>
