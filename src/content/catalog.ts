@@ -20,13 +20,15 @@ export interface ProjectAssets {
 export interface ProjectCopyFile {
   /** 截图名称统一翻译，键为导入脚本生成的原始 caption */
   captions?: Record<string, string>
+  /** 预览说明统一替换，键为同步脚本生成的原文 */
+  notices?: Record<string, string>
   /** 按 slug 覆盖生成的文案 */
   projects?: Record<string, ProjectCopy>
 }
 
-function translate(image: ProjectImage, captions: Record<string, string>): ProjectImage {
-  const caption = image.caption && captions[image.caption]
-  const alt = captions[image.alt]
+function translate(image: ProjectImage, captions: Record<string, string>, own?: string): ProjectImage {
+  const caption = own || (image.caption && captions[image.caption])
+  const alt = own || captions[image.alt]
   return caption || alt ? { ...image, caption: caption || image.caption, alt: alt || image.alt } : image
 }
 
@@ -38,9 +40,15 @@ export function buildProjects(
 ): Project[] {
   const captions = copy.captions || {}
   return [...base, ...additions].map((generated, index) => {
-    const entry: ProjectInfo = { ...generated, ...(copy.projects?.[generated.slug] || {}) }
+    const { imageCaptions, story, ...overrides } = copy.projects?.[generated.slug] || {}
+    const entry: ProjectInfo = {
+      ...generated,
+      ...overrides,
+      story: generated.story.map((item, i) => story?.[i] || item).concat(story?.slice(generated.story.length) || []),
+    }
     const asset = assets[entry.slug]
-    const images = (asset?.images || []).map((image) => translate(image, captions))
+    const images = (asset?.images || []).map((image, i) => translate(image, captions, imageCaptions?.[i]))
+    const notice = entry.previewNotice && (copy.notices?.[entry.previewNotice] || entry.previewNotice)
     return {
       ...entry,
       id: entry.slug,
@@ -48,7 +56,7 @@ export function buildProjects(
       featured: index < FEATURED_COUNT,
       order: index + 1,
       status: '作品展示',
-      previewNotice: entry.previewNotice || DEFAULT_NOTICE,
+      previewNotice: notice || DEFAULT_NOTICE,
       cover: asset?.cover && translate(asset.cover, captions),
       images,
       imageCount: images.length,

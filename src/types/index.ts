@@ -48,8 +48,11 @@ export interface ProjectInfo {
   sourceUrl?: string
 }
 
-/** project-copy.json 里对单个项目的人工文案覆盖，字段整体替换生成数据。 */
-export type ProjectCopy = Partial<
+/**
+ * project-copy.json 里对单个项目的人工文案覆盖。
+ * story 按位置合并（只写第一段就只替换第一段），imageCaptions 按截图顺序覆盖名称，其余字段整体替换。
+ */
+export type ProjectCopy = { imageCaptions?: string[] } & Partial<
   Pick<
     ProjectInfo,
     | 'name'

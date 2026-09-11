@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { projects } from '../content/projects'
 import { projectDetails } from '../content/project-details'
 import assets from '../content/project-assets.json'
+import copy from '../content/project-copy.json'
 import { filterProjects, safeUrl } from './projects'
 describe('项目浏览规则', () => {
   it('可以按技术标签搜索，并与题材筛选组合', () => {
@@ -60,6 +61,24 @@ describe('项目浏览规则', () => {
       expect(summary).not.toHaveProperty('images')
       expect(summary).not.toHaveProperty('features')
       expect(summary.platform).toBeTruthy()
+    }
+  })
+})
+describe('人工文案覆盖', () => {
+  const overrides = copy.projects as Record<string, { imageCaptions?: string[]; features?: unknown[] }>
+  it('只覆盖存在的项目，截图名称条数与截图一致', () => {
+    const slugs = new Set(projects.map((p) => p.slug))
+    for (const [slug, entry] of Object.entries(overrides)) {
+      expect(slugs.has(slug), slug).toBe(true)
+      if (entry.imageCaptions) expect(entry.imageCaptions).toHaveLength(assets[slug as keyof typeof assets].images.length)
+    }
+  })
+  it('页面上不再出现同步脚本的模板句和英文截图名', () => {
+    for (const project of projectDetails) {
+      for (const feature of project.features) expect(feature.text, project.slug).not.toMatch(/^已有对应的/)
+      expect(project.tagline, project.slug).not.toBe(project.summary)
+      for (const image of project.images) expect(image.caption, project.slug).not.toMatch(/^[A-Za-z0-9 ]+$/)
+      expect(project.previewNotice).not.toContain('尚未编译、安装或运行验证')
     }
   })
 })
