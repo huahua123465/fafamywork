@@ -1,5 +1,5 @@
-import type { Project } from '../types'
-export function filterProjects(items: Project[], query = '', category = '全部', sort = 'featured') {
+import type { ProjectSummary } from '../types'
+export function filterProjects<T extends ProjectSummary>(items: T[], query = '', category = '全部', sort = 'featured'): T[] {
   const needle = query.trim().toLocaleLowerCase()
   return items
     .filter(

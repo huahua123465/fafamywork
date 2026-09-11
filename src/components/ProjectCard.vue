@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { Project } from '../types'
+import type { ProjectSummary } from '../types'
 import Icon from './Icon.vue'
 import AssetImage from './AssetImage.vue'
 import { safeUrl } from '../utils/projects'
-defineProps<{ project: Project }>()
+defineProps<{ project: ProjectSummary }>()
 </script>
 <template>
   <article class="project-card" :class="[project.color, 'real-project-card']">
     <div class="card-copy">
       <span class="eyebrow category-label">{{ project.category }}</span>
-      <span v-if="project.images?.length" class="card-screen-count">{{ project.images.length }} 张界面</span>
+      <span v-if="project.imageCount" class="card-screen-count">{{ project.imageCount }} 张界面</span>
       <h3>
         <RouterLink :to="`/projects/${project.slug}`">{{ project.name }}</RouterLink>
       </h3>
@@ -29,12 +29,8 @@ defineProps<{ project: Project }>()
         ><Icon name="image" :size="32" /><span>项目截图待补充</span></span
       ><span v-if="project.cover" class="cover-hint"
         ><Icon name="expand" :size="15" /> 查看页面总览</span
-      ><span v-if="project.images?.length" class="card-peek" aria-hidden="true">
-        <AssetImage
-          :src="project.images[Math.min(3, project.images.length - 1)].src"
-          :fallback-src="project.images[Math.min(3, project.images.length - 1)].fullSrc"
-          alt=""
-        />
+      ><span v-if="project.peek" class="card-peek" aria-hidden="true">
+        <AssetImage :src="project.peek.src" :fallback-src="project.peek.fullSrc" alt="" />
         <small>代表界面</small>
       </span>
       ></RouterLink

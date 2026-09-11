@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { projects } from '../content/projects'
+import { findProject } from '../content/project-details'
 import Icon from '../components/Icon.vue'
 import ProjectCard from '../components/ProjectCard.vue'
 import ProjectGallery from '../components/ScreenshotGallery.vue'
@@ -13,7 +14,7 @@ import PurchaseGuide from '../components/PurchaseGuide.vue'
 import BuyingSummary from '../components/BuyingSummary.vue'
 const route = useRoute(),
   router = useRouter()
-const project = computed(() => projects.find((p) => p.slug === route.params.slug))
+const project = computed(() => findProject(route.params.slug))
 const related = computed(() =>
   projects
     .filter((p) => p.id !== project.value?.id)

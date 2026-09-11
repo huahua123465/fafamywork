@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { projects } from '../content/projects'
+import { projectDetails } from '../content/project-details'
 import assets from '../content/project-assets.json'
 import { filterProjects, safeUrl } from './projects'
 describe('项目浏览规则', () => {
@@ -51,7 +52,15 @@ describe('项目浏览规则', () => {
     expect(new Set(projects.map((p) => p.slug)).size).toBe(projects.length)
     expect(projects.every((p) => !p.demoUrl && p.cover?.fullSrc)).toBe(true)
     expect(projects.map((p) => p.slug).sort()).toEqual(Object.keys(assets).sort())
-    expect(projects.every((p) => (p.images?.length || 0) > 0)).toBe(true)
+    expect(projectDetails.every((p) => p.images.length > 0 && p.imageCount === p.images.length)).toBe(true)
+  })
+  it('列表数据与详情数据一致，列表不携带详情专用字段', () => {
+    expect(projects.map((p) => p.slug)).toEqual(projectDetails.map((p) => p.slug))
+    for (const summary of projects) {
+      expect(summary).not.toHaveProperty('images')
+      expect(summary).not.toHaveProperty('features')
+      expect(summary.platform).toBeTruthy()
+    }
   })
 })
 describe('外部链接校验', () => {

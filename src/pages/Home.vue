@@ -17,7 +17,7 @@ const visible = computed(() =>
     .slice(0, 6),
 )
 const totalScreens = computed(() =>
-  projects.reduce((count, project) => count + (project.images?.length || 0), 0),
+  projects.reduce((count, project) => count + project.imageCount, 0),
 )
 </script>
 <template>

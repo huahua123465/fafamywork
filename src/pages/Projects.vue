@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { categories, projects } from '../content/projects'
+import { platforms as platformEntries } from '../content/platforms'
 import { filterProjects } from '../utils/projects'
 import ProjectCard from '../components/ProjectCard.vue'
 import Icon from '../components/Icon.vue'
@@ -16,7 +17,7 @@ const category = computed(() =>
 const results = computed(() =>
   filterProjects(projects.filter(p => !route.query.platform || p.platform === route.query.platform), queryString(route.query.q), category.value, 'featured'),
 )
-const platforms = computed(() => [...new Set(['Android 应用', 'Java Web', '鸿蒙', '小程序', ...projects.map(p => p.platform).filter(Boolean)])] as string[])
+const platforms = computed(() => [...new Set([...platformEntries, ...projects.map((p) => p.platform)])])
 const emptyPlatform = computed(() => Boolean(route.query.platform) && !projects.some(p => p.platform === route.query.platform))
 let timer: ReturnType<typeof setTimeout>
 function update(values: Record<string, string | undefined>, replace = false) {
