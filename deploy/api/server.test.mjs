@@ -18,14 +18,19 @@ beforeAll(async () => {
     env: { ...process.env, PORT: String(port), ADMIN_PASSWORD: PASSWORD, TOKEN_SECRET: 'secret', DATA_DIR: dir, DATA_FILE: join(dir, 'profile.json'), STATS_FLUSH_MS: '50' },
     stdio: 'pipe',
   })
-  for (let i = 0; i < 50; i++) {
+  let output = ''
+  child.stdout.on('data', (d) => (output += d))
+  child.stderr.on('data', (d) => (output += d))
+  // 和图片资源测试并行跑时 CPU 很忙，启动可能要好几秒
+  const deadline = Date.now() + 20_000
+  while (Date.now() < deadline) {
     try {
       if ((await fetch(`${base}/api/health`)).ok) return
     } catch {}
     await new Promise((r) => setTimeout(r, 100))
   }
-  throw new Error('API 没有启动')
-})
+  throw new Error(`API 没有启动：${output}`)
+}, 30_000)
 afterAll(() => {
   child?.kill()
   rmSync(dir, { recursive: true, force: true })
