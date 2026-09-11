@@ -124,7 +124,7 @@ onBeforeUnmount(() => clearTimeout(timer))
       </div>
       <p v-if="results.length" class="catalog-end">
         <span></span>
-        {{ search || category !== '全部' ? '这些就是全部匹配的作品了' : '暂时到这里，新的想法正在发生' }}
+        {{ route.query.q || route.query.platform || category !== '全部' ? '这些就是全部匹配的作品了' : '暂时到这里，新的想法正在发生' }}
         <span></span>
       </p>
     </div>

@@ -11,11 +11,11 @@ const leftProject = computed(() => projects.find((p) => p.id !== mainProject.val
 const rightProject = computed(() =>
   projects.find((p) => p.id !== mainProject.value?.id && p.id !== leftProject.value?.id),
 )
-const visible = computed(() =>
-  projects
-    .filter((p) => (category.value === '全部' ? p.featured : p.category === category.value))
-    .slice(0, 6),
+const HOME_LIMIT = 6
+const matched = computed(() =>
+  projects.filter((p) => (category.value === '全部' ? p.featured : p.category === category.value)),
 )
+const visible = computed(() => matched.value.slice(0, HOME_LIMIT))
 const totalScreens = computed(() =>
   projects.reduce((count, project) => count + project.imageCount, 0),
 )
@@ -35,7 +35,7 @@ const totalScreens = computed(() =>
         <span
           ><strong>{{ totalScreens }}</strong> 张界面截图</span
         ><i></i>
-        <span><strong>5</strong> 类应用场景</span>
+        <span><strong>{{ categories.length }}</strong> 类应用场景</span>
       </div>
       <div class="hero-actions">
         <RouterLink to="/projects" class="button">探索全部项目 <Icon name="right" :size="17" /></RouterLink
@@ -127,6 +127,11 @@ const totalScreens = computed(() =>
         <Icon name="sparkles" :size="32" />
         <h3>新的作品，正在路上。</h3>
         <p>稍后再来，发现新的想法。</p>
+      </div>
+      <div v-if="category !== '全部' && matched.length > HOME_LIMIT" class="load-more home-more">
+        <RouterLink :to="{ path: '/projects', query: { category } }" class="button secondary"
+          >查看全部 {{ matched.length }} 个{{ category }}项目 <Icon name="right" :size="16"
+        /></RouterLink>
       </div>
       <RouterLink to="/about" class="creator-strip"
         ><div class="creator-icon"><Icon name="sparkles" :size="34" /></div>

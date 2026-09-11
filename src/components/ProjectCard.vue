@@ -23,6 +23,8 @@ defineProps<{ project: ProjectSummary }>()
         v-if="project.cover"
         :src="project.cover.src"
         :fallback-src="project.cover.fullSrc"
+        :width="project.cover.width"
+        :height="project.cover.height"
         :alt="project.cover.alt"
         class="cover-img"
       /><span v-else class="image-fallback"

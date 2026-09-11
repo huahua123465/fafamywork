@@ -7,6 +7,9 @@ const props = defineProps<{
   fallbackSrc?: string
   eager?: boolean
   priority?: boolean
+  /** 原图尺寸：只用来设置 aspect-ratio，让图片加载前就占好位置、不引起页面跳动 */
+  width?: number
+  height?: number
 }>()
 const failed = ref(false)
 const actualSrc = ref(props.src)
@@ -56,6 +59,7 @@ watch(() => props.src, reset)
     :src="actualSrc"
     :alt="alt"
     :loading="eager ? 'eager' : 'lazy'"
+    :style="width && height ? { aspectRatio: `${width} / ${height}` } : undefined"
     :fetchpriority="priority ? 'high' : undefined"
     decoding="async"
     @error="onError"

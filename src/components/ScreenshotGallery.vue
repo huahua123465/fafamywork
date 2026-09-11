@@ -78,6 +78,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
         :key="current.src"
         :src="current.src"
         :fallback-src="current.fullSrc"
+        :width="current.width"
+        :height="current.height"
         :alt="current.alt"
         eager
       />
@@ -125,7 +127,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
           :aria-label="`放大${screen.caption}`"
         >
           <div class="screen-image">
-            <AssetImage :src="screen.src" :fallback-src="screen.fullSrc" :alt="screen.alt" /><span
+            <AssetImage
+              :src="screen.src"
+              :fallback-src="screen.fullSrc"
+              :alt="screen.alt"
+              :width="screen.width"
+              :height="screen.height"
+            /><span
               class="screen-zoom"
               ><Icon name="expand" :size="18"
             /></span>
@@ -161,7 +169,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
         tabindex="0"
         aria-label="图片预览区域"
       >
-        <AssetImage :src="current.fullSrc || current.src" :alt="current.alt" eager />
+        <AssetImage
+          :src="current.fullSrc || current.src"
+          :alt="current.alt"
+          :width="current.width"
+          :height="current.height"
+          eager
+        />
       </div>
       <div class="lightbox-controls">
         <button class="icon-button" aria-label="上一张" @click="move(-1)"><Icon name="previous" /></button>
