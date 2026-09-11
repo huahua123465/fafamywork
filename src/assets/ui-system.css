@@ -72,8 +72,7 @@ small,
 .results-count,
 .category-label,
 .tech-tags,
-.detail-tech,
-.device-legend {
+.detail-tech {
   font-size: var(--ui-body-size);
   line-height: var(--ui-body-line);
   letter-spacing: 0.3px;

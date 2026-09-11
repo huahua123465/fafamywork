@@ -4,7 +4,7 @@ import App from './App.vue'
 import { createAppRouter } from './router'
 import { loadProfile } from './utils/profile'
 import { applyHead, pageMeta, siteOrigin } from './utils/seo'
-import { recordPageView } from './utils/analytics'
+import { trackView } from './utils/analytics'
 import { site } from './content/site'
 import { projects } from './content/projects'
 import './assets/main.css'
@@ -18,7 +18,7 @@ const router = createAppRouter(createWebHistory())
 router.afterEach((to) => {
   const meta = pageMeta(to, site.name, projects)
   applyHead(meta, siteOrigin())
-  recordPageView(to.path, meta.title)
+  trackView(to.path)
 })
 
 // 先取个人资料再挂载，避免"作品创作者"等默认文案先闪出来再被替换。

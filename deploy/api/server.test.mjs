@@ -83,3 +83,38 @@ describe('资料接口', () => {
     expect(await token('10.8.8.8')).toBeTruthy()
   })
 })
+
+describe('访问统计接口', () => {
+  const ua = { 'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Safari/604.1' }
+  const track = (body, headers = {}) =>
+    fetch(`${base}/api/track`, json('POST', body, { ...ua, 'X-Forwarded-For': '10.1.1.1', ...headers }))
+
+  it('记录浏览、访客去重、项目咨询与来源，过滤爬虫和非法路径', async () => {
+    expect((await track({ type: 'view', path: '/projects/flower-shop', slug: 'flower-shop', device: 'mobile', referrer: 'https://www.baidu.com/s?wd=x' })).status).toBe(204)
+    await track({ type: 'view', path: '/', device: 'mobile' })
+    await track({ type: 'view', path: '/about', device: 'desktop' }, { 'X-Forwarded-For': '10.2.2.2' })
+    await track({ type: 'contact', slug: 'flower-shop' })
+    await track({ type: 'copy', slug: 'flower-shop' })
+    await track({ type: 'view', path: '/<script>' })
+    await track({ type: 'view', path: '/' }, { 'User-Agent': 'Mozilla/5.0 (compatible; Baiduspider/2.0)' })
+    await track({ type: 'unknown' })
+
+    expect((await fetch(`${base}/api/stats`)).status).toBe(401)
+    const res = await fetch(`${base}/api/stats?days=7`, { headers: { Authorization: `Bearer ${await token()}` } })
+    const stats = await res.json()
+    expect(stats.total).toEqual({ views: 3, visitors: 2, mobile: 2, desktop: 1, contacts: 1, copies: 1 })
+    expect(stats.daily).toHaveLength(7)
+    expect(stats.projects).toEqual([{ slug: 'flower-shop', views: 1, contacts: 1 }])
+    expect(stats.referrers).toEqual([{ key: 'www.baidu.com', count: 1 }])
+    expect(stats.pages.map((p) => p.key).sort()).toEqual(['/', '/about', '/projects/flower-shop'])
+  })
+
+  it('统计定期落盘，重启后数据仍在', async () => {
+    await new Promise((r) => setTimeout(r, 200))
+    const { readFileSync } = await import('node:fs')
+    const saved = JSON.parse(readFileSync(join(dir, 'stats.json'), 'utf8'))
+    const [day] = Object.values(saved.days)
+    expect(day.views).toBe(3)
+    expect(JSON.stringify(saved)).not.toContain('10.1.1.1')
+  })
+})

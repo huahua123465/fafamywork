@@ -7,6 +7,7 @@ import { contactOpen, notify } from '../composables/ui'
 import { safeUrl } from '../utils/projects'
 import { siteOrigin } from '../utils/seo'
 import { dialable } from '../utils/profile'
+import { trackEvent } from '../utils/analytics'
 import { useRoute } from 'vue-router'
 import { projects } from '../content/projects'
 const route = useRoute()
@@ -18,7 +19,8 @@ const hasContact = computed(() =>
 )
 const copyError = ref(false)
 const copied = ref(false)
-watch(contactOpen, () => {
+watch(contactOpen, (open) => {
+  if (open) trackEvent('contact', selected.value?.slug)
   requirements.value = ''
   copyError.value = false
   copied.value = false
@@ -26,6 +28,7 @@ watch(contactOpen, () => {
 async function copy(value: string) {
   try {
     await navigator.clipboard.writeText(value)
+    trackEvent('copy', selected.value?.slug)
     notify('已复制到剪贴板')
     copyError.value = false
     copied.value = true

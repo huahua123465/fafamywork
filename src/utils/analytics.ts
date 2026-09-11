@@ -1,47 +1,68 @@
-export interface VisitRecord {
-  path: string
-  title: string
-  views: number
-  lastVisited: string
+import { readToken } from './admin-session'
+
+// 访问统计：浏览和咨询事件发到自己的 /api/track，服务器按天聚合，不用第三方统计服务。
+// 以下情况不上报：站长本人（浏览器里有后台登录记录）、自动化浏览器、开启了「请勿追踪」。
+
+export type TrackType = 'view' | 'contact' | 'copy'
+interface TrackEvent {
+  type: TrackType
+  path?: string
+  slug?: string
+  device?: 'mobile' | 'desktop'
+  referrer?: string
 }
-export interface AnalyticsData {
-  totalViews: number
-  sessions: number
-  desktopViews: number
-  mobileViews: number
-  daily: Record<string, number>
-  pages: Record<string, VisitRecord>
+
+let firstView = true
+
+function shouldTrack() {
+  if (typeof navigator === 'undefined') return false
+  if (navigator.webdriver || navigator.doNotTrack === '1') return false
+  return !readToken()
 }
-const KEY = 'portfolio-local-analytics-v1'
-const empty = (): AnalyticsData => ({
-  totalViews: 0,
-  sessions: 0,
-  desktopViews: 0,
-  mobileViews: 0,
-  daily: {},
-  pages: {},
-})
-export function readAnalytics(): AnalyticsData {
+
+function send(event: TrackEvent) {
+  if (!shouldTrack()) return
+  const body = JSON.stringify(event)
   try {
-    return { ...empty(), ...JSON.parse(localStorage.getItem(KEY) || '{}') }
+    if (navigator.sendBeacon?.('/api/track', new Blob([body], { type: 'application/json' }))) return
   } catch {
-    return empty()
+    // 部分内置浏览器禁用 sendBeacon，退回 fetch
   }
+  fetch('/api/track', { method: 'POST', body, headers: { 'Content-Type': 'application/json' }, keepalive: true }).catch(
+    () => {},
+  )
 }
-export function recordPageView(path: string, title: string) {
-  const data = readAnalytics()
-  const now = new Date(),
-    day = now.toISOString().slice(0, 10)
-  if (!sessionStorage.getItem(`${KEY}-session`)) {
-    sessionStorage.setItem(`${KEY}-session`, '1')
-    data.sessions += 1
-  }
-  data.totalViews += 1
-  data.daily[day] = (data.daily[day] || 0) + 1
-  if (window.innerWidth < 768) data.mobileViews += 1
-  else data.desktopViews += 1
-  const current = data.pages[path]
-  data.pages[path] = { path, title, views: (current?.views || 0) + 1, lastVisited: now.toISOString() }
-  localStorage.setItem(KEY, JSON.stringify(data))
-  window.dispatchEvent(new CustomEvent('portfolio-analytics-update'))
+
+export function trackView(path: string) {
+  const slug = path.match(/^\/projects\/([a-z0-9-]+)\/?$/)?.[1]
+  send({
+    type: 'view',
+    path: path.replace(/(.)\/+$/, '$1'),
+    slug,
+    device: matchMedia('(max-width: 767px)').matches ? 'mobile' : 'desktop',
+    // 外部来源只在打开网站的第一个页面有意义，站内跳转不再重复带
+    referrer: firstView ? document.referrer : undefined,
+  })
+  firstView = false
+}
+
+export function trackEvent(type: Exclude<TrackType, 'view'>, slug?: string) {
+  send({ type, slug })
+}
+
+export interface StatsSummary {
+  days: number
+  total: { views: number; visitors: number; mobile: number; desktop: number; contacts: number; copies: number }
+  daily: { date: string; views: number; visitors: number; contacts: number }[]
+  pages: { key: string; count: number }[]
+  referrers: { key: string; count: number }[]
+  projects: { slug: string; views: number; contacts: number }[]
+  firstDate: string
+}
+
+export async function fetchStats(token: string, days: number): Promise<StatsSummary> {
+  const res = await fetch(`/api/stats?days=${days}`, { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' })
+  if (res.status === 401) throw Object.assign(new Error('登录已过期，请重新登录'), { status: 401 })
+  if (!res.ok) throw new Error('读取统计失败，后端可能没有启动')
+  return res.json()
 }
