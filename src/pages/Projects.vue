@@ -16,7 +16,8 @@ const category = computed(() =>
 const results = computed(() =>
   filterProjects(projects.filter(p => !route.query.platform || p.platform === route.query.platform), queryString(route.query.q), category.value, 'featured'),
 )
-const platforms = computed(() => [...new Set(projects.map(p => p.platform).filter(Boolean))] as string[])
+const platforms = computed(() => [...new Set(['Android 应用', 'Java Web', '鸿蒙', '小程序', ...projects.map(p => p.platform).filter(Boolean)])] as string[])
+const emptyPlatform = computed(() => Boolean(route.query.platform) && !projects.some(p => p.platform === route.query.platform))
 const count = computed(() => Math.max(12, Math.min(1000, Number(route.query.limit) || 12)))
 const visible = computed(() => results.value.slice(0, count.value))
 let timer: ReturnType<typeof setTimeout>
@@ -96,7 +97,6 @@ onBeforeUnmount(() => clearTimeout(timer))
           <button :aria-pressed="!route.query.platform" :class="{ active: !route.query.platform }" @click="update({ platform: undefined })">全部平台</button>
           <button v-for="item in platforms" :key="item" :aria-pressed="route.query.platform === item" :class="{ active: route.query.platform === item }" @click="update({ platform: item })">{{ item }}</button>
         </div>
-        <p class="platform-note">Java Web、鸿蒙、小程序等项目将陆续上架。</p>
       </div>
       <div class="catalog-filters">
         <div class="category-tabs" aria-label="项目分类">
@@ -117,8 +117,8 @@ onBeforeUnmount(() => clearTimeout(timer))
       </div>
       <div v-else class="empty-state">
         <div class="empty-icon"><Icon name="search" :size="35" /></div>
-        <h2>{{ projects.length ? '暂时没有找到相关项目' : '新的作品，正在路上。' }}</h2>
-        <p>{{ projects.length ? '换一个关键词，或看看其他分类吧。' : '稍后再来，发现新的想法。' }}</p>
+        <h2>{{ emptyPlatform ? `${route.query.platform} 项目即将上架` : '暂时没有找到相关项目' }}</h2>
+        <p>{{ emptyPlatform ? '这里还没有作品，后续会陆续添加。可以先看看其他平台的项目。' : '换一个关键词，或看看其他分类吧。' }}</p>
         <button v-if="projects.length" class="button" @click="reset">
           清除筛选 <Icon name="right" :size="16" />
         </button>
