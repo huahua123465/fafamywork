@@ -488,34 +488,11 @@ export const projects: Project[] = [...entries, ...(additions as ProjectInfo[])]
   ...entry,
   ...assets[entry.slug as keyof typeof assets],
   id: entry.slug,
-  kind: 'schedule',
   platform: 'Android 应用',
   featured: index < 6,
   order: index + 1,
-  sample: false,
   status: '作品展示',
   previewNotice:
     additions.find((item) => item.slug === entry.slug)?.previewNotice ||
     '界面为项目自带图片或依据源码整理的静态预览，实际运行效果以应用为准。',
-  caseStudy: {
-    background: entry.description,
-    audience:
-      entry.category === '校园学习'
-        ? '面向大学生与校园场景中的日常使用者。'
-        : entry.category === '管理系统'
-          ? '面向需要处理日常业务记录的学生、教师或管理人员。'
-          : entry.category === '社交聊天'
-            ? '面向希望完成联系人管理与日常沟通的移动端用户。'
-            : entry.category === '旅行生活'
-              ? '面向关注日常生活效率、共享或出行规划的移动端用户。'
-              : '面向希望在移动端完成商品浏览、选购、购物车与订单管理的用户。',
-    responsibility: `负责需求梳理、Android 客户端页面组织与主要业务流程实现，并围绕${entry.features
-      .map((item) => item.title)
-      .join('、')}完成模块衔接。`,
-    cycle: '个人项目 · 持续迭代（原始资料未记录精确起止日期）',
-    challenge: entry.story[0]?.text || '在有限页面中组织核心流程，并保持不同功能入口之间的关系清晰。',
-    outcome: `已形成 ${assets[entry.slug as keyof typeof assets].images.length} 张详细界面和完整页面总览，覆盖${entry.features
-      .map((item) => item.title)
-      .join('、')}等核心场景。`,
-  },
 }))

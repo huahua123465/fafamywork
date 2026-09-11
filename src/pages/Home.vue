@@ -2,7 +2,6 @@
 import { computed, ref } from 'vue'
 import { categories, projects } from '../content/projects'
 import Icon from '../components/Icon.vue'
-import ProjectPreview from '../components/ProjectPreview.vue'
 import ProjectCard from '../components/ProjectCard.vue'
 import AssetImage from '../components/AssetImage.vue'
 import { site } from '../content/site'
@@ -43,7 +42,7 @@ const totalScreens = computed(() =>
         ><RouterLink to="/about" class="text-link">关于我 <Icon name="chevron" :size="17" /></RouterLink>
       </div>
     </div>
-    <div class="hero-stage" :class="{ 'real-project-stage': mainProject && !mainProject.sample }">
+    <div class="hero-stage" :class="{ 'real-project-stage': mainProject }">
       <div class="stage-glow"></div>
       <RouterLink
         v-if="leftProject"
@@ -55,7 +54,7 @@ const totalScreens = computed(() =>
           class="hero-cover"
           :src="leftProject.cover.src"
           :alt="leftProject.cover.alt"
-        /><ProjectPreview v-else-if="leftProject.sample" :kind="leftProject.kind" /><span
+        /><span
           v-else
           class="image-fallback hero-cover"
           >项目截图待补充</span
@@ -72,7 +71,7 @@ const totalScreens = computed(() =>
           :alt="mainProject.cover.alt"
           eager
           priority
-        /><ProjectPreview v-else-if="mainProject.sample" :kind="mainProject.kind" /><span
+        /><span
           v-else
           class="image-fallback hero-cover"
           >项目截图待补充</span
@@ -87,7 +86,7 @@ const totalScreens = computed(() =>
           class="hero-cover"
           :src="rightProject.cover.src"
           :alt="rightProject.cover.alt"
-        /><ProjectPreview v-else-if="rightProject.sample" :kind="rightProject.kind" /><span
+        /><span
           v-else
           class="image-fallback hero-cover"
           >项目截图待补充</span
@@ -95,7 +94,7 @@ const totalScreens = computed(() =>
       >
       <div class="stage-caption">
         <span class="status-dot"></span> 一些小作品，一点新可能 <span class="caption-divider">/</span>
-        {{ projects.some((p) => p.sample) ? '精选项目示例' : '精选作品' }}
+        精选作品
       </div>
     </div>
   </section>

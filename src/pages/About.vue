@@ -24,9 +24,6 @@ const steps = [
         <RouterLink to="/projects" class="button">看看我的作品 <Icon name="right" :size="17" /></RouterLink
         ><button class="text-link" @click="openContact">联系我 <Icon name="chevron" :size="17" /></button>
       </div>
-      <p v-if="author.sample" class="about-sample">
-        <span class="status-dot"></span> 个人介绍示例 · 等待你的故事
-      </p>
     </div>
     <div class="about-photo">
       <AssetImage
@@ -59,7 +56,6 @@ const steps = [
           <p class="eyebrow">WHAT I CARE ABOUT</p>
           <h2>想得清楚，也做得细致。</h2>
         </div>
-        <span v-if="author.sample" class="subtle-label">能力方向 · 示例内容</span>
       </div>
       <div class="feature-grid">
         <article v-for="(skill, i) in author.skills" :key="skill.title">
@@ -95,9 +91,6 @@ const steps = [
           <p>{{ step.text }}</p>
         </article>
       </div>
-      <p v-if="author.sample" class="sample-note process-note">
-        创作过程为示例介绍，后续可替换为你的真实工作方式。
-      </p>
     </div>
   </section>
   <section v-if="author.timeline.length" class="container timeline-section">

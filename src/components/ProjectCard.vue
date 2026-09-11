@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import type { Project } from '../types'
-import ProjectPreview from './ProjectPreview.vue'
 import Icon from './Icon.vue'
 import AssetImage from './AssetImage.vue'
 import { safeUrl } from '../utils/projects'
 defineProps<{ project: Project }>()
 </script>
 <template>
-  <article class="project-card" :class="[project.color, { 'real-project-card': !project.sample }]">
+  <article class="project-card" :class="[project.color, 'real-project-card']">
     <div class="card-copy">
       <span class="eyebrow category-label">{{ project.category }}</span>
       <span v-if="project.images?.length" class="card-screen-count">{{ project.images.length }} 张界面</span>
@@ -26,9 +25,9 @@ defineProps<{ project: Project }>()
         :fallback-src="project.cover.fullSrc"
         :alt="project.cover.alt"
         class="cover-img"
-      /><ProjectPreview v-else-if="project.sample" :kind="project.kind" /><span v-else class="image-fallback"
+      /><span v-else class="image-fallback"
         ><Icon name="image" :size="32" /><span>项目截图待补充</span></span
-      ><span v-if="project.cover && !project.sample" class="cover-hint"
+      ><span v-if="project.cover" class="cover-hint"
         ><Icon name="expand" :size="15" /> 查看页面总览</span
       ><span v-if="project.images?.length" class="card-peek" aria-hidden="true">
         <AssetImage

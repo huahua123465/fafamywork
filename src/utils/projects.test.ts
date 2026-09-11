@@ -49,15 +49,9 @@ describe('项目浏览规则', () => {
   })
   it('项目与已导入素材一一对应，总览和独立截图完整', () => {
     expect(new Set(projects.map((p) => p.slug)).size).toBe(projects.length)
-    expect(projects.every((p) => !p.sample && !p.demoUrl && p.cover?.fullSrc)).toBe(true)
+    expect(projects.every((p) => !p.demoUrl && p.cover?.fullSrc)).toBe(true)
     expect(projects.map((p) => p.slug).sort()).toEqual(Object.keys(assets).sort())
     expect(projects.every((p) => (p.images?.length || 0) > 0)).toBe(true)
-  })
-  it('每个项目都有完整的价值说明', () => {
-    for (const project of projects) {
-      expect(project.caseStudy).toBeTruthy()
-      expect(Object.values(project.caseStudy || {}).every((text) => text.length > 8)).toBe(true)
-    }
   })
 })
 describe('外部链接校验', () => {

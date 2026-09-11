@@ -1,4 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600&display=swap');
+/* Inter Tight 可变字体自托管：fonts.googleapis.com 在国内经常无法访问，
+   外链 @import 会卡住整张样式表的加载。字体来自 Google Fonts（SIL OFL），只保留拉丁字符子集。 */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('./fonts/inter-tight-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('./fonts/inter-tight-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 /* Compact, clean UI system shared by the portfolio's real interface. */
 :root {
@@ -9,8 +26,6 @@
   --ui-section-line: 24px;
   --ui-body-size: 14.5px;
   --ui-body-line: 18px;
-  --ui-line: #e7e9ed;
-  --ui-shadow: 0 10px 30px rgba(24, 34, 52, 0.07);
   --ui-highlight: inset 0 6px 10px rgba(255, 255, 255, 0.22);
 }
 
@@ -30,12 +45,10 @@ textarea {
 .card-copy h3,
 .creator-strip h3,
 .empty-state h2,
-.case-study-grid h3,
 .technology-grid h3,
 .feature-grid h3,
 .story-content h3,
-.insight-card h2,
-.insight-panel h2 {
+.insight-card h2 {
   font-size: var(--ui-title-size);
   line-height: var(--ui-title-line);
   font-weight: 600;
@@ -46,7 +59,6 @@ textarea {
 .project-overview h2,
 .story-side h2,
 .detail-cta h2,
-.about-section h2,
 .process-section h2 {
   font-size: var(--ui-section-size);
   line-height: var(--ui-section-line);
@@ -61,9 +73,6 @@ small,
 .category-label,
 .tech-tags,
 .detail-tech,
-.case-study-grid small,
-.insight-label,
-.ranking-label,
 .device-legend {
   font-size: var(--ui-body-size);
   line-height: var(--ui-body-line);
@@ -78,17 +87,12 @@ small,
   line-height: 18px;
   letter-spacing: 0.3px;
   font-weight: 600;
-  box-shadow: var(--ui-highlight), 0 5px 14px rgba(0, 102, 204, 0.18);
 }
 
 .button.small {
   min-height: 38px;
   padding: 0 17px;
   font-size: var(--ui-body-size);
-}
-
-.button.secondary {
-  box-shadow: inset 0 6px 10px rgba(255, 255, 255, 0.8), 0 4px 14px rgba(24, 34, 52, 0.06);
 }
 
 .icon-button,
@@ -112,11 +116,9 @@ small,
 
 .project-card,
 .creator-strip,
-.case-study-grid article,
 .technology-grid article,
 .feature-grid article,
 .insight-card,
-.insight-panel,
 .search-field,
 .detail-brief {
   border-color: var(--ui-line);
@@ -134,9 +136,6 @@ small,
 }
 
 @media (max-width: 767px) {
-  :root {
-    --radius: 20px;
-  }
 
   .container {
     width: calc(100% - 32px);
@@ -147,9 +146,7 @@ small,
   }
 
   .hero-copy h1,
-  .detail-heading h1,
-  .about-heading h1,
-  .insights-hero h1 {
+  .detail-heading h1 {
     font-size: 34px;
     line-height: 40px;
     letter-spacing: -0.9px;
@@ -157,7 +154,6 @@ small,
 
   .page-heading h1,
   .card-copy h3,
-  .case-study-grid h3,
   .technology-grid h3,
   .feature-grid h3,
   .story-content h3 {
@@ -172,7 +168,6 @@ small,
   .detail-cta h2 {
     font-size: var(--ui-section-size);
     line-height: var(--ui-section-line);
-    letter-spacing: 0.6px;
   }
 
   .mobile-nav a,
@@ -190,6 +185,5 @@ small,
 
   .project-card {
     border-width: 1px;
-    border-radius: 22px;
   }
 }

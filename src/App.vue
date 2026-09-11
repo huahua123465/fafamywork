@@ -4,8 +4,6 @@ import { useRoute } from 'vue-router'
 import Icon from './components/Icon.vue'
 import ContactDialog from './components/ContactDialog.vue'
 import { site } from './content/site'
-import { author } from './content/author'
-import { projects } from './content/projects'
 import { openContact, toast } from './composables/ui'
 const menu = ref(false)
 const route = useRoute()
@@ -68,11 +66,7 @@ watch(
       </div>
       <div class="footer-bottom">
         <span>© {{ new Date().getFullYear() }} {{ site.name }}</span
-        ><span>{{
-          author.sample || projects.some((p) => p.sample)
-            ? '项目界面为静态预览 · 个人介绍待补充'
-            : '用心做好每一个作品'
-        }}</span
+        ><span>用心做好每一个作品</span
         ><a href="#main">回到顶部 ↑</a>
       </div>
     </div>

@@ -7,7 +7,6 @@ export const author = reactive({
   role: '软件开发 · 项目实践',
   introduction:
     '从校园闲置到鲜花选购，从旅行计划到仓库管理。这里收录我的应用项目，也记录每一个想法落到界面的过程。',
-  sample: false,
   avatar: '',
   email: '',
   wechat: '',

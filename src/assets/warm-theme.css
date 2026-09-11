@@ -1,5 +1,5 @@
 .platform-filter { margin: 20px 0; }
-.platform-filter > p, .platform-note { font-size: 14px; color: var(--muted); }
+.platform-filter > p { font-size: 14px; color: var(--muted); }
 .platform-filter .category-tabs { margin: 8px 0; }
 .buying-summary { margin: 28px 0; padding: 28px; text-align: left; background: #f7f1e8; border-radius: 18px; }
 .buying-summary h2, .buying-guide h2 { font-size: 21px; font-weight: 500; line-height: 1.5; }

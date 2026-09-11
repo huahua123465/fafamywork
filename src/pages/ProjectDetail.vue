@@ -71,8 +71,7 @@ function closePreview() {
         <p class="detail-meta">
           <span>{{ project.category }}</span
           ><span>{{ project.platform || '应用项目' }}</span
-          ><span v-if="project.sample" class="sample-label">示例项目</span
-          ><span v-else>{{ project.status }}</span>
+          ><span>{{ project.status }}</span>
         </p>
         <div class="detail-brief">
           <p>{{ project.description }}</p>
@@ -98,7 +97,7 @@ function closePreview() {
         <div>
           <div class="project-facts">
             <div>
-              <small>项目类型</small><strong>{{ project.sample ? '界面概念示例' : project.category }}</strong>
+              <small>项目类型</small><strong>{{ project.category }}</strong>
             </div>
             <div>
               <small>适用平台</small><strong>{{ project.platform || '应用项目' }}</strong>
@@ -164,9 +163,6 @@ function closePreview() {
           <div class="tech-tags">
             <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
           </div>
-          <p v-if="project.sample" class="sample-note">
-            以下为设计示例的思路说明，<br />真实项目经历将在替换内容时补充。
-          </p>
         </div>
         <div class="story-content">
           <article v-for="(item, i) in project.story" :key="item.title">
@@ -185,7 +181,6 @@ function closePreview() {
                   : '目前可以查看界面设计、阅读项目介绍。业务演示尚未开放，预览中的控件用于展示设计，不会提交数据或创建记录。'
               }}
             </p>
-            <p v-if="project.sample">本项目为展示示例，截图和场景图片用于呈现设计方向。</p>
           </details>
         </div>
       </div>
