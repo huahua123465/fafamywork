@@ -27,7 +27,7 @@ watch(
         ><span>{{ site.name }}<span class="brand-period">.</span></span></RouterLink
       >
       <nav class="desktop-nav" aria-label="主导航">
-        <RouterLink to="/" :class="{ current: route.path === '/' }">探索</RouterLink
+        <RouterLink to="/" :class="{ current: route.path === '/' }">首页</RouterLink
         ><RouterLink to="/projects" :class="{ current: route.path.startsWith('/projects') }"
           >全部项目</RouterLink
         ><RouterLink to="/about" :class="{ current: route.path === '/about' }">关于我</RouterLink>
@@ -48,7 +48,7 @@ watch(
       </div>
     </div>
     <nav v-if="menu" class="mobile-nav" aria-label="移动端导航">
-      <RouterLink to="/">探索</RouterLink><RouterLink to="/projects">全部项目</RouterLink
+      <RouterLink to="/">首页</RouterLink><RouterLink to="/projects">全部项目</RouterLink
       ><RouterLink to="/about">关于我</RouterLink><RouterLink to="/insights">浏览数据</RouterLink
       ><button @click="contactFromMenu">联系我 <Icon name="arrow" :size="16" /></button>
     </nav>
