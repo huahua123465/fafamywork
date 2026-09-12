@@ -1,0 +1,41 @@
+:root {
+  --ease-ui: cubic-bezier(.22, 1, .36, 1);
+}
+html { scroll-behavior: auto; scrollbar-gutter: stable; }
+.button, .icon-button, .category-tabs button, .text-link {
+  transition: transform 180ms var(--ease-ui), background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+.button:active, .icon-button:active { transform: scale(.97); }
+.category-tabs button:active { transform: scale(.98); }
+.project-card { transition: transform 280ms var(--ease-ui), box-shadow 280ms var(--ease-ui); }
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover { transform: translateY(-3px); }
+}
+@media (hover: none) {
+  .project-card:hover, .stage-window:hover, .card-art:hover { transform: none; }
+}
+.asset-image { opacity: .15; transition: opacity 260ms ease; }
+.asset-image.is-loaded { opacity: 1; }
+.page-enter-active { transition: opacity 200ms ease, transform 240ms var(--ease-ui); }
+.page-leave-active { transition: opacity 100ms ease; }
+.page-enter-from { opacity: 0; transform: translateY(6px); }
+.page-leave-to { opacity: 0; }
+.motion-grid { position: relative; }
+.catalog-move { transition: transform 300ms var(--ease-ui); }
+.catalog-enter-active { transition: opacity 200ms ease, transform 260ms var(--ease-ui); }
+.catalog-enter-from { opacity: 0; transform: translateY(8px); }
+/* Leaving cards exit immediately so filtering never reserves empty grid cells. */
+.catalog-leave-active { display: none; }
+.modal[open] { animation: dialog-in 220ms var(--ease-ui) both; }
+.modal[open]::backdrop { animation: shade-in 180ms ease both; }
+.modal[open].is-closing { animation: dialog-out 160ms ease both; pointer-events: none; }
+.modal[open].is-closing::backdrop { animation: shade-out 160ms ease both; }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes dialog-out { to { opacity: 0; transform: translateY(6px) scale(.99); } }
+@keyframes shade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shade-out { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .asset-image { opacity: 1; }
+  .page-enter-from, .catalog-enter-from { opacity: 1; transform: none; }
+}

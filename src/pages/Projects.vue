@@ -224,9 +224,9 @@ onBeforeUnmount(() => clearTimeout(timer))
         <button v-if="activeCount" type="button" @click="reset">清除全部筛选</button>
       </p>
 
-      <div v-if="results.length" class="project-grid">
+      <TransitionGroup v-if="results.length" name="catalog" tag="div" class="project-grid motion-grid">
         <ProjectCard v-for="project in results" :key="project.id" :project="project" />
-      </div>
+      </TransitionGroup>
       <div v-else class="empty-state">
         <div class="empty-icon"><Icon name="search" :size="35" /></div>
         <h2>{{ emptyPlatform ? `${platform} 项目即将上架` : '暂时没有找到相关项目' }}</h2>

@@ -12,12 +12,15 @@ const props = defineProps<{
   height?: number
 }>()
 const failed = ref(false)
+const loaded = ref(false)
+const element = ref<HTMLImageElement>()
 const actualSrc = ref(props.src)
 const attempts = ref(0)
 let timer: ReturnType<typeof setTimeout> | undefined
 function reset() {
   clearTimeout(timer)
   failed.value = false
+  loaded.value = false
   attempts.value = 0
   actualSrc.value = props.src
 }
@@ -35,7 +38,10 @@ function onError() {
     actualSrc.value = props.fallbackSrc
   } else failed.value = true
 }
-onMounted(() => window.addEventListener('online', retry))
+onMounted(() => {
+  window.addEventListener('online', retry)
+  if (element.value?.complete && element.value.naturalWidth) loaded.value = true
+})
 onBeforeUnmount(() => {
   clearTimeout(timer)
   window.removeEventListener('online', retry)
@@ -56,6 +62,9 @@ watch(() => props.src, reset)
     ></span
   ><img
     v-else
+    ref="element"
+    class="asset-image"
+    :class="{ 'is-loaded': loaded }"
     :src="actualSrc"
     :alt="alt"
     :loading="eager ? 'eager' : 'lazy'"
@@ -63,5 +72,6 @@ watch(() => props.src, reset)
     :fetchpriority="priority ? 'high' : undefined"
     decoding="async"
     @error="onError"
+    @load="loaded = true"
   />
 </template>

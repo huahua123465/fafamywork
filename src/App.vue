@@ -51,7 +51,7 @@ watch(
       ><button @click="contactFromMenu">联系我 <Icon name="arrow" :size="16" /></button>
     </nav>
   </header>
-  <main id="main" tabindex="-1"><RouterView /></main>
+  <main id="main" tabindex="-1"><RouterView v-slot="{ Component, route: pageRoute }"><Transition name="page" mode="out-in"><div :key="pageRoute.path" class="page-view"><component :is="Component" /></div></Transition></RouterView></main>
   <footer class="site-footer">
     <div class="container">
       <div class="footer-top">

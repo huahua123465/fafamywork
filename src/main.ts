@@ -13,6 +13,7 @@ import './assets/insights.css'
 import './assets/ui-system.css'
 import './assets/warm-theme.css'
 import './assets/admin.css'
+import './assets/motion.css'
 
 const router = createAppRouter(createWebHistory())
 router.afterEach((to) => {
