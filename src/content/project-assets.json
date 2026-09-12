@@ -6830,5 +6830,245 @@
         "height": 1704
       }
     ]
+  },
+  "fresh-miniapp": {
+    "cover": {
+      "src": "/images/projects/fresh-miniapp/overview-preview.webp",
+      "fullSrc": "/images/projects/fresh-miniapp/overview.webp",
+      "alt": "生鲜商城小程序 · 页面总览",
+      "caption": "生鲜商城小程序 · 页面总览",
+      "width": 1330,
+      "height": 2325
+    },
+    "images": [
+      {
+        "src": "/images/projects/fresh-miniapp/screen-01-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-01.webp",
+        "alt": "商城首页",
+        "caption": "商城首页",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-02-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-02.webp",
+        "alt": "商品分类",
+        "caption": "商品分类",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-03-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-03.webp",
+        "alt": "商品详情",
+        "caption": "商品详情",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-04-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-04.webp",
+        "alt": "购物车",
+        "caption": "购物车",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-05-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-05.webp",
+        "alt": "订单结算",
+        "caption": "订单结算",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-06-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-06.webp",
+        "alt": "我的订单",
+        "caption": "我的订单",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-07-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-07.webp",
+        "alt": "个人中心",
+        "caption": "个人中心",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-08-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-08.webp",
+        "alt": "登录",
+        "caption": "登录",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-09-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-09.webp",
+        "alt": "会员中心",
+        "caption": "会员中心",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-10-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-10.webp",
+        "alt": "客服支持",
+        "caption": "客服支持",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-11-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-11.webp",
+        "alt": "商家概览",
+        "caption": "商家概览",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-12-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-12.webp",
+        "alt": "商家商品",
+        "caption": "商家商品",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-13-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-13.webp",
+        "alt": "商家订单",
+        "caption": "商家订单",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-14-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-14.webp",
+        "alt": "商家资料",
+        "caption": "商家资料",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-15-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-15.webp",
+        "alt": "管理概览",
+        "caption": "管理概览",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-16-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-16.webp",
+        "alt": "商品管理",
+        "caption": "商品管理",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-17-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-17.webp",
+        "alt": "订单管理",
+        "caption": "订单管理",
+        "width": 488,
+        "height": 941
+      },
+      {
+        "src": "/images/projects/fresh-miniapp/screen-18-preview.webp",
+        "fullSrc": "/images/projects/fresh-miniapp/screen-18.webp",
+        "alt": "用户管理",
+        "caption": "用户管理",
+        "width": 488,
+        "height": 941
+      }
+    ]
+  },
+  "harmony-shop": {
+    "cover": {
+      "src": "/images/projects/harmony-shop/overview-preview.webp",
+      "fullSrc": "/images/projects/harmony-shop/overview.webp",
+      "alt": "HarmonyOS 网上商城 · 页面总览",
+      "caption": "HarmonyOS 网上商城 · 页面总览",
+      "width": 810,
+      "height": 1770
+    },
+    "images": [
+      {
+        "src": "/images/projects/harmony-shop/screen-01-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-01.webp",
+        "alt": "登录",
+        "caption": "登录",
+        "width": 469,
+        "height": 800
+      },
+      {
+        "src": "/images/projects/harmony-shop/screen-02-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-02.webp",
+        "alt": "用户注册",
+        "caption": "用户注册",
+        "width": 469,
+        "height": 800
+      },
+      {
+        "src": "/images/projects/harmony-shop/screen-03-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-03.webp",
+        "alt": "商城首页",
+        "caption": "商城首页",
+        "width": 355,
+        "height": 773
+      },
+      {
+        "src": "/images/projects/harmony-shop/screen-04-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-04.webp",
+        "alt": "商品详情",
+        "caption": "商品详情",
+        "width": 469,
+        "height": 800
+      },
+      {
+        "src": "/images/projects/harmony-shop/screen-05-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-05.webp",
+        "alt": "购物车",
+        "caption": "购物车",
+        "width": 469,
+        "height": 800
+      },
+      {
+        "src": "/images/projects/harmony-shop/screen-06-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-06.webp",
+        "alt": "待支付",
+        "caption": "待支付",
+        "width": 469,
+        "height": 800
+      },
+      {
+        "src": "/images/projects/harmony-shop/screen-07-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-07.webp",
+        "alt": "我的订单",
+        "caption": "我的订单",
+        "width": 469,
+        "height": 800
+      },
+      {
+        "src": "/images/projects/harmony-shop/screen-08-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-08.webp",
+        "alt": "个人中心",
+        "caption": "个人中心",
+        "width": 469,
+        "height": 800
+      },
+      {
+        "src": "/images/projects/harmony-shop/screen-09-preview.webp",
+        "fullSrc": "/images/projects/harmony-shop/screen-09.webp",
+        "alt": "淘宝网页",
+        "caption": "淘宝网页",
+        "width": 469,
+        "height": 800
+      }
+    ]
   }
 }

@@ -358,5 +358,17 @@
     "folder": "咸鱼可出静态预览/驾考宝典app静态预览",
     "cover": "页面总览.jpg",
     "count": 14
+  },
+  {
+    "slug": "fresh-miniapp",
+    "folder": "小程序商城截图",
+    "cover": "页面总览.jpg",
+    "count": 18
+  },
+  {
+    "slug": "harmony-shop",
+    "folder": "鸿蒙商城截图",
+    "cover": "页面总览.jpg",
+    "count": 9
   }
 ]

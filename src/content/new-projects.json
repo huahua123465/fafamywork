@@ -2970,5 +2970,144 @@
       ]
     },
     "previewNotice": "图片依据项目源码静态还原，尚未编译、安装或运行验证；动态数据、网络服务与识别结果以实际运行配置为准。"
+  },
+  {
+    "slug": "fresh-miniapp",
+    "name": "生鲜商城小程序",
+    "english": "Fresh Miniapp",
+    "platform": "小程序",
+    "category": "电商购物",
+    "summary": "面向生鲜选购场景，提供用户、商家与管理员三类页面，包含商品分类、详情、购物车、订单和会员等界面。",
+    "tagline": "商品选购与结算，了解完整页面流程。",
+    "description": "面向生鲜选购场景，提供用户、商家与管理员三类页面，包含商品分类、详情、购物车、订单和会员等界面。",
+    "color": "mint",
+    "keywords": [
+      "生鲜商城小程序",
+      "小程序",
+      "TypeScript",
+      "微信小程序",
+      "Spring Boot",
+      "MySQL",
+      "商品选购与结算",
+      "会员与个人中心",
+      "商家商品与订单",
+      "管理员工作台"
+    ],
+    "tags": [
+      "TypeScript",
+      "微信小程序",
+      "Spring Boot",
+      "MySQL"
+    ],
+    "features": [
+      {
+        "title": "商品选购与结算",
+        "text": "对应界面见项目截图，实际数据与业务流程需结合源码配置核对。",
+        "icon": "code"
+      },
+      {
+        "title": "会员与个人中心",
+        "text": "对应界面见项目截图，实际数据与业务流程需结合源码配置核对。",
+        "icon": "code"
+      },
+      {
+        "title": "商家商品与订单",
+        "text": "对应界面见项目截图，实际数据与业务流程需结合源码配置核对。",
+        "icon": "code"
+      },
+      {
+        "title": "管理员工作台",
+        "text": "对应界面见项目截图，实际数据与业务流程需结合源码配置核对。",
+        "icon": "code"
+      }
+    ],
+    "story": [
+      {
+        "title": "项目场景",
+        "text": "面向生鲜选购场景，提供用户、商家与管理员三类页面，包含商品分类、详情、购物车、订单和会员等界面。"
+      },
+      {
+        "title": "开发与运行",
+        "text": "使用微信开发者工具导入 miniprogram；后端在 backend，使用 Spring Boot 与 MySQL，需配置自己的 AppID、接口地址及数据库。"
+      }
+    ],
+    "runtime": {
+      "minSdk": null,
+      "compileSdk": null,
+      "languages": [
+        "TypeScript",
+        "Java"
+      ],
+      "note": "使用微信开发者工具导入 miniprogram；后端在 backend，使用 Spring Boot 与 MySQL，需配置自己的 AppID、接口地址及数据库。"
+    },
+    "previewNotice": "展示项目已有截图，本次未重新启动应用。具体运行、接口与交付范围请购买前确认。"
+  },
+  {
+    "slug": "harmony-shop",
+    "name": "HarmonyOS 网上商城",
+    "english": "HarmonyOS Shop",
+    "platform": "鸿蒙",
+    "category": "电商购物",
+    "summary": "基于鸿蒙的商城应用，包含登录注册、商品详情、购物车、订单与个人中心，并提供内嵌淘宝网页入口。",
+    "tagline": "账号登录与注册，了解完整页面流程。",
+    "description": "基于鸿蒙的商城应用，包含登录注册、商品详情、购物车、订单与个人中心，并提供内嵌淘宝网页入口。",
+    "color": "peach",
+    "keywords": [
+      "HarmonyOS 网上商城",
+      "鸿蒙",
+      "ArkTS",
+      "ArkUI",
+      "Preferences",
+      "账号登录与注册",
+      "商品浏览与购物车",
+      "订单与个人中心",
+      "内嵌网页"
+    ],
+    "tags": [
+      "ArkTS",
+      "ArkUI",
+      "Preferences"
+    ],
+    "features": [
+      {
+        "title": "账号登录与注册",
+        "text": "对应界面见项目截图，实际数据与业务流程需结合源码配置核对。",
+        "icon": "code"
+      },
+      {
+        "title": "商品浏览与购物车",
+        "text": "对应界面见项目截图，实际数据与业务流程需结合源码配置核对。",
+        "icon": "code"
+      },
+      {
+        "title": "订单与个人中心",
+        "text": "对应界面见项目截图，实际数据与业务流程需结合源码配置核对。",
+        "icon": "code"
+      },
+      {
+        "title": "内嵌网页",
+        "text": "对应界面见项目截图，实际数据与业务流程需结合源码配置核对。",
+        "icon": "code"
+      }
+    ],
+    "story": [
+      {
+        "title": "项目场景",
+        "text": "基于鸿蒙的商城应用，包含登录注册、商品详情、购物车、订单与个人中心，并提供内嵌淘宝网页入口。"
+      },
+      {
+        "title": "开发与运行",
+        "text": "使用 DevEco Studio 导入 3501392850Mall/Mall；工程配置 HarmonyOS 6.0.1（API 21），使用 ArkTS、ArkUI 和 Preferences。支付页面不代表已接入真实支付。"
+      }
+    ],
+    "runtime": {
+      "minSdk": null,
+      "compileSdk": null,
+      "languages": [
+        "ArkTS"
+      ],
+      "note": "使用 DevEco Studio 导入 3501392850Mall/Mall；工程配置 HarmonyOS 6.0.1（API 21），使用 ArkTS、ArkUI 和 Preferences。支付页面不代表已接入真实支付。"
+    },
+    "previewNotice": "展示项目已有截图，本次未重新启动应用。具体运行、接口与交付范围请购买前确认。"
   }
 ]

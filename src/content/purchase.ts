@@ -88,7 +88,7 @@ export function purchaseInfo(project: Project) {
             ? 'Room 本地数据层'
             : local
               ? 'SQLite 本地数据库'
-              : '数据方案购买前确认',
+              : project.tags.includes('Preferences') ? 'Preferences 本地偏好存储' : '数据方案购买前确认',
         text: project.tags.includes('MySQL')
           ? android
             ? '需要准备数据库与后端运行环境；客户端通过接口访问数据，不能只安装 APK 就完成服务端部署。'
@@ -97,7 +97,7 @@ export function purchaseInfo(project: Project) {
             ? '以 SQLite 为基础，通过实体、DAO 与数据库层组织本地数据，适合学习数据持久化与分层。'
             : local
               ? '本地数据库用于保存项目业务记录。不同设备之间的数据同步能力，需要结合接口实现单独确认。'
-              : '当前资料未明确标注完整的数据持久化方案，请在购买前确认存储方式与数据初始化步骤。',
+              : project.tags.includes('Preferences') ? '使用 HarmonyOS Preferences 保存本地数据，不代表已配备多人共享的服务端数据库。' : '当前资料未明确标注完整的数据持久化方案，请在购买前确认存储方式与数据初始化步骤。',
       },
       android
         ? {
@@ -124,7 +124,7 @@ export function purchaseInfo(project: Project) {
         text: php
           ? '需要配置 PHP 服务、接口地址及数据库连接。购买前确认后端代码、数据库脚本和部署说明是否包含。'
           : spring
-            ? '后端由 Spring Boot 提供接口，需要匹配 Java 运行环境并配置服务地址；本地数据层使用 Room。'
+            ? '后端由 Spring Boot 提供接口，需要匹配 Java 运行环境并配置服务地址；数据库与初始化步骤按工程配置确认。'
             : project.slug === 'ai-chat'
               ? '源码包含 AI 助手入口与网络请求配置。在线对话需可用的服务账号和接口配置，接口额度、费用及实际可用性需另行确认。'
               : '页面展示不等于云端服务已开通。涉及登录、图片或联网业务时，需确认接口地址、账号和服务是否可用。',
