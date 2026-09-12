@@ -6,6 +6,8 @@
 // PUT  /api/profile  带 token 保存；格式不对的字段返回 400 和字段名，不再静默清空
 // POST /api/track    访客浏览与咨询事件（公开，过滤爬虫并限速）
 // GET  /api/stats    带 token 读取访问统计
+// POST /api/messages 买家留言（公开，蜜罐 + 限速）；GET 带 token 读取，/read /delete 管理
+// /api/media/wechat-qr  GET 公开读取微信二维码，POST/DELETE 带 token 上传或删除
 const http = require('node:http')
 const fs = require('node:fs')
 const path = require('node:path')
@@ -39,7 +41,7 @@ const TEXT_FIELDS = {
   footerText: 60,
   priceNote: 120,
 }
-const URL_FIELDS = { github: 300, resume: 300, avatar: 500, blog: 300 }
+const URL_FIELDS = { github: 300, resume: 300, avatar: 500, blog: 300, wechatQr: 200 }
 
 const EMPTY = () => {
   const o = {}
@@ -71,6 +73,7 @@ const FIELD_LABELS = {
   blog: '个人博客 / 主页',
   resume: '简历链接',
   avatar: '头像地址',
+  wechatQr: '微信二维码',
 }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -179,6 +182,65 @@ function noteLogin(ip, ok) {
   rec.count += 1
   rec.last = Date.now()
   attempts.set(ip, rec)
+}
+
+// ---- 买家留言 ----
+const MESSAGES_FILE = process.env.MESSAGES_FILE || path.join(path.dirname(DATA_FILE), 'messages.json')
+const MEDIA_DIR = process.env.MEDIA_DIR || path.join(path.dirname(DATA_FILE), 'media')
+const MAX_MESSAGES = 500
+const MESSAGE_LIMIT_PER_HOUR = 5
+
+function loadMessages() {
+  try {
+    const list = JSON.parse(fs.readFileSync(MESSAGES_FILE, 'utf8'))
+    return Array.isArray(list) ? list : []
+  } catch {
+    return []
+  }
+}
+let messages = loadMessages()
+function saveMessages() {
+  fs.mkdirSync(path.dirname(MESSAGES_FILE), { recursive: true })
+  const tmp = `${MESSAGES_FILE}.tmp`
+  fs.writeFileSync(tmp, JSON.stringify(messages, null, 2))
+  fs.renameSync(tmp, MESSAGES_FILE)
+}
+
+// 同一 IP 每小时最多 5 条，避免被灌垃圾留言
+const messageBudget = new Map()
+setInterval(() => messageBudget.clear(), 60 * 60 * 1000).unref()
+
+const text = (value, max) => String(value == null ? '' : value).trim().slice(0, max)
+
+// ---- 微信二维码等媒体文件 ----
+const MEDIA_TYPES = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp' }
+const MAX_MEDIA_BYTES = 400 * 1024
+
+/** 校验 data:URL 并返回 {ext, buffer}，不合格返回带 error 的对象 */
+function decodeImage(dataUrl) {
+  const match = /^data:image\/(png|jpeg|jpg|webp);base64,([A-Za-z0-9+/=\s]+)$/.exec(String(dataUrl || ''))
+  if (!match) return { error: '请上传 PNG、JPG 或 WebP 图片' }
+  const buffer = Buffer.from(match[2].replace(/\s/g, ''), 'base64')
+  if (!buffer.length) return { error: '图片内容为空' }
+  if (buffer.length > MAX_MEDIA_BYTES) return { error: '图片太大了，请压缩到 400KB 以内' }
+  // 按文件头判断真实类型，不信任 data:URL 里写的类型
+  const hex = buffer.subarray(0, 12).toString('hex')
+  const ext = hex.startsWith('89504e470d0a1a0a')
+    ? 'png'
+    : hex.startsWith('ffd8ff')
+      ? 'jpg'
+      : buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP'
+        ? 'webp'
+        : ''
+  return ext ? { ext, buffer } : { error: '图片格式无法识别，请重新导出后上传' }
+}
+
+function findMedia(name) {
+  for (const ext of Object.keys(MEDIA_TYPES)) {
+    const file = path.join(MEDIA_DIR, `${name}.${ext}`)
+    if (fs.existsSync(file)) return { file, ext }
+  }
+  return null
 }
 
 // ---- 访问统计 ----
@@ -399,6 +461,105 @@ const server = http.createServer(async (req, res) => {
     if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
     const days = Math.min(Math.max(Number(url.searchParams.get('days')) || 30, 1), 365)
     return send(res, 200, summarizeStats(days))
+  }
+
+  if (url.pathname === '/api/messages' && req.method === 'POST') {
+    let body
+    try {
+      body = await readBody(req, 16 * 1024)
+    } catch {
+      return send(res, 400, { error: '请求格式错误' })
+    }
+    // 蜜罐字段：真实访客看不到这个输入框，填了的一律当机器人
+    if (text(body.website, 10)) return send(res, 200, { ok: true })
+    const used = messageBudget.get(ip) || 0
+    if (used >= MESSAGE_LIMIT_PER_HOUR) return send(res, 429, { error: '留言太频繁了，请稍后再试' })
+    const contact = text(body.contact, 80)
+    const message = text(body.message, 1000)
+    if (!contact) return send(res, 400, { error: '请留下联系方式，否则没法回复你', field: 'contact' })
+    if (!message) return send(res, 400, { error: '请写一下你的需求', field: 'message' })
+    messageBudget.set(ip, used + 1)
+    messages.unshift({
+      id: crypto.randomUUID(),
+      at: new Date().toISOString(),
+      name: text(body.name, 40),
+      contact,
+      message,
+      slug: text(body.slug, 60),
+      read: false,
+    })
+    messages = messages.slice(0, MAX_MESSAGES)
+    try {
+      saveMessages()
+    } catch (e) {
+      console.error('留言写入失败', e)
+      return send(res, 500, { error: '留言没能保存，请直接用页面上的联系方式找我' })
+    }
+    return send(res, 200, { ok: true })
+  }
+
+  if (url.pathname === '/api/messages' && req.method === 'GET') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    return send(res, 200, { messages, unread: messages.filter((m) => !m.read).length })
+  }
+
+  if ((url.pathname === '/api/messages/read' || url.pathname === '/api/messages/delete') && req.method === 'POST') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    let body
+    try {
+      body = await readBody(req)
+    } catch {
+      return send(res, 400, { error: '请求格式错误' })
+    }
+    const id = text(body.id, 64)
+    const found = messages.find((m) => m.id === id)
+    if (!found) return send(res, 404, { error: '这条留言不存在' })
+    if (url.pathname.endsWith('read')) found.read = body.read !== false
+    else messages = messages.filter((m) => m.id !== id)
+    try {
+      saveMessages()
+    } catch (e) {
+      console.error('留言写入失败', e)
+      return send(res, 500, { error: '保存失败' })
+    }
+    return send(res, 200, { ok: true, unread: messages.filter((m) => !m.read).length })
+  }
+
+  if (url.pathname === '/api/media/wechat-qr' && req.method === 'GET') {
+    const found = findMedia('wechat-qr')
+    if (!found) return send(res, 404, { error: 'not found' })
+    res.writeHead(200, {
+      'Content-Type': MEDIA_TYPES[found.ext],
+      'Cache-Control': 'public, max-age=60',
+      'X-Content-Type-Options': 'nosniff',
+    })
+    return fs.createReadStream(found.file).pipe(res)
+  }
+
+  if (url.pathname === '/api/media/wechat-qr' && (req.method === 'POST' || req.method === 'DELETE')) {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    const existing = findMedia('wechat-qr')
+    if (req.method === 'DELETE') {
+      if (existing) fs.rmSync(existing.file, { force: true })
+      return send(res, 200, { ok: true })
+    }
+    let body
+    try {
+      body = await readBody(req, MAX_MEDIA_BYTES * 2)
+    } catch (e) {
+      return send(res, 400, { error: e.message === 'too large' ? '图片太大了，请压缩到 400KB 以内' : '请求格式错误' })
+    }
+    const image = decodeImage(body.dataUrl)
+    if (image.error) return send(res, 400, { error: image.error, field: 'wechatQr' })
+    try {
+      fs.mkdirSync(MEDIA_DIR, { recursive: true })
+      if (existing) fs.rmSync(existing.file, { force: true })
+      fs.writeFileSync(path.join(MEDIA_DIR, `wechat-qr.${image.ext}`), image.buffer)
+    } catch (e) {
+      console.error('二维码写入失败', e)
+      return send(res, 500, { error: '图片保存失败' })
+    }
+    return send(res, 200, { ok: true, url: '/api/media/wechat-qr' })
   }
 
   if (url.pathname === '/api/session' && req.method === 'GET') {

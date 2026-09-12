@@ -1,6 +1,3 @@
-.platform-filter { margin: 20px 0; }
-.platform-filter > p { font-size: 14px; color: var(--muted); }
-.platform-filter .category-tabs { margin: 8px 0; }
 .buying-summary { margin: 28px 0; padding: 28px; text-align: left; background: #f7f1e8; border-radius: 18px; }
 .buying-summary h2, .buying-guide h2 { font-size: 21px; font-weight: 500; line-height: 1.5; }
 .buying-summary .section-heading { margin-bottom: 20px; }
@@ -210,7 +207,6 @@ body,
 .metric-grid article,
 .data-scope,
 .search-field,
-.card-peek,
 .technology-grid article {
   border: 0;
   border-radius: 16px;
@@ -421,3 +417,15 @@ body,
   }
 }
 .purchase-price { margin-top: 14px; font-size: 15px; font-weight: 600; color: var(--strong); }
+.contact-qr { margin: 18px 0 4px; text-align: center; }
+.contact-qr img { width: 176px; height: 176px; object-fit: contain; padding: 10px; border-radius: 16px; background: #fff; box-shadow: var(--shadow); }
+.contact-qr p { margin-top: 10px; color: var(--muted); font-size: 13px; }
+.message-form { margin: 20px 0 4px; padding: 18px; border-radius: 14px; background: var(--surface); text-align: left; }
+.message-form h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.message-form > p { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 12px; }
+.message-form label { display: block; font-size: 13px; margin: 10px 0 6px; }
+.message-form input, .message-form textarea { display: block; width: 100%; box-sizing: border-box; padding: 11px 12px; font: inherit; font-size: 14px; line-height: 1.7; color: var(--text); border: 0; border-radius: 10px; background: #fffdf9; resize: vertical; }
+.message-form .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.message-form .button { margin-top: 14px; }
+.message-form .admin-error { margin: 10px 0 0; }
+.message-sent { display: flex; align-items: center; gap: 10px; justify-content: center; padding: 16px; border-radius: 14px; background: #eef6ef; color: #1a7f4b; font-size: 14px; }

@@ -14,6 +14,7 @@ export interface Profile {
   blog: string
   resume: string
   avatar: string
+  wechatQr: string
   siteName: string
   footerText: string
   priceNote: string
@@ -24,7 +25,7 @@ export interface Profile {
 
 export const PROFILE_FIELDS: (keyof Profile)[] = [
   'name', 'role', 'introduction', 'email', 'wechat', 'qq', 'phone',
-  'location', 'github', 'blog', 'resume', 'avatar', 'siteName', 'footerText', 'priceNote',
+  'location', 'github', 'blog', 'resume', 'avatar', 'wechatQr', 'siteName', 'footerText', 'priceNote',
 ]
 
 /** 把接口返回的资料合并进 author / site；只覆盖非空字段，留空的沿用默认文案。 */

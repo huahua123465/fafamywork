@@ -240,3 +240,106 @@
   flex-basis: 100%;
   margin: 0;
 }
+
+/* 买家留言收件箱 */
+.inbox-empty {
+  color: var(--muted);
+  font-size: 14px;
+}
+.inbox-list {
+  display: grid;
+  gap: 12px;
+}
+.inbox-item {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #fffdf9;
+  box-shadow: var(--shadow);
+}
+.inbox-item.unread {
+  box-shadow:
+    inset 3px 0 var(--blue),
+    var(--shadow);
+}
+.inbox-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.inbox-top strong {
+  font-size: 15px;
+}
+.inbox-top time {
+  color: var(--muted);
+  font-size: 12px;
+}
+.inbox-contact {
+  margin: 6px 0 10px;
+  font-size: 14px;
+  color: var(--strong);
+  overflow-wrap: anywhere;
+}
+.inbox-item p.inbox-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.inbox-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+.inbox-actions button {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--blue);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.inbox-actions button.danger {
+  color: #c0392b;
+}
+.inbox-badge {
+  display: inline-block;
+  min-width: 20px;
+  padding: 0 7px;
+  margin-left: 8px;
+  border-radius: 99px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* 微信二维码上传 */
+.qr-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qr-preview {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.qr-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.qr-actions input[type='file'] {
+  max-width: 210px;
+  font-size: 13px;
+}

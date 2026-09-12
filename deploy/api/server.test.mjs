@@ -118,3 +118,55 @@ describe('访问统计接口', () => {
     expect(JSON.stringify(saved)).not.toContain('10.1.1.1')
   })
 })
+
+describe('买家留言与二维码', () => {
+  const post = (path, body, headers = {}) => fetch(`${base}${path}`, json('POST', body, headers))
+  // 1×1 PNG
+  const PNG =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+
+  it('留言需要联系方式和内容，蜜罐字段会被静默丢弃', async () => {
+    expect((await post('/api/messages', { message: '想买这个项目' }, { 'X-Forwarded-For': '10.5.0.1' })).status).toBe(400)
+    expect((await post('/api/messages', { contact: 'wx: abc' }, { 'X-Forwarded-For': '10.5.0.1' })).status).toBe(400)
+    expect((await post('/api/messages', { contact: 'bot', message: 'spam', website: 'http://x' }, { 'X-Forwarded-For': '10.5.0.1' })).status).toBe(200)
+    const ok = await post('/api/messages', { name: '小王', contact: 'wx: abc123', message: '想要带管理端的版本', slug: 'wims' }, { 'X-Forwarded-For': '10.5.0.2' })
+    expect(ok.status).toBe(200)
+  })
+
+  it('只有登录后能读留言，可标记已读和删除', async () => {
+    expect((await fetch(`${base}/api/messages`)).status).toBe(401)
+    const auth = { Authorization: `Bearer ${await token()}` }
+    let data = await (await fetch(`${base}/api/messages`, { headers: auth })).json()
+    expect(data.messages).toHaveLength(1)
+    expect(data.unread).toBe(1)
+    expect(data.messages[0]).toMatchObject({ name: '小王', contact: 'wx: abc123', slug: 'wims', read: false })
+    const id = data.messages[0].id
+    expect((await post('/api/messages/read', { id }, auth)).status).toBe(200)
+    data = await (await fetch(`${base}/api/messages`, { headers: auth })).json()
+    expect(data.unread).toBe(0)
+    expect((await post('/api/messages/delete', { id }, auth)).status).toBe(200)
+    data = await (await fetch(`${base}/api/messages`, { headers: auth })).json()
+    expect(data.messages).toHaveLength(0)
+  })
+
+  it('同一 IP 每小时最多 5 条留言', async () => {
+    const ip = { 'X-Forwarded-For': '10.5.0.9' }
+    for (let i = 0; i < 5; i++) {
+      expect((await post('/api/messages', { contact: 'a@b.co', message: `第 ${i} 条` }, ip)).status).toBe(200)
+    }
+    expect((await post('/api/messages', { contact: 'a@b.co', message: '第 6 条' }, ip)).status).toBe(429)
+  })
+
+  it('二维码上传要登录，按文件头校验类型，可读取和删除', async () => {
+    expect((await post('/api/media/wechat-qr', { dataUrl: PNG })).status).toBe(401)
+    const auth = { Authorization: `Bearer ${await token()}` }
+    const bad = await post('/api/media/wechat-qr', { dataUrl: 'data:image/png;base64,aGVsbG8=' }, auth)
+    expect(bad.status).toBe(400)
+    expect((await post('/api/media/wechat-qr', { dataUrl: PNG }, auth)).status).toBe(200)
+    const img = await fetch(`${base}/api/media/wechat-qr`)
+    expect(img.status).toBe(200)
+    expect(img.headers.get('content-type')).toBe('image/png')
+    expect((await fetch(`${base}/api/media/wechat-qr`, { method: 'DELETE', headers: auth })).status).toBe(200)
+    expect((await fetch(`${base}/api/media/wechat-qr`)).status).toBe(404)
+  })
+})

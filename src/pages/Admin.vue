@@ -14,6 +14,15 @@ import {
 } from '../utils/profile'
 import { notify } from '../composables/ui'
 import { ADMIN_TOKEN_KEY, readToken } from '../utils/admin-session'
+import {
+  deleteMessage,
+  deleteWechatQr,
+  fetchMessages,
+  readImageFile,
+  setMessageRead,
+  uploadWechatQr,
+  type BuyerMessage,
+} from '../utils/messages'
 
 const token = ref(readToken())
 const password = ref('')
@@ -26,6 +35,10 @@ const loadError = ref('')
 /** 保存时发现登录过期：保留表单内容，原地要求重新输入密码，登录后自动继续保存 */
 const reloginNeeded = ref(false)
 const fieldErrors = reactive<Partial<Record<keyof Profile, string>>>({})
+const messages = ref<BuyerMessage[]>([])
+const unread = ref(0)
+const inboxError = ref('')
+const qrBusy = ref(false)
 
 const form = reactive<Profile>({
   name: '',
@@ -40,6 +53,7 @@ const form = reactive<Profile>({
   blog: '',
   resume: '',
   avatar: '',
+  wechatQr: '',
   siteName: '',
   footerText: '',
   priceNote: '',
@@ -77,6 +91,66 @@ function clearErrors() {
   for (const key of Object.keys(fieldErrors) as (keyof Profile)[]) delete fieldErrors[key]
 }
 
+async function loadInbox() {
+  inboxError.value = ''
+  try {
+    const data = await fetchMessages(token.value)
+    messages.value = data.messages
+    unread.value = data.unread
+  } catch (e) {
+    inboxError.value = e instanceof Error ? e.message : '读取留言失败'
+  }
+}
+
+async function toggleRead(item: BuyerMessage) {
+  try {
+    await setMessageRead(token.value, item.id, !item.read)
+    await loadInbox()
+  } catch (e) {
+    notify(e instanceof Error ? e.message : '操作失败', 'error')
+  }
+}
+
+async function removeMessage(item: BuyerMessage) {
+  if (!confirm('删除这条留言？删除后无法恢复。')) return
+  try {
+    await deleteMessage(token.value, item.id)
+    await loadInbox()
+  } catch (e) {
+    notify(e instanceof Error ? e.message : '删除失败', 'error')
+  }
+}
+
+/** 上传后立即保存资料，二维码马上出现在咨询弹窗里 */
+async function onQrChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+  qrBusy.value = true
+  try {
+    form.wechatQr = await uploadWechatQr(token.value, await readImageFile(file))
+    await save()
+  } catch (e) {
+    notify(e instanceof Error ? e.message : '上传失败', 'error')
+  } finally {
+    qrBusy.value = false
+    input.value = ''
+  }
+}
+
+async function removeQr() {
+  qrBusy.value = true
+  try {
+    await deleteWechatQr(token.value)
+    form.wechatQr = ''
+    await save()
+  } catch (e) {
+    notify(e instanceof Error ? e.message : '删除失败', 'error')
+  } finally {
+    qrBusy.value = false
+  }
+}
+
 async function loadCurrent() {
   loading.value = true
   loadError.value = ''
@@ -108,6 +182,7 @@ async function doLogin() {
       reloginNeeded.value = false
       await save()
     } else await loadCurrent()
+    loadInbox()
   } catch (e) {
     loginError.value = e instanceof Error ? e.message : '登录失败'
   } finally {
@@ -191,6 +266,7 @@ onMounted(async () => {
     return
   }
   loadCurrent()
+  loadInbox()
 })
 onBeforeUnmount(() => window.removeEventListener('beforeunload', warnUnsaved))
 </script>
@@ -233,6 +309,26 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', warnUnsaved))
 
       <p v-if="loadError" class="admin-error" role="alert">{{ loadError }}</p>
       <p v-if="loading" class="admin-loading">正在读取当前资料…</p>
+
+      <fieldset class="admin-group">
+        <legend>买家留言<span v-if="unread" class="inbox-badge">{{ unread }}</span></legend>
+        <p v-if="inboxError" class="admin-error" role="alert">{{ inboxError }}</p>
+        <p v-if="!messages.length" class="inbox-empty">还没有留言。访客在「联系我」弹窗里留下的需求会出现在这里。</p>
+        <div v-else class="inbox-list">
+          <article v-for="item in messages" :key="item.id" class="inbox-item" :class="{ unread: !item.read }">
+            <div class="inbox-top">
+              <strong>{{ item.name || '匿名访客' }}</strong>
+              <time :datetime="item.at">{{ new Date(item.at).toLocaleString('zh-CN') }}</time>
+            </div>
+            <p class="inbox-contact">联系方式：{{ item.contact }}<template v-if="item.slug"> · 项目：{{ item.slug }}</template></p>
+            <p class="inbox-text">{{ item.message }}</p>
+            <div class="inbox-actions">
+              <button type="button" @click="toggleRead(item)">{{ item.read ? '标为未读' : '标为已读' }}</button>
+              <button type="button" class="danger" @click="removeMessage(item)">删除</button>
+            </div>
+          </article>
+        </div>
+      </fieldset>
 
       <fieldset class="admin-group">
         <legend>基本信息</legend>
@@ -279,6 +375,19 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', warnUnsaved))
           }}</small>
           <small v-else>{{ f.hint }}</small>
         </label>
+        <div class="admin-field">
+          <span>微信二维码</span>
+          <div class="qr-row">
+            <img v-if="form.wechatQr" class="qr-preview" :src="form.wechatQr" alt="当前微信二维码" />
+            <div class="qr-actions">
+              <input type="file" accept="image/png,image/jpeg,image/webp" :disabled="qrBusy" @change="onQrChange" />
+              <button v-if="form.wechatQr" class="text-link" type="button" :disabled="qrBusy" @click="removeQr">
+                删除二维码
+              </button>
+            </div>
+          </div>
+          <small>买家扫码就能加你，比手动输入微信号更省事。PNG / JPG / WebP，400KB 以内，上传后自动保存。</small>
+        </div>
       </fieldset>
 
       <fieldset class="admin-group">

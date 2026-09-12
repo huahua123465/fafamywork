@@ -10,6 +10,7 @@ export const author = reactive({
   avatar: '',
   email: '',
   wechat: '',
+  wechatQr: '',
   qq: '',
   phone: '',
   location: '',
