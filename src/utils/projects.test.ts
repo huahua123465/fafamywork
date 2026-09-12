@@ -67,9 +67,18 @@ describe('项目浏览规则', () => {
       expect(prev.imageCount > now.imageCount || (prev.imageCount === now.imageCount && prev.order < now.order)).toBe(true)
     }
   })
-  it('平台筛选只返回该平台项目', () => {
-    expect(filterProjects(projects, { platform: 'Android 应用' })).toHaveLength(projects.length)
-    expect(filterProjects(projects, { platform: '鸿蒙' })).toHaveLength(0)
+  it('平台筛选只返回该平台项目，各平台加起来是全部', () => {
+    const platforms = [...new Set(projects.map((p) => p.platform))]
+    expect(platforms.length).toBeGreaterThan(1)
+    let total = 0
+    for (const platform of platforms) {
+      const list = filterProjects(projects, { platform })
+      expect(list.length, platform).toBeGreaterThan(0)
+      expect(list.every((p) => p.platform === platform), platform).toBe(true)
+      total += list.length
+    }
+    expect(total).toBe(projects.length)
+    expect(filterProjects(projects, { platform: '不存在的平台' })).toHaveLength(0)
   })
   it('项目与已导入素材一一对应，总览和独立截图完整', () => {
     expect(new Set(projects.map((p) => p.slug)).size).toBe(projects.length)

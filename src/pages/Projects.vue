@@ -20,7 +20,19 @@ const SORTS: { value: ProjectSort; label: string }[] = [
   { value: 'screens', label: '按界面数量' },
 ]
 /** 买家最常按这些条件挑项目；只列出数据里真实出现过的标签 */
-const TECH_FILTERS = ['Java', 'Kotlin', 'SQLite', 'Room', 'MySQL', 'PHP', 'Retrofit', 'Jetpack Compose']
+const TECH_FILTERS = [
+  'Java',
+  'Kotlin',
+  'ArkTS',
+  'TypeScript',
+  'SQLite',
+  'Room',
+  'MySQL',
+  'PHP',
+  'Spring Boot',
+  'Retrofit',
+  'Jetpack Compose',
+]
 const NEEDS = [
   { value: 'admin', label: '带管理端' },
   { value: 'backend', label: '带后端' },
