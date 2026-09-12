@@ -61,7 +61,7 @@
 .insights-heading h1 {
   margin-top: 15px;
   font-size: clamp(45px, 6vw, 76px);
-  letter-spacing: -0.055em;
+  letter-spacing: normal;
   line-height: 1.04;
 }
 .data-scope {

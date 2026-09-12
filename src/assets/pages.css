@@ -159,7 +159,7 @@
 }
 .contact-pending strong {
   font-size: 14px;
-  font-weight: 550;
+  font-weight: 600;
 }
 .contact-pending p {
   font-size: 12px;
@@ -264,7 +264,7 @@
 }
 .detail-heading h1 {
   font-size: 64px;
-  font-weight: 650;
+  font-weight: 600;
 }
 .detail-dot {
   margin-left: 3px;
@@ -273,7 +273,7 @@
   font-size: 23px;
   color: #6f737d;
   margin-top: 16px;
-  letter-spacing: -0.025em;
+  letter-spacing: normal;
 }
 .detail-actions {
   display: flex;
@@ -432,8 +432,8 @@
   margin-bottom: 8px;
 }
 .project-facts strong {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
 }
 .feature-section,
 .ability-section {
@@ -590,7 +590,7 @@
   align-items: center;
 }
 .about-role {
-  letter-spacing: 0.06em;
+  letter-spacing: normal;
 }
 .about-copy .hero-actions {
   justify-content: flex-start;
@@ -623,13 +623,13 @@
 }
 .photo-caption span:first-child {
   font-size: 9px;
-  letter-spacing: 0.13em;
+  letter-spacing: normal;
   color: #959aa2;
 }
 .photo-caption span:last-child {
   font-size: 14px;
   color: #5e6774;
-  letter-spacing: 0.03em;
+  letter-spacing: normal;
 }
 .photo-note {
   position: absolute;
@@ -686,7 +686,7 @@
 }
 .process-grid h3 {
   font-size: 19px;
-  font-weight: 550;
+  font-weight: 600;
   margin-bottom: 12px;
 }
 .process-grid p {

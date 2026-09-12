@@ -19,13 +19,16 @@
 
 /* Compact, clean UI system shared by the portfolio's real interface. */
 :root {
-  font-family: 'Inter Tight', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  /* 拉丁字母用 Inter Tight，中文按系统依次回退；Windows 最终落到微软雅黑。
+     行高一律用无单位倍数，避免子元素改了字号却继承到固定像素行高而叠字。 */
+  font-family: 'Inter Tight', -apple-system, 'PingFang SC', 'HarmonyOS Sans SC', 'Source Han Sans SC',
+    'Noto Sans SC', 'Microsoft YaHei', sans-serif;
   --ui-title-size: 22px;
-  --ui-title-line: 28px;
+  --ui-title-line: 1.45;
   --ui-section-size: 19px;
-  --ui-section-line: 24px;
-  --ui-body-size: 14.5px;
-  --ui-body-line: 18px;
+  --ui-section-line: 1.4;
+  --ui-body-size: 15.5px;
+  --ui-body-line: 1.8;
   --ui-highlight: inset 0 6px 10px rgba(255, 255, 255, 0.22);
 }
 
@@ -37,7 +40,7 @@ textarea {
   font-family: inherit;
   font-size: var(--ui-body-size);
   line-height: var(--ui-body-line);
-  letter-spacing: 0.3px;
+  letter-spacing: normal;
 }
 
 .page-heading h1,
@@ -52,7 +55,7 @@ textarea {
   font-size: var(--ui-title-size);
   line-height: var(--ui-title-line);
   font-weight: 600;
-  letter-spacing: -0.7px;
+  letter-spacing: normal;
 }
 
 .section-heading h2,
@@ -63,7 +66,7 @@ textarea {
   font-size: var(--ui-section-size);
   line-height: var(--ui-section-line);
   font-weight: 600;
-  letter-spacing: 0.6px;
+  letter-spacing: normal;
 }
 
 p,
@@ -74,7 +77,7 @@ small,
 .detail-tech {
   font-size: var(--ui-body-size);
   line-height: var(--ui-body-line);
-  letter-spacing: 0.3px;
+  letter-spacing: normal;
 }
 
 .button {
@@ -82,8 +85,8 @@ small,
   padding: 0 22px;
   border-radius: 999px;
   font-size: var(--ui-body-size);
-  line-height: 18px;
-  letter-spacing: 0.3px;
+  line-height: 1.3;
+  letter-spacing: normal;
   font-weight: 600;
 }
 
@@ -107,8 +110,8 @@ small,
   min-height: 38px;
   padding: 0 18px;
   font-size: var(--ui-body-size);
-  line-height: 18px;
-  letter-spacing: 0.3px;
+  line-height: 1.3;
+  letter-spacing: normal;
   box-shadow: inset 0 6px 10px rgba(255, 255, 255, 0.18);
 }
 
@@ -130,7 +133,7 @@ small,
 .footer-bottom {
   font-size: var(--ui-body-size);
   line-height: var(--ui-body-line);
-  letter-spacing: 0.3px;
+  letter-spacing: normal;
 }
 
 @media (max-width: 767px) {
@@ -146,8 +149,8 @@ small,
   .hero-copy h1,
   .detail-heading h1 {
     font-size: 34px;
-    line-height: 40px;
-    letter-spacing: -0.9px;
+    line-height: 1.3;
+    letter-spacing: normal;
   }
 
   .page-heading h1,
@@ -157,7 +160,7 @@ small,
   .story-content h3 {
     font-size: var(--ui-title-size);
     line-height: var(--ui-title-line);
-    letter-spacing: -0.7px;
+    letter-spacing: normal;
   }
 
   .section-heading h2,
@@ -178,7 +181,7 @@ small,
   .story-content p {
     font-size: var(--ui-body-size);
     line-height: var(--ui-body-line);
-    letter-spacing: 0.3px;
+    letter-spacing: normal;
   }
 
   .project-card {

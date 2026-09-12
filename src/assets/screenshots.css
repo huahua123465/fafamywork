@@ -51,7 +51,7 @@
   min-height: 58px;
   display: flex;
   align-items: center;
-  letter-spacing: -0.025em;
+  letter-spacing: normal;
 }
 .real-project-card .card-copy p {
   min-height: 44px;

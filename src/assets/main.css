@@ -60,8 +60,8 @@ p {
 h1,
 h2,
 h3 {
-  line-height: 1.25;
-  letter-spacing: -0.04em;
+  line-height: 1.35;
+  letter-spacing: normal;
 }
 button:focus-visible,
 a:focus-visible,
@@ -162,8 +162,8 @@ main:focus {
   gap: 10px;
   align-items: center;
   font-size: 17px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: normal;
 }
 .brand-period {
   color: var(--blue);
@@ -299,7 +299,7 @@ main:focus {
   right: 0;
   justify-content: center;
   font-size: 11px;
-  letter-spacing: 0.06em;
+  letter-spacing: normal;
 }
 .caption-divider {
   margin: 0 8px;
