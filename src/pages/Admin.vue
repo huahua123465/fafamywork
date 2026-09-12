@@ -18,7 +18,7 @@ import {
   deleteMessage,
   deleteWechatQr,
   fetchMessages,
-  readImageFile,
+  compressImage,
   setMessageRead,
   uploadWechatQr,
   type BuyerMessage,
@@ -128,7 +128,7 @@ async function onQrChange(event: Event) {
   if (!file) return
   qrBusy.value = true
   try {
-    form.wechatQr = await uploadWechatQr(token.value, await readImageFile(file))
+    form.wechatQr = await uploadWechatQr(token.value, await compressImage(file))
     await save()
   } catch (e) {
     notify(e instanceof Error ? e.message : '上传失败', 'error')
@@ -386,7 +386,7 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', warnUnsaved))
               </button>
             </div>
           </div>
-          <small>买家扫码就能加你，比手动输入微信号更省事。PNG / JPG / WebP，400KB 以内，上传后自动保存。</small>
+          <small>买家扫码就能加你，比手动输入微信号更省事。PNG / JPG / WebP，上传时会自动压缩，手机里的大图也能直接传。</small>
         </div>
       </fieldset>
 
