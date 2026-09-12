@@ -2,11 +2,36 @@
   height: 530px;
   margin-top: 38px;
 }
+.real-project-stage .stage-main {
+  width: 330px;
+  height: 450px;
+  left: calc(50% - 165px);
+  top: 8px;
+}
 .real-project-stage .stage-left {
+  width: 270px;
+  height: 395px;
+  left: calc(50% - 417px);
+  top: 44px;
   transform: rotate(-5deg);
 }
 .real-project-stage .stage-right {
+  width: 270px;
+  height: 395px;
+  right: calc(50% - 417px);
+  top: 44px;
   transform: rotate(5deg);
+}
+.real-project-stage .hero-cover {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  aspect-ratio: auto;
+  padding: 9px;
+  background: #fff;
+  border: 1px solid #e4e8ee;
+  border-radius: 17px;
+  box-shadow: 0 16px 40px #27436316;
 }
 .real-project-stage .stage-caption {
   bottom: 25px;
@@ -30,6 +55,18 @@
 }
 .real-project-card .card-copy p {
   min-height: 44px;
+}
+.real-project-card .card-art {
+  height: 335px;
+  padding: 10px;
+  background: #ffffffcf;
+  box-shadow: 0 3px 12px #1b385008;
+}
+.real-project-card .cover-img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
 }
 .gallery-stage.real-gallery {
   height: 640px;
@@ -236,6 +273,21 @@
   .real-project-stage {
     height: 475px;
   }
+  .real-project-stage .stage-main {
+    width: 295px;
+    height: 402px;
+    left: calc(50% - 147px);
+  }
+  .real-project-stage .stage-left {
+    width: 220px;
+    height: 342px;
+    left: calc(50% - 334px);
+  }
+  .real-project-stage .stage-right {
+    width: 220px;
+    height: 342px;
+    right: calc(50% - 334px);
+  }
   .gallery-stage.real-gallery {
     height: 590px;
     padding: 28px 60px;
@@ -244,13 +296,21 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
   }
+  .real-project-card .card-art {
+    height: 335px;
+  }
 }
 @media (max-width: 767px) {
   .real-project-stage {
+    height: 411px;
     padding-bottom: 44px;
     margin-top: 30px;
   }
   .real-project-stage .stage-main {
+    width: 260px;
+    height: 360px;
+    left: 0;
+    top: 0;
     margin: 0 auto;
   }
   .real-project-stage .stage-left,
@@ -269,6 +329,10 @@
   .real-project-card .card-copy p {
     min-height: auto;
     font-size: 14px;
+  }
+  .real-project-card .card-art {
+    height: 360px;
+    padding: 9px;
   }
   .card-screen-count {
     font-size: 10px;
@@ -475,106 +539,5 @@
   }
   .detail-tech {
     justify-content: flex-start;
-  }
-}
-
-/* ---- 卡片与首屏：单张代表界面 + 手机外框 ----
-   原来用的是「页面总览」拼图，缩到卡片里只剩一片小方块，60 个项目看起来一模一样。 */
-.phone-frame {
-  display: block;
-  height: 100%;
-  aspect-ratio: 9 / 19.5;
-  margin: 0 auto;
-  padding: 5px;
-  border-radius: 27px;
-  background: linear-gradient(165deg, #4a443e, #211f1d);
-  box-shadow:
-    0 12px 28px #3a2a1a2e,
-    inset 0 1px #ffffff33;
-  overflow: hidden;
-}
-.phone-frame .phone-screen,
-.phone-frame .image-fallback {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  background: #fff;
-  object-fit: cover;
-  object-position: top center;
-}
-.real-project-card .card-art {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 330px;
-  padding: 20px 10px;
-  background: linear-gradient(165deg, #fffdf9, #f3ebe0);
-  box-shadow: inset 0 1px #fff;
-}
-.real-project-card .card-art:hover {
-  transform: none;
-}
-.real-project-card .card-art:hover .phone-frame {
-  transform: translateY(-6px);
-}
-.phone-frame {
-  transition: transform 0.3s;
-}
-
-/* 首屏三台手机 */
-.real-project-stage .stage-main {
-  width: 216px;
-  height: 468px;
-  left: calc(50% - 108px);
-  top: 6px;
-}
-.real-project-stage .stage-left {
-  width: 178px;
-  height: 386px;
-  left: calc(50% - 334px);
-  top: 58px;
-}
-.real-project-stage .stage-right {
-  width: 178px;
-  height: 386px;
-  right: calc(50% - 334px);
-  top: 58px;
-}
-.real-project-stage .phone-frame {
-  width: 100%;
-  aspect-ratio: auto;
-}
-@media (max-width: 1100px) {
-  .real-project-stage {
-    height: 470px;
-  }
-  .real-project-stage .stage-main {
-    width: 194px;
-    height: 420px;
-  }
-  .real-project-stage .stage-left,
-  .real-project-stage .stage-right {
-    width: 160px;
-    height: 347px;
-  }
-  .real-project-stage .stage-left {
-    left: calc(50% - 296px);
-  }
-  .real-project-stage .stage-right {
-    right: calc(50% - 296px);
-  }
-}
-@media (max-width: 767px) {
-  .real-project-stage {
-    height: 430px;
-  }
-  .real-project-stage .stage-main {
-    width: 184px;
-    height: 398px;
-    left: calc(50% - 92px);
-  }
-  .real-project-card .card-art {
-    height: 340px;
   }
 }

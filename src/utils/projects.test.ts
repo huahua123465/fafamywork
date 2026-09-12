@@ -91,7 +91,7 @@ describe('项目浏览规则', () => {
     for (const summary of projects) {
       expect(summary).not.toHaveProperty('images')
       expect(summary).not.toHaveProperty('features')
-      expect(summary.highlight?.src, summary.slug).toBeTruthy()
+      expect(summary.cover?.src, summary.slug).toBeTruthy()
       expect(summary.platform).toBeTruthy()
     }
   })

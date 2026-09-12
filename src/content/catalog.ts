@@ -13,9 +13,6 @@ export const DEFAULT_NOTICE = '界面为项目自带图片或依据源码整理�
 /** 首页默认展示的精选数量：数据顺序里的前几项 */
 export const FEATURED_COUNT = 6
 
-/** 代表界面优先挑首页类页面；这些账号类页面长得都差不多，不能代表项目 */
-const SKIP_CAPTION = /^(启动页|欢迎页|登录|注册|找回密码|修改密码)$/
-const PREFER_CAPTION = /(首页|主页|主界面|发现)/
 /** 判断项目是否带管理端：截图名称或功能说明里出现这些词 */
 const ADMIN_RE = /管理后台|管理员|后台|商品管理|用户管理|题目管理|店铺管理|餐品管理|商家中心|题库管理/
 /** 需要单独部署服务端的技术 */
@@ -40,15 +37,6 @@ function translate(image: ProjectImage, captions: Record<string, string>, own?: 
   return caption || alt ? { ...image, caption: caption || image.caption, alt: alt || image.alt } : image
 }
 
-function pickHighlight(images: ProjectImage[], index?: number): ProjectImage | undefined {
-  if (typeof index === 'number' && images[index]) return images[index]
-  return (
-    images.find((image) => PREFER_CAPTION.test(image.caption || '')) ||
-    images.find((image) => !SKIP_CAPTION.test(image.caption || '')) ||
-    images[0]
-  )
-}
-
 export function buildProjects(
   base: ProjectInfo[],
   additions: ProjectInfo[],
@@ -57,7 +45,7 @@ export function buildProjects(
 ): Project[] {
   const captions = copy.captions || {}
   return [...base, ...additions].map((generated, index) => {
-    const { imageCaptions, highlightIndex, story, ...overrides } = copy.projects?.[generated.slug] || {}
+    const { imageCaptions, story, ...overrides } = copy.projects?.[generated.slug] || {}
     const entry: ProjectInfo = {
       ...generated,
       ...overrides,
@@ -79,7 +67,7 @@ export function buildProjects(
       status: '作品展示',
       previewNotice: notice || DEFAULT_NOTICE,
       cover: asset?.cover && translate(asset.cover, captions),
-      highlight: pickHighlight(images, highlightIndex),
+      peek: images[Math.min(3, images.length - 1)],
       images,
       imageCount: images.length,
       hasAdmin: ADMIN_RE.test(searchable),
@@ -106,7 +94,7 @@ export function toSummary(project: Project): ProjectSummary {
     updatedAt: project.updatedAt,
     demoUrl: project.demoUrl,
     cover: project.cover,
-    highlight: project.highlight,
+    peek: project.peek,
     imageCount: project.imageCount,
     hasAdmin: project.hasAdmin,
     hasBackend: project.hasBackend,

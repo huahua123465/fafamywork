@@ -19,20 +19,22 @@ defineProps<{ project: ProjectSummary }>()
       </div>
     </div>
     <RouterLink class="card-art" :to="`/projects/${project.slug}`" :aria-label="`了解${project.name}`"
-      ><span class="phone-frame"
-        ><AssetImage
-          v-if="project.highlight"
-          class="phone-screen"
-          :src="project.highlight.src"
-          :fallback-src="project.highlight.fullSrc"
-          :width="project.highlight.width"
-          :height="project.highlight.height"
-          :alt="`${project.name} ${project.highlight.caption || '界面'}`"
-        /><span v-else class="image-fallback"
-          ><Icon name="image" :size="32" /><span>项目截图待补充</span></span
-        ></span
-      ><span v-if="project.imageCount" class="cover-hint"
-        ><Icon name="expand" :size="15" /> 查看全部 {{ project.imageCount }} 张界面</span
+      ><AssetImage
+        v-if="project.cover"
+        :src="project.cover.src"
+        :fallback-src="project.cover.fullSrc"
+        :width="project.cover.width"
+        :height="project.cover.height"
+        :alt="project.cover.alt"
+        class="cover-img"
+      /><span v-else class="image-fallback"
+        ><Icon name="image" :size="32" /><span>项目截图待补充</span></span
+      ><span v-if="project.cover" class="cover-hint"
+        ><Icon name="expand" :size="15" /> 查看页面总览</span
+      ><span v-if="project.peek" class="card-peek" aria-hidden="true">
+        <AssetImage :src="project.peek.src" :fallback-src="project.peek.fullSrc" alt="" />
+        <small>代表界面</small>
+      </span>
       ></RouterLink
     >
     <div class="card-actions">

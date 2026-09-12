@@ -52,7 +52,7 @@ export interface ProjectInfo {
  * project-copy.json 里对单个项目的人工文案覆盖。
  * story 按位置合并（只写第一段就只替换第一段），imageCaptions 按截图顺序覆盖名称，其余字段整体替换。
  */
-export type ProjectCopy = { imageCaptions?: string[]; highlightIndex?: number } & Partial<
+export type ProjectCopy = { imageCaptions?: string[] } & Partial<
   Pick<
     ProjectInfo,
     | 'name'
@@ -88,10 +88,10 @@ export interface ProjectSummary {
   price?: string
   updatedAt?: string
   demoUrl?: string
-  /** 页面总览拼图，用于详情页和分享卡片 */
+  /** 页面总览拼图：列表卡片、首屏、详情页与分享卡片都用它 */
   cover?: ProjectImage
-  /** 代表界面：列表卡片和首屏展示的单张截图 */
-  highlight?: ProjectImage
+  /** 卡片右下角的代表界面 */
+  peek?: ProjectImage
   /** 独立界面截图张数 */
   imageCount: number
   /** 截图或功能里出现管理后台 / 管理员页面 */
