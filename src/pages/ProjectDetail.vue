@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { projects } from '../content/projects'
 import { findProject } from '../content/project-details'
@@ -8,6 +8,7 @@ import ProjectCard from '../components/ProjectCard.vue'
 import ProjectGallery from '../components/ScreenshotGallery.vue'
 import NotFound from './NotFound.vue'
 import { openContact } from '../composables/ui'
+import { site } from '../content/site'
 import { safeUrl } from '../utils/projects'
 import { describeTechnology } from '../content/technology'
 import PurchaseGuide from '../components/PurchaseGuide.vue'
@@ -25,6 +26,10 @@ const related = computed(() =>
     )
     .slice(0, 3),
 )
+// 常驻咨询栏是 fixed 定位，给 <body> 打标记让页脚留出高度，避免挡住页脚最后一行
+onMounted(() => document.body.classList.add('has-cta-bar'))
+onBeforeUnmount(() => document.body.classList.remove('has-cta-bar'))
+
 function preview() {
   router.replace({ query: { ...route.query, view: 'preview' } })
 }
@@ -216,6 +221,15 @@ function closePreview() {
           /></RouterLink>
         </div>
         <div class="project-grid"><ProjectCard v-for="item in related" :key="item.id" :project="item" /></div>
-      </div></section></template
+      </div>
+    </section>
+    <!-- 手机端常驻咨询入口：买家滑到哪里都能直接联系 -->
+    <div class="detail-cta-bar">
+      <div>
+        <strong>{{ project.name }}</strong>
+        <span>{{ project.price || site.priceNote || '价格与交付范围请咨询' }}</span>
+      </div>
+      <button class="button small" @click="openContact">咨询这个项目</button>
+    </div></template
   ><NotFound v-else />
 </template>

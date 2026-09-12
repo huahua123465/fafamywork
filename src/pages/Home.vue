@@ -11,6 +11,14 @@ const leftProject = computed(() => projects.find((p) => p.id !== mainProject.val
 const rightProject = computed(() =>
   projects.find((p) => p.id !== mainProject.value?.id && p.id !== leftProject.value?.id),
 )
+/** 首屏三块：左、中（主）、右，缺项目时自动跳过 */
+const stage = computed(() =>
+  [
+    { cls: 'stage-left', project: leftProject.value },
+    { cls: 'stage-main', project: mainProject.value, priority: true },
+    { cls: 'stage-right', project: rightProject.value },
+  ].filter((item) => item.project),
+)
 const HOME_LIMIT = 6
 const matched = computed(() =>
   projects.filter((p) => (category.value === '全部' ? p.featured : p.category === category.value)),
@@ -45,51 +53,24 @@ const totalScreens = computed(() =>
     <div class="hero-stage" :class="{ 'real-project-stage': mainProject }">
       <div class="stage-glow"></div>
       <RouterLink
-        v-if="leftProject"
-        class="stage-window stage-left"
-        :to="`/projects/${leftProject.slug}`"
-        :aria-label="`了解${leftProject.name}`"
-        ><AssetImage
-          v-if="leftProject.cover"
-          class="hero-cover"
-          :src="leftProject.cover.src"
-          :alt="leftProject.cover.alt"
-        /><span
-          v-else
-          class="image-fallback hero-cover"
-          >项目截图待补充</span
-        ></RouterLink
-      ><RouterLink
-        v-if="mainProject"
-        class="stage-window stage-main"
-        :to="`/projects/${mainProject.slug}`"
-        :aria-label="`了解${mainProject.name}`"
-        ><AssetImage
-          v-if="mainProject.cover"
-          class="hero-cover"
-          :src="mainProject.cover.src"
-          :alt="mainProject.cover.alt"
-          eager
-          priority
-        /><span
-          v-else
-          class="image-fallback hero-cover"
-          >项目截图待补充</span
-        ></RouterLink
-      ><RouterLink
-        v-if="rightProject"
-        class="stage-window stage-right"
-        :to="`/projects/${rightProject.slug}`"
-        :aria-label="`了解${rightProject.name}`"
-        ><AssetImage
-          v-if="rightProject.cover"
-          class="hero-cover"
-          :src="rightProject.cover.src"
-          :alt="rightProject.cover.alt"
-        /><span
-          v-else
-          class="image-fallback hero-cover"
-          >项目截图待补充</span
+        v-for="item in stage"
+        :key="item.project!.id"
+        class="stage-window"
+        :class="item.cls"
+        :to="`/projects/${item.project!.slug}`"
+        :aria-label="`了解${item.project!.name}`"
+        ><span class="phone-frame"
+          ><AssetImage
+            v-if="item.project!.highlight"
+            class="phone-screen"
+            :src="item.project!.highlight!.src"
+            :fallback-src="item.project!.highlight!.fullSrc"
+            :width="item.project!.highlight!.width"
+            :height="item.project!.highlight!.height"
+            :alt="`${item.project!.name} ${item.project!.highlight!.caption || '界面'}`"
+            :eager="item.priority"
+            :priority="item.priority"
+          /><span v-else class="image-fallback">项目截图待补充</span></span
         ></RouterLink
       >
       <div class="stage-caption">

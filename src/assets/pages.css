@@ -24,13 +24,6 @@
   color: var(--muted);
   margin-top: 17px;
 }
-.catalog-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 23px;
-}
 .search-field {
   display: flex;
   gap: 12px;
@@ -63,16 +56,6 @@
 }
 .search-field > .icon-button {
   margin-right: -10px;
-}
-.catalog-filters {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-}
-.results-count {
-  padding-top: 14px;
-  white-space: nowrap;
 }
 .catalog-page .project-grid {
   row-gap: 28px;
@@ -880,26 +863,9 @@
     line-height: 1.9;
     margin-top: 13px;
   }
-  .catalog-toolbar {
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 17px;
-  }
   .search-field {
     width: 100%;
     height: 49px;
-  }
-  .catalog-filters {
-    display: block;
-    position: relative;
-  }
-  .catalog-filters .category-tabs {
-    margin-bottom: 12px;
-  }
-  .results-count {
-    display: block;
-    margin-bottom: 18px;
-    padding-top: 0;
   }
   .catalog-end {
     font-size: 10px;
@@ -1144,5 +1110,189 @@
   }
   .not-found > p:last-of-type {
     font-size: 13px;
+  }
+}
+
+/* 手机端项目详情页底部常驻咨询栏 */
+.detail-cta-bar {
+  display: none;
+}
+@media (max-width: 767px) {
+  .detail-cta-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 16px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    background: #fffdf9f5;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 -6px 22px #3a2a1a1f;
+  }
+  .detail-cta-bar > div {
+    min-width: 0;
+  }
+  .detail-cta-bar strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .detail-cta-bar span {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .detail-cta-bar .button {
+    flex: 0 0 auto;
+  }
+  body.has-cta-bar .site-footer {
+    padding-bottom: 84px;
+  }
+}
+
+/* 项目列表筛选区：搜索、排序与标签在一起，减少筛选占用的高度 */
+.catalog-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.catalog-controls .search-field {
+  flex: 1 1 320px;
+  width: auto;
+}
+.sort-select {
+  height: 52px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.filter-rows {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.filter-rows .category-tabs {
+  margin-bottom: 0;
+}
+.filter-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--track);
+}
+.filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 99px;
+  background: #fffdf9;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.15s;
+}
+.filter-toggle:hover {
+  background: #f3e8dc;
+}
+.filter-toggle.has-active {
+  background: #ecd9cb;
+  color: var(--strong);
+  font-weight: 600;
+}
+.tech-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 4px 0 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--surface);
+}
+.tech-filter button {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 99px;
+  background: #fffdf9;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tech-filter button:hover {
+  background: #f3e8dc;
+}
+.tech-filter button.active {
+  background: var(--blue);
+  color: #fff;
+}
+.tech-filter > span {
+  color: var(--muted);
+  font-size: 13px;
+  margin-right: 2px;
+}
+.active-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.active-filters button {
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+@media (max-width: 767px) {
+  .catalog-controls {
+    gap: 10px;
+  }
+  .catalog-controls .search-field {
+    flex-basis: 100%;
+  }
+  .sort-select {
+    height: 44px;
+    flex: 1;
+  }
+  .tech-filter {
+    padding: 12px;
+  }
+  /* 换行后分隔线会单独占一行，手机端直接去掉 */
+  .filter-divider {
+    display: none;
   }
 }
