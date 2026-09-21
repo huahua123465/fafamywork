@@ -314,14 +314,9 @@ setInterval(() => {
   userLoginBudget.clear()
 }, 15 * 60 * 1000).unref()
 
-// 分享访问与有效访问确认：同一 IP 每 10 分钟各 30 次，正常访客远用不到，挡住批量刷待确认记录。
-const shareVisitBudget = new Map()
-const shareQualifyBudget = new Map()
-const SHARE_BUDGET = 30
-setInterval(() => {
-  shareVisitBudget.clear()
-  shareQualifyBudget.clear()
-}, 10 * 60 * 1000).unref()
+// 查询邀请人：同一 IP 每 10 分钟 30 次，挡住批量试分享码
+const inviterBudget = new Map()
+setInterval(() => inviterBudget.clear(), 10 * 60 * 1000).unref()
 
 function budgetExceeded(budget, ip, maximum) {
   const used = budget.get(ip) || 0
@@ -423,29 +418,11 @@ function bearer(req) {
   return String(req.headers.authorization || '').replace(/^Bearer\s+/i, '')
 }
 
-function visitorHash(ip, userAgent) {
-  return crypto.createHmac('sha256', SECRET).update(`${ip}\n${userAgent}`).digest('hex')
-}
-
-/** IPv4 取整个地址；IPv6 取 /64 网段（同一台设备会在网段内轮换地址） */
-function networkKey(ip) {
-  const addr = String(ip || '').replace(/^::ffff:/i, '')
-  if (!addr.includes(':')) return addr
-  const [head, tail = ''] = addr.split('::')
-  const h = head ? head.split(':') : []
-  const t = tail ? tail.split(':') : []
-  const groups = addr.includes('::') ? [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill('0'), ...t] : h
-  return `${groups.slice(0, 4).map((g) => parseInt(g || '0', 16).toString(16)).join(':')}::/64`
-}
-
-/** 请求方的网络与设备标记（HMAC 后才入库）。设备号由前端生成存在 localStorage，经 X-Device-Id 发来 */
-function clientMarks(req, ip) {
-  const key = networkKey(ip)
+/** 请求方的浏览器设备号（HMAC 后才入库）。设备号由前端生成存在 localStorage，经 X-Device-Id 发来 */
+function clientMarks(req) {
   const deviceId = String(req.headers['x-device-id'] || '')
-  const hmac = (value) => crypto.createHmac('sha256', SECRET).update(value).digest('hex')
   return {
-    network: key ? hmac(`net\n${key}`) : '',
-    device: /^[A-Za-z0-9_-]{16,64}$/.test(deviceId) ? hmac(`dev\n${deviceId}`) : '',
+    device: /^[A-Za-z0-9_-]{16,64}$/.test(deviceId) ? crypto.createHmac('sha256', SECRET).update(`dev\n${deviceId}`).digest('hex') : '',
   }
 }
 
@@ -476,7 +453,7 @@ function readBody(req, limit = 64 * 1024) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost')
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress
-  const marks = clientMarks(req, ip)
+  const marks = clientMarks(req)
 
   if (url.pathname === '/api/health') return send(res, 200, { ok: true })
 
@@ -579,26 +556,11 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, result)
   }
 
-  if (url.pathname === '/api/shares/visit' && req.method === 'POST') {
-    const ua = String(req.headers['user-agent'] || '')
-    if (!ua || BOT_RE.test(ua)) return send(res, 200, { eligible: false })
-    if (budgetExceeded(shareVisitBudget, ip, SHARE_BUDGET)) return send(res, 200, { eligible: false })
-    let body
-    try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
-    const currentUser = accounts.authenticate(bearer(req), marks)
-    const result = accounts.beginVisit(body.referralCode, body.projectSlug, { visitor: visitorHash(ip, ua), ...marks }, currentUser?.id)
-    // 本人访问告诉前端原因（访客页会显示「不计积分」），爬虫、限速等情况不解释
-    if (!result) return send(res, 200, { eligible: false })
-    if (result.rejected) return send(res, 200, { eligible: false, reason: result.reason })
-    return send(res, 201, { eligible: true, ...result })
-  }
-
-  if (url.pathname === '/api/shares/qualify' && req.method === 'POST') {
-    if (budgetExceeded(shareQualifyBudget, ip, SHARE_BUDGET)) return send(res, 200, { rewarded: false, reason: 'rate_limited' })
-    let body
-    try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
-    const result = accounts.qualifyVisit(body.visitToken, body.interacted === true)
-    return send(res, 200, result)
+  if (url.pathname === '/api/shares/inviter' && req.method === 'GET') {
+    if (budgetExceeded(inviterBudget, ip, 30)) return send(res, 429, { error: '请求过于频繁，请稍后再试' })
+    const inviter = accounts.inviter(url.searchParams.get('code'))
+    if (!inviter) return send(res, 404, { error: '分享链接无效' })
+    return send(res, 200, inviter)
   }
 
   if (url.pathname === '/api/account/share-summary' && req.method === 'GET') {
@@ -613,10 +575,10 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, { transactions: accounts.pointTransactions(user.id) })
   }
 
-  if (url.pathname === '/api/account/share-visits' && req.method === 'GET') {
+  if (url.pathname === '/api/account/referrals' && req.method === 'GET') {
     const user = accounts.authenticate(bearer(req), marks)
     if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
-    return send(res, 200, { visits: accounts.shareVisits(user.id) })
+    return send(res, 200, { referrals: accounts.referrals(user.id) })
   }
 
   if (url.pathname === '/api/admin/points/settings') {

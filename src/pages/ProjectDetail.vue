@@ -14,13 +14,10 @@ import { describeTechnology } from '../content/technology'
 import PurchaseGuide from '../components/PurchaseGuide.vue'
 import BuyingSummary from '../components/BuyingSummary.vue'
 import ShareDialog from '../components/ShareDialog.vue'
-import ReferralBadge from '../components/ReferralBadge.vue'
-import { trackReferralVisit } from '../utils/sharing'
 const route = useRoute(),
   router = useRouter()
 const project = computed(() => findProject(route.params.slug))
 const shareOpen = ref(false)
-let stopReferralTracking: () => void = () => undefined
 const related = computed(() =>
   projects
     .filter((p) => p.id !== project.value?.id)
@@ -34,11 +31,9 @@ const related = computed(() =>
 // 常驻咨询栏是 fixed 定位，给 <body> 打标记让页脚留出高度，避免挡住页脚最后一行
 onMounted(() => {
   document.body.classList.add('has-cta-bar')
-  if (project.value) stopReferralTracking = trackReferralVisit(project.value.slug, route.query.ref)
 })
 onBeforeUnmount(() => {
   document.body.classList.remove('has-cta-bar')
-  stopReferralTracking()
 })
 
 function preview() {
@@ -241,6 +236,6 @@ function closePreview() {
         <span>{{ project.price || site.priceNote || '价格与交付范围请咨询' }}</span>
       </div>
       <button class="button small" @click="openContact">咨询这个项目</button>
-    </div><ShareDialog :open="shareOpen" :project="project" @close="shareOpen = false" /><ReferralBadge /></template
+    </div><ShareDialog :open="shareOpen" :project="project" @close="shareOpen = false" /></template
   ><NotFound v-else />
 </template>

@@ -13,6 +13,8 @@ export interface SiteUser {
 const TOKEN_KEY = 'portfolio-user-token'
 export const currentUser = ref<SiteUser | null>(null)
 export const authOpen = ref(false)
+/** 登录弹窗打开时默认显示哪一页：被邀请人进站时直接显示注册 */
+export const authMode = ref<'login' | 'register'>('login')
 /** 登录弹窗底部「暂不登录」按钮：从分享入口打开时改成直接普通分享 */
 export const authSkip = ref<{ label: string; action: () => void } | null>(null)
 let pendingAction: (() => void | Promise<void>) | null = null
@@ -68,10 +70,15 @@ export async function loadUserSession() {
   }
 }
 
-export async function registerUser(input: { username: string; nickname: string; password: string; website?: string }) {
-  return finishAuth(await parse(await fetch('/api/auth/register', {
+export interface ReferralResult { rewarded: boolean; reason?: string; points?: number; inviter?: string }
+
+export async function registerUser(input: {
+  username: string; nickname: string; password: string; website?: string; referralCode?: string; projectSlug?: string
+}) {
+  const data = await parse(await fetch('/api/auth/register', {
     method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeaders() }, body: JSON.stringify(input),
-  })))
+  }))
+  return { user: finishAuth(data), referral: data.referral as ReferralResult | undefined }
 }
 
 export async function loginUser(username: string, password: string) {
@@ -90,9 +97,14 @@ function finishAuth(data: { token: string; user: SiteUser }) {
   return data.user
 }
 
-export function openAuth(afterLogin?: () => void | Promise<void>, skip?: { label: string; action: () => void }) {
+export function openAuth(
+  afterLogin?: () => void | Promise<void>,
+  skip?: { label: string; action: () => void },
+  mode: 'login' | 'register' = 'login',
+) {
   pendingAction = afterLogin || null
   authSkip.value = skip || null
+  authMode.value = mode
   authOpen.value = true
 }
 

@@ -29,7 +29,7 @@ describe('账号数据库', () => {
     store.close()
   })
 
-  it('旧版数据库（share_visits 没有网络和设备列）打开时自动补列，旧记录保留', () => {
+  it('旧版数据库打开时自动建邀请表、清掉网络标记，旧用户保留', () => {
     const directory = mkdtempSync(join(tmpdir(), 'fafa-account-store-'))
     temporaryDirectories.push(directory)
     const filename = join(directory, 'app.db')
@@ -39,20 +39,18 @@ describe('账号数据库', () => {
       CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL COLLATE NOCASE UNIQUE, nickname TEXT NOT NULL DEFAULT '',
         password_hash TEXT NOT NULL, referral_code TEXT NOT NULL UNIQUE, points_balance INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL DEFAULT 'active',
         created_at TEXT NOT NULL, last_login_at TEXT);
-      CREATE TABLE share_visits (id INTEGER PRIMARY KEY AUTOINCREMENT, sharer_user_id INTEGER NOT NULL REFERENCES users(id), visit_token_hash TEXT NOT NULL UNIQUE,
-        project_slug TEXT NOT NULL, visitor_hash TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL, qualified_at TEXT,
-        reward_points INTEGER NOT NULL DEFAULT 0, reject_reason TEXT);
+      CREATE TABLE user_marks (user_id INTEGER NOT NULL, kind TEXT NOT NULL, mark_hash TEXT NOT NULL, last_seen_at TEXT NOT NULL, PRIMARY KEY (user_id, kind, mark_hash));
       INSERT INTO users (username, password_hash, referral_code, created_at) VALUES ('old_user', 'x', 'OLDCODE1', '2026-09-20T00:00:00.000Z');
-      INSERT INTO share_visits (sharer_user_id, visit_token_hash, project_slug, visitor_hash, created_at) VALUES (1, 'h', 'smart-todo', 'v', '2026-09-20T00:00:00.000Z');
+      INSERT INTO user_marks VALUES (1, 'network', 'n', '2026-09-20T00:00:00.000Z'), (1, 'device', 'd', '2026-09-20T00:00:00.000Z');
     `)
     old.close()
 
     const store = createAccountStore(filename)
+    expect(store.inviter('OLDCODE1')).toMatchObject({ nickname: 'old_user' })
     store.close()
     const db = new DatabaseSync(filename)
-    const columns = db.prepare('PRAGMA table_info(share_visits)').all().map((c) => c.name)
-    expect(columns).toEqual(expect.arrayContaining(['network_hash', 'device_hash']))
-    expect(db.prepare('SELECT project_slug, network_hash FROM share_visits').get()).toMatchObject({ project_slug: 'smart-todo', network_hash: '' })
+    expect(db.prepare("SELECT name FROM sqlite_master WHERE name = 'referrals'").get()).toBeTruthy()
+    expect(db.prepare('SELECT kind FROM user_marks').all().map((r) => r.kind)).toEqual(['device'])
     db.close()
   })
 })

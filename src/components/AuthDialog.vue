@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 import Modal from './Modal.vue'
-import { authOpen, authSkip, closeAuth, loginUser, registerUser, skipAuth } from '../utils/user-session'
+import { authMode, authOpen, authSkip, closeAuth, loginUser, registerUser, skipAuth } from '../utils/user-session'
+import { clearInvite, describeReferral, pendingInvite } from '../utils/sharing'
+import { notify } from '../composables/ui'
 
 const mode = ref<'login' | 'register'>('login')
 const busy = ref(false)
@@ -10,7 +12,9 @@ const form = reactive({ username: '', nickname: '', password: '', confirm: '', w
 const title = computed(() => mode.value === 'login' ? '登录账号' : '注册账号')
 
 watch(authOpen, (open) => {
-  if (open) error.value = ''
+  if (!open) return
+  error.value = ''
+  mode.value = authMode.value
 })
 
 function switchMode(next: 'login' | 'register') {
@@ -27,7 +31,16 @@ async function submit() {
   busy.value = true
   try {
     if (mode.value === 'login') await loginUser(form.username, form.password)
-    else await registerUser({ username: form.username, nickname: form.nickname, password: form.password, website: form.website })
+    else {
+      const invite = pendingInvite.value
+      const { referral } = await registerUser({
+        username: form.username, nickname: form.nickname, password: form.password, website: form.website,
+        referralCode: invite?.code, projectSlug: invite?.projectSlug,
+      })
+      // 注册即用掉邀请；弹窗关闭后 toast 才看得见
+      if (invite) clearInvite()
+      notify(describeReferral(referral))
+    }
     form.password = ''
     form.confirm = ''
   } catch (e) {
@@ -44,7 +57,8 @@ async function submit() {
       <button :class="{ active: mode === 'login' }" type="button" @click="switchMode('login')">登录</button>
       <button :class="{ active: mode === 'register' }" type="button" @click="switchMode('register')">注册</button>
     </div>
-    <p class="auth-note">浏览项目不需要登录。登录仅用于分享赚积分和查看积分记录。</p>
+    <p v-if="mode === 'register' && pendingInvite" class="auth-invite"><strong>「{{ pendingInvite.nickname }}」邀请你注册</strong>注册成功后，TA 将获得 {{ pendingInvite.pointsPerInvite }} 积分。注册免费，只需用户名和密码。</p>
+    <p v-else class="auth-note">浏览项目不需要登录。登录仅用于分享赚积分和查看积分记录。</p>
     <form class="auth-form" @submit.prevent="submit">
       <label><span>用户名</span><input v-model.trim="form.username" autocomplete="username" required minlength="3" maxlength="24" placeholder="英文字母、数字或下划线" /></label>
       <label v-if="mode === 'register'"><span>昵称（选填）</span><input v-model.trim="form.nickname" maxlength="30" autocomplete="nickname" /></label>

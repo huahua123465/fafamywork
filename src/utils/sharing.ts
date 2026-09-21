@@ -6,10 +6,8 @@ import { projects } from '../content/projects'
 export interface ShareOffer {
   referralCode: string
   projectSlug: string
-  pointsPerVisit: number
+  pointsPerInvite: number
   remainingToday: number
-  qualificationSeconds: number
-  visitorDedupeDays: number
 }
 
 export async function createRewardShare(projectSlug: string) {
@@ -24,89 +22,60 @@ export function rewardShareUrl(offer: ShareOffer) {
   return url.toString()
 }
 
-/** 访客通过专属链接打开时的计分进度，详情页右下角的计时条读取它 */
-export type ReferralState =
-  | { phase: 'counting'; total: number; remaining: number; interacted: boolean }
-  | { phase: 'submitting' }
-  | { phase: 'rewarded'; points: number }
-  | { phase: 'not_counted'; message: string }
-export const referralState = ref<ReferralState | null>(null)
-
-const NOT_COUNTED: Record<string, string> = {
-  self: '这是分享者本人的网络或设备，自己打开不计积分。',
-  duplicate: '这个网络或设备近期已经为 TA 计过分，这次不重复计算。',
-  daily_limit: '分享者今天的奖励次数已满，这次不计积分。',
-  disabled: '分享积分活动已暂停。',
+/**
+ * 被邀请人通过专属链接进站时记下邀请（7 天有效），注册时一并提交。
+ * 存 localStorage：好友可能先逛几页、甚至隔天回来再注册。
+ */
+export interface PendingInvite {
+  code: string
+  projectSlug: string
+  nickname: string
+  pointsPerInvite: number
+  at: number
 }
-const notCounted = (reason: unknown) => ({ phase: 'not_counted' as const, message: NOT_COUNTED[String(reason)] || '这次访问没有计入积分。' })
+const INVITE_KEY = 'portfolio-invite'
+const INVITE_TTL_MS = 7 * 24 * 60 * 60 * 1000
 
-export function trackReferralVisit(projectSlug: string, referralCode: unknown) {
-  const ref = String(referralCode || '').trim().toUpperCase()
-  if (!ref || !/^[A-Z0-9]{6,8}$/.test(ref)) return () => undefined
-  let visitToken = ''
-  let ready = false
-  let interacted = false
-  let submitted = false
-  let stopped = false
-  let tick: ReturnType<typeof setInterval> | undefined
-  const set = (state: ReferralState | null) => { if (!stopped) referralState.value = state }
-
-  const qualify = async () => {
-    if (submitted || !ready || !interacted || !visitToken) return
-    submitted = true
-    set({ phase: 'submitting' })
-    try {
-      const res = await fetch('/api/shares/qualify', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ visitToken, interacted: true }), keepalive: true,
-      })
-      const data = await res.json()
-      set(data.rewarded ? { phase: 'rewarded', points: Number(data.points) || 0 } : notCounted(data.reason))
-    } catch {
-      set(notCounted(''))
-    }
+function readInvite(): PendingInvite | null {
+  try {
+    const data = JSON.parse(localStorage.getItem(INVITE_KEY) || 'null') as PendingInvite | null
+    return data && Date.now() - data.at < INVITE_TTL_MS ? data : null
+  } catch {
+    return null
   }
-  const interaction = () => {
-    if (interacted) return
-    interacted = true
-    const current = referralState.value
-    if (current?.phase === 'counting') set({ ...current, interacted: true })
-    void qualify()
-  }
-  // iOS 上点空白处不会冒泡 click，补 touchstart
-  const events = ['scroll', 'click', 'keydown', 'touchstart'] as const
-  events.forEach((name) => window.addEventListener(name, interaction, { passive: true }))
+}
+export const pendingInvite = ref<PendingInvite | null>(typeof window === 'undefined' ? null : readInvite())
 
-  void fetch('/api/shares/visit', {
-    method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeaders() },
-    body: JSON.stringify({ referralCode: ref, projectSlug }),
-  }).then((res) => res.json()).then((data) => {
-    if (!data.eligible) {
-      if (data.reason) set(notCounted(data.reason))
-      return
-    }
-    visitToken = data.visitToken
-    const total = Math.max(0, Number(data.qualificationSeconds) || 15)
-    const deadline = Date.now() + total * 1000
-    const update = () => {
-      const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
-      if (!submitted) set({ phase: 'counting', total, remaining, interacted })
-      if (remaining === 0) {
-        clearInterval(tick)
-        ready = true
-        void qualify()
-      }
-    }
-    update()
-    tick = setInterval(update, 250)
-  }).catch(() => undefined)
+export function clearInvite() {
+  pendingInvite.value = null
+  try { localStorage.removeItem(INVITE_KEY) } catch { /* 隐私模式等 */ }
+}
 
-  return () => {
-    stopped = true
-    clearInterval(tick)
-    events.forEach((name) => window.removeEventListener(name, interaction))
-    referralState.value = null
+/** 校验分享码并取邀请人昵称；无效或活动关闭时返回 null */
+export async function captureInvite(referralCode: unknown, projectSlug: string): Promise<PendingInvite | null> {
+  const code = String(referralCode || '').trim().toUpperCase()
+  if (!/^[A-Z0-9]{6,8}$/.test(code)) return null
+  try {
+    const res = await fetch(`/api/shares/inviter?code=${code}`, { cache: 'no-store' })
+    if (!res.ok) return null
+    const data = await res.json()
+    if (!data.sharingEnabled) return null
+    const invite = { code, projectSlug, nickname: String(data.nickname || ''), pointsPerInvite: Number(data.pointsPerInvite) || 0, at: Date.now() }
+    pendingInvite.value = invite
+    try { localStorage.setItem(INVITE_KEY, JSON.stringify(invite)) } catch { /* 隐私模式等 */ }
+    return invite
+  } catch {
+    return null
   }
+}
+
+/** 注册结果里的邀请说明 */
+export function describeReferral(referral: { rewarded: boolean; reason?: string; points?: number; inviter?: string } | undefined) {
+  if (!referral) return '注册成功'
+  if (referral.rewarded) return `注册成功，${referral.inviter} 获得了 ${referral.points} 积分`
+  if (referral.reason === 'self') return '注册成功。这个浏览器登录过邀请人的账号，本次不计积分'
+  if (referral.reason === 'daily_limit') return '注册成功。邀请人今天的奖励次数已满，本次不计积分'
+  return '注册成功'
 }
 
 /**
@@ -139,7 +108,7 @@ export function projectName(slug: string) {
   return projects.find((p) => p.slug === slug)?.name || slug
 }
 
-/** 积分流水里的原因由服务端写入项目 slug，展示时换成项目名称 */
+/** 旧版积分流水里的原因写的是项目 slug，展示时换成项目名称 */
 export function describeReason(reason: string) {
   return reason.replace(/分享项目 ([a-z0-9-]+) /, (_, slug: string) => `分享项目「${projectName(slug)}」`)
 }

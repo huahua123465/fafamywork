@@ -182,112 +182,81 @@ describe('分享积分与管理员控制', () => {
     const configured = await fetch(`${base}/api/admin/points/settings`, json('PUT', {
       sharingEnabled: true,
       pointsPerQualifiedVisit: 5,
-      dailyRewardLimit: 1,
+      dailyRewardLimit: 2,
       qualificationSeconds: 0,
       visitorDedupeDays: 30,
       registrationBonus: 0,
     }, adminAuth))
     expect(configured.status).toBe(200)
-    expect(await configured.json()).toMatchObject({ pointsPerQualifiedVisit: 5, dailyRewardLimit: 1 })
+    expect(await configured.json()).toMatchObject({ pointsPerQualifiedVisit: 5, dailyRewardLimit: 2 })
 
     const registered = await fetch(`${base}/api/auth/register`, json('POST', {
       username: 'reward_user', nickname: '奖励用户', password: 'reward-pass-123',
-    }, { 'X-Forwarded-For': '10.30.0.2' }))
+    }, { 'X-Forwarded-For': '10.30.0.2', 'X-Device-Id': 'sharer-device-0001' }))
     sharerToken = (await registered.json()).token
     const share = await fetch(`${base}/api/shares/create`, json('POST', { projectSlug: 'smart-todo' }, { Authorization: `Bearer ${sharerToken}` }))
     expect(share.status).toBe(200)
-    expect(await share.json()).toMatchObject({ projectSlug: 'smart-todo', pointsPerVisit: 5, remainingToday: 1, qualificationSeconds: 0, visitorDedupeDays: 30 })
+    expect(await share.json()).toMatchObject({ projectSlug: 'smart-todo', pointsPerInvite: 5, remainingToday: 2 })
   })
 
-  it('有效访问只奖励一次，并执行访客去重和每日上限', async () => {
-    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
-    const referralCode = me.user.referralCode
-    const visitHeaders = { 'User-Agent': 'Mozilla/5.0 Real Visitor', 'X-Forwarded-For': '10.30.1.1' }
-    const begin = await fetch(`${base}/api/shares/visit`, json('POST', { referralCode, projectSlug: 'smart-todo' }, visitHeaders))
-    expect(begin.status).toBe(201)
-    const { visitToken } = await begin.json()
-    const qualify = await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken, interacted: true }))
-    expect(await qualify.json()).toMatchObject({ rewarded: true, points: 5, balance: 5 })
-    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken, interacted: true }))).json()).toMatchObject({ rewarded: false })
+  const sharerCode = async () => (await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()).user.referralCode
+  const invite = (username, headers) => fetch(`${base}/api/auth/register`, json('POST', {
+    username, password: 'friend-pass-123', referralCode: headers.code, projectSlug: 'smart-todo',
+  }, { 'X-Forwarded-For': headers.ip, ...(headers.device ? { 'X-Device-Id': headers.device } : {}) }))
 
-    const duplicateBegin = await fetch(`${base}/api/shares/visit`, json('POST', { referralCode, projectSlug: 'smart-todo' }, visitHeaders))
-    const duplicateToken = (await duplicateBegin.json()).visitToken
-    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken: duplicateToken, interacted: true }))).json()).toMatchObject({ rewarded: false, reason: 'duplicate' })
-
-    const otherBegin = await fetch(`${base}/api/shares/visit`, json('POST', { referralCode, projectSlug: 'smart-todo' }, { ...visitHeaders, 'X-Forwarded-For': '10.30.1.2' }))
-    const otherToken = (await otherBegin.json()).visitToken
-    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken: otherToken, interacted: true }))).json()).toMatchObject({ rewarded: false, reason: 'daily_limit' })
-
-    const accountAuth = { Authorization: `Bearer ${sharerToken}` }
-    expect(await (await fetch(`${base}/api/account/share-summary`, { headers: accountAuth })).json()).toMatchObject({ points: 5, totalQualifiedVisits: 1, rewardedToday: 1 })
-    expect((await (await fetch(`${base}/api/account/point-transactions`, { headers: accountAuth })).json()).transactions).toHaveLength(1)
+  it('被邀请人打开链接能看到邀请人昵称，无效分享码返回 404', async () => {
+    const found = await fetch(`${base}/api/shares/inviter?code=${await sharerCode()}`)
+    expect(await found.json()).toMatchObject({ nickname: '奖励用户', pointsPerInvite: 5, sharingEnabled: true })
+    expect((await fetch(`${base}/api/shares/inviter?code=NOPE0000`)).status).toBe(404)
   })
 
-  it('本人访问和机器人访问不创建奖励资格', async () => {
-    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
-    const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
-    const self = await fetch(`${base}/api/shares/visit`, json('POST', body, { Authorization: `Bearer ${sharerToken}`, 'User-Agent': 'Mozilla/5.0', 'X-Forwarded-For': '10.30.2.1' }))
-    expect(await self.json()).toEqual({ eligible: false, reason: 'self' })
-    const bot = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Googlebot', 'X-Forwarded-For': '10.30.2.2' }))
-    expect(await bot.json()).toEqual({ eligible: false })
+  it('好友通过专属链接注册后分享者立即得分，邀请记录只露出部分用户名', async () => {
+    const code = await sharerCode()
+    const res = await invite('friend_one', { code, ip: '10.40.0.1', device: 'friend-device-0001' })
+    expect(res.status).toBe(201)
+    expect((await res.json()).referral).toEqual({ rewarded: true, points: 5, inviter: '奖励用户' })
+    const auth = { Authorization: `Bearer ${sharerToken}` }
+    expect(await (await fetch(`${base}/api/account/share-summary`, { headers: auth })).json()).toMatchObject({ points: 5, totalInvites: 1, rewardedToday: 1 })
+    const { referrals } = await (await fetch(`${base}/api/account/referrals`, { headers: auth })).json()
+    expect(referrals[0]).toMatchObject({ invitee: 'f***e', projectSlug: 'smart-todo', status: 'rewarded', rewardPoints: 5 })
+    const { transactions } = await (await fetch(`${base}/api/account/point-transactions`, { headers: auth })).json()
+    expect(transactions[0]).toMatchObject({ type: 'invite_reward', amount: 5, reason: '邀请 f***e 注册' })
   })
 
-  it('分享者退出登录、换浏览器或换网络后访问自己的链接仍不奖励', async () => {
-    const home = { 'X-Forwarded-For': '10.30.4.1', 'X-Device-Id': 'sharer-device-0001' }
-    const login = await fetch(`${base}/api/auth/login`, json('POST', { username: 'reward_user', password: 'reward-pass-123' }, home))
-    const { token, user } = await login.json()
-    await fetch(`${base}/api/auth/logout`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
-    const body = { referralCode: user.referralCode, projectSlug: 'smart-todo' }
-    // 同一网络，换浏览器（新 UA、没有设备号、未登录）
-    const sameNetwork = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0 Other Browser', 'X-Forwarded-For': '10.30.4.1' }))
-    expect(await sameNetwork.json()).toEqual({ eligible: false, reason: 'self' })
-    // 同一浏览器（设备号相同），切到手机流量
-    const sameDevice = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0', 'X-Forwarded-For': '10.99.0.1', 'X-Device-Id': 'sharer-device-0001' }))
-    expect(await sameDevice.json()).toEqual({ eligible: false, reason: 'self' })
+  it('在分享者登录过的浏览器上注册的新账号不计分', async () => {
+    const res = await invite('alt_account', { code: await sharerCode(), ip: '10.40.0.2', device: 'sharer-device-0001' })
+    expect(res.status).toBe(201)
+    expect((await res.json()).referral).toMatchObject({ rewarded: false, reason: 'self', points: 0 })
   })
 
-  it('访问开始后分享者才在同一网络登录，确认时拒绝', async () => {
-    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
-    const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
-    const begin = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0 Late', 'X-Forwarded-For': '10.30.5.1' }))
-    const { visitToken } = await begin.json()
-    await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}`, 'X-Forwarded-For': '10.30.5.1' } })
-    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken, interacted: true }))).json()).toMatchObject({ rewarded: false, reason: 'self' })
+  it('和分享者同一网络（如同一代理出口）但不同设备的好友照常计分，超出每日上限后不再计分', async () => {
+    const code = await sharerCode()
+    const same = await invite('friend_two', { code, ip: '10.30.0.2', device: 'friend-device-0002' })
+    expect((await same.json()).referral).toMatchObject({ rewarded: true, points: 5 })
+    const over = await invite('friend_three', { code, ip: '10.40.0.3', device: 'friend-device-0003' })
+    expect((await over.json()).referral).toMatchObject({ rewarded: false, reason: 'daily_limit' })
+    const share = await fetch(`${base}/api/shares/create`, json('POST', { projectSlug: 'smart-todo' }, { Authorization: `Bearer ${sharerToken}` }))
+    expect(await share.json()).toMatchObject({ remainingToday: 0 })
   })
 
-  it('同一网络换 UA 不算新访客', async () => {
-    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
-    const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
-    // 10.30.1.1 在前面的用例里已经产生过奖励
-    const begin = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0 Brand New UA', 'X-Forwarded-For': '10.30.1.1' }))
-    const { visitToken } = await begin.json()
-    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken, interacted: true }))).json()).toMatchObject({ rewarded: false, reason: 'duplicate' })
-  })
-
-  it('分享访问和有效访问确认按 IP 限速', async () => {
-    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
-    const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
-    const headers = { 'User-Agent': 'Mozilla/5.0 Flood', 'X-Forwarded-For': '10.30.3.1' }
-    const visits = []
-    for (let i = 0; i < 31; i++) visits.push(await (await fetch(`${base}/api/shares/visit`, json('POST', body, headers))).json())
-    expect(visits[29]).toMatchObject({ eligible: true })
-    expect(visits[30]).toEqual({ eligible: false })
-    const qualifies = []
-    for (let i = 0; i < 31; i++) qualifies.push(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken: 'nope', interacted: true }, headers))).json())
-    expect(qualifies[29]).toMatchObject({ reason: 'invalid' })
-    expect(qualifies[30]).toMatchObject({ rewarded: false, reason: 'rate_limited' })
+  it('分享码无效时照常注册，不产生邀请记录', async () => {
+    const res = await invite('friend_four', { code: 'NOPE0000', ip: '10.40.0.4', device: 'friend-device-0004' })
+    expect(res.status).toBe(201)
+    expect((await res.json()).referral).toBeUndefined()
   })
 
   it('管理员可以撤销奖励、调整积分、停用用户并查询审计记录', async () => {
     const auth = { Authorization: `Bearer ${adminToken}` }
     const users = (await (await fetch(`${base}/api/admin/users?search=reward_user`, { headers: auth })).json()).users
     const user = users[0]
-    expect(user.points).toBe(5)
+    expect(user.points).toBe(10)
     const detail = await fetch(`${base}/api/admin/users/${user.id}`, { headers: auth })
     expect(detail.status).toBe(200)
-    expect(await detail.json()).toMatchObject({ user: { username: 'reward_user', points: 5 } })
+    const detailData = await detail.json()
+    expect(detailData).toMatchObject({ user: { username: 'reward_user', points: 10 } })
+    expect(detailData.referrals).toHaveLength(4)
     const transactions = (await (await fetch(`${base}/api/admin/point-transactions`, { headers: auth })).json()).transactions
-    const reward = transactions.find((item) => item.type === 'share_reward' && item.userId === user.id)
+    const reward = transactions.find((item) => item.type === 'invite_reward' && item.userId === user.id)
     expect((await fetch(`${base}/api/admin/point-transactions/${reward.id}/revoke`, json('POST', { reason: '测试撤销' }, auth))).status).toBe(200)
     expect((await fetch(`${base}/api/admin/point-transactions/${reward.id}/revoke`, json('POST', { reason: '重复撤销' }, auth))).status).toBe(400)
     expect((await fetch(`${base}/api/admin/users/${user.id}/points`, json('POST', { amount: 20, reason: '测试奖励' }, auth))).status).toBe(200)

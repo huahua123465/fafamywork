@@ -4,9 +4,11 @@ import { useRoute } from 'vue-router'
 import Icon from './components/Icon.vue'
 import ContactDialog from './components/ContactDialog.vue'
 import AuthDialog from './components/AuthDialog.vue'
+import InviteBadge from './components/InviteBadge.vue'
 import { site } from './content/site'
 import { openContact, toast, toastKind } from './composables/ui'
 import { currentUser, openAuth } from './utils/user-session'
+import { handleInviteLink } from './utils/invite'
 const menu = ref(false)
 const route = useRoute()
 function contactFromMenu() {
@@ -16,6 +18,12 @@ function contactFromMenu() {
 watch(
   () => route.fullPath,
   () => (menu.value = false),
+)
+// 分享链接带 ?ref=分享码，任何页面进站都处理
+watch(
+  () => route.query.ref,
+  (ref) => { if (ref) void handleInviteLink(ref, route.path) },
+  { immediate: true },
 )
 </script>
 <template>
@@ -77,7 +85,7 @@ watch(
       </div>
     </div>
   </footer>
-  <ContactDialog /><AuthDialog /><Transition name="toast"
+  <ContactDialog /><AuthDialog /><InviteBadge /><Transition name="toast"
     ><div v-if="toast" class="toast" :role="toastKind === 'error' ? 'alert' : 'status'">
       <Icon :name="toastKind === 'error' ? 'info' : 'success'" :size="18" />{{ toast }}
     </div></Transition

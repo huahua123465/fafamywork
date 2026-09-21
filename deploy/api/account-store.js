@@ -8,9 +8,6 @@ const { DatabaseSync } = require('node:sqlite')
 const USERNAME_RE = /^[a-zA-Z0-9_]{3,24}$/
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000
 const SCRYPT_OPTIONS = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }
-// 分享者最近用过的网络在这段时间内访问自己的链接不奖励；设备标记长期有效。
-// 网络窗口不宜太长：手机流量的公网 IP 是运营商共享的，记太久会误伤同一出口的真实访客。
-const SELF_NETWORK_DAYS = 7
 
 const nowIso = () => new Date().toISOString()
 const tokenHash = (token) => crypto.createHash('sha256').update(token).digest('hex')
@@ -55,6 +52,9 @@ function validateRegistration(input) {
   }
   return null
 }
+
+/** 给分享者看的被邀请人用户名只露首尾，避免把别人的账号名完整展示出去 */
+const maskUsername = (name) => (name.length <= 2 ? `${name[0]}*` : `${name[0]}***${name.slice(-1)}`)
 
 function publicUser(row) {
   return {
@@ -104,6 +104,7 @@ function createAccountStore(filename) {
       registration_bonus INTEGER NOT NULL DEFAULT 0 CHECK (registration_bonus >= 0),
       updated_at TEXT NOT NULL
     );
+    -- 旧版「访问满 N 秒计分」的记录表，2026-09-21 改为邀请注册计分后停用，保留以免丢历史数据
     CREATE TABLE IF NOT EXISTS share_visits (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       sharer_user_id INTEGER NOT NULL REFERENCES users(id),
@@ -138,6 +139,18 @@ function createAccountStore(filename) {
       PRIMARY KEY (user_id, kind, mark_hash)
     );
     CREATE INDEX IF NOT EXISTS idx_user_marks_mark ON user_marks(kind, mark_hash);
+    -- 邀请注册：好友通过分享者的专属链接注册新账号，每个新账号只记一次
+    CREATE TABLE IF NOT EXISTS referrals (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      sharer_user_id INTEGER NOT NULL REFERENCES users(id),
+      invitee_user_id INTEGER NOT NULL UNIQUE REFERENCES users(id),
+      project_slug TEXT NOT NULL DEFAULT '',
+      status TEXT NOT NULL CHECK (status IN ('rewarded', 'rejected')),
+      reject_reason TEXT,
+      reward_points INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_referrals_sharer ON referrals(sharer_user_id, created_at DESC);
     CREATE TABLE IF NOT EXISTS admin_audit_logs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       action TEXT NOT NULL,
@@ -148,12 +161,9 @@ function createAccountStore(filename) {
       created_at TEXT NOT NULL
     );
   `)
-  // 旧库补列：share_visits 记录访客网络和设备，用于防分享者自刷与按网络去重
-  const visitColumns = new Set(db.prepare('PRAGMA table_info(share_visits)').all().map((c) => c.name))
-  if (!visitColumns.has('network_hash')) db.exec("ALTER TABLE share_visits ADD COLUMN network_hash TEXT NOT NULL DEFAULT ''")
-  if (!visitColumns.has('device_hash')) db.exec("ALTER TABLE share_visits ADD COLUMN device_hash TEXT NOT NULL DEFAULT ''")
-  db.exec('CREATE INDEX IF NOT EXISTS idx_share_visits_network ON share_visits(sharer_user_id, network_hash, qualified_at)')
-  db.exec('CREATE INDEX IF NOT EXISTS idx_share_visits_device ON share_visits(sharer_user_id, device_hash, qualified_at)')
+
+  // 2026-09-21 起不再按网络判断本人（开代理的用户全部被误判），清掉已记下的网络标记
+  db.exec("DELETE FROM user_marks WHERE kind = 'network'")
 
   db.prepare(`
     INSERT INTO point_settings (id, updated_at) VALUES (1, ?)
@@ -204,22 +214,45 @@ function createAccountStore(filename) {
     INSERT INTO user_marks (user_id, kind, mark_hash, last_seen_at) VALUES (?, ?, ?, ?)
     ON CONFLICT(user_id, kind, mark_hash) DO UPDATE SET last_seen_at = excluded.last_seen_at
   `)
-  /** 记下账号用过的网络和设备（都是服务端 HMAC 后的值），marks 缺省时不记 */
+  /** 记下账号登录过的浏览器设备号（服务端 HMAC 后的值），marks 缺省时不记 */
   function noteMarks(userId, marks) {
-    if (!marks) return
-    const seen = nowIso()
-    if (marks.network) upsertMark.run(userId, 'network', marks.network, seen)
-    if (marks.device) upsertMark.run(userId, 'device', marks.device, seen)
+    if (marks?.device) upsertMark.run(userId, 'device', marks.device, nowIso())
   }
-  /** 访客网络或设备是否属于分享者本人 */
-  function isSharerOwn(sharerId, network, device) {
-    const since = new Date(Date.now() - SELF_NETWORK_DAYS * 86400000).toISOString()
-    if (network && db.prepare(`
-      SELECT 1 FROM user_marks WHERE user_id = ? AND kind = 'network' AND mark_hash = ? AND last_seen_at >= ?
-    `).get(sharerId, network, since)) return true
+  /** 这台浏览器是否登录过分享者的账号 */
+  function isSharerDevice(sharerId, device) {
     return Boolean(device && db.prepare(`
       SELECT 1 FROM user_marks WHERE user_id = ? AND kind = 'device' AND mark_hash = ?
     `).get(sharerId, device))
+  }
+  const rewardedToday = (sharerId) => db.prepare(`
+    SELECT COUNT(*) AS total FROM referrals WHERE sharer_user_id = ? AND status = 'rewarded' AND created_at >= ?
+  `).get(sharerId, chinaDayStartIso()).total
+
+  /**
+   * 新账号通过专属链接注册时给分享者记奖励，在注册事务内调用。
+   * 不奖励的情况：活动关闭、分享者已停用、在分享者登录过的浏览器上注册、分享者今日已满。
+   */
+  function applyReferral(invitee, referralCode, projectSlug, marks) {
+    const code = String(referralCode || '').trim().toUpperCase()
+    if (!/^[A-Z0-9]{6,8}$/.test(code)) return null
+    const sharer = db.prepare('SELECT * FROM users WHERE referral_code = ?').get(code)
+    if (!sharer || sharer.id === invitee.id) return null
+    const settings = publicSettings()
+    let reason = ''
+    if (!settings.sharingEnabled) reason = 'disabled'
+    else if (sharer.status !== 'active') reason = 'blocked'
+    else if (isSharerDevice(sharer.id, marks?.device)) reason = 'self'
+    else if (rewardedToday(sharer.id) >= settings.dailyRewardLimit) reason = 'daily_limit'
+    const slug = /^[a-z0-9-]{1,60}$/.test(String(projectSlug || '')) ? String(projectSlug) : ''
+    const points = reason ? 0 : settings.pointsPerQualifiedVisit
+    const info = db.prepare(`
+      INSERT INTO referrals (sharer_user_id, invitee_user_id, project_slug, status, reject_reason, reward_points, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).run(sharer.id, invitee.id, slug, reason ? 'rejected' : 'rewarded', reason || null, points, nowIso())
+    if (!reason && points > 0) {
+      addTransaction(sharer.id, points, 'invite_reward', String(info.lastInsertRowid), `邀请 ${maskUsername(invitee.username)} 注册`, 'system')
+    }
+    return { rewarded: !reason, reason: reason || undefined, points, inviter: sharer.nickname || sharer.username }
   }
 
   function newReferralCode() {
@@ -250,7 +283,7 @@ function createAccountStore(filename) {
     }
   }
 
-  const registerTransaction = (input, marks) =>
+  const registerTransaction = (input, marks, invite) =>
     transaction(() => {
       const settings = db.prepare('SELECT registration_bonus FROM point_settings WHERE id = 1').get()
       const info = insertUser.run(
@@ -264,9 +297,12 @@ function createAccountStore(filename) {
       if (settings.registration_bonus > 0) {
         addTransaction(Number(info.lastInsertRowid), settings.registration_bonus, 'register_bonus', null, '新用户注册奖励', 'system')
       }
-      const user = findUserById.get(info.lastInsertRowid)
-      noteMarks(user.id, marks)
-      return { user: publicUser(user), ...issueSession(user.id) }
+      const invitee = findUserById.get(info.lastInsertRowid)
+      // 先判断邀请再记下新账号的设备，避免新账号自己的标记影响判断
+      const referral = invite ? applyReferral(invitee, invite.referralCode, invite.projectSlug, marks) : null
+      noteMarks(invitee.id, marks)
+      const user = findUserById.get(invitee.id)
+      return { user: publicUser(user), ...issueSession(user.id), ...(referral ? { referral } : {}) }
     })
 
   return {
@@ -279,7 +315,7 @@ function createAccountStore(filename) {
         password: String(input.password),
       }
       try {
-        return registerTransaction(normalized, marks)
+        return registerTransaction(normalized, marks, { referralCode: input.referralCode, projectSlug: input.projectSlug })
       } catch (error) {
         if (String(error.message).includes('UNIQUE constraint failed: users.username')) {
           return { invalid: { error: '这个用户名已经被注册', field: 'username' } }
@@ -334,97 +370,44 @@ function createAccountStore(filename) {
       if (!settings.sharingEnabled) return { invalid: { error: '分享积分活动当前未开启' } }
       const slug = String(projectSlug || '').trim()
       if (!/^[a-z0-9-]{1,60}$/.test(slug)) return { invalid: { error: '项目地址无效', field: 'projectSlug' } }
-      const rewardedToday = db.prepare(`
-        SELECT COUNT(*) AS total FROM share_visits
-        WHERE sharer_user_id = ? AND status = 'rewarded' AND qualified_at >= ?
-      `).get(userId, chinaDayStartIso()).total
       return {
         referralCode: user.referral_code,
         projectSlug: slug,
-        pointsPerVisit: settings.pointsPerQualifiedVisit,
-        remainingToday: Math.max(0, settings.dailyRewardLimit - rewardedToday),
-        qualificationSeconds: settings.qualificationSeconds,
-        visitorDedupeDays: settings.visitorDedupeDays,
+        pointsPerInvite: settings.pointsPerQualifiedVisit,
+        remainingToday: Math.max(0, settings.dailyRewardLimit - rewardedToday(userId)),
       }
     },
 
-    /** visitor：{ visitor: 网络+UA, network: 网络, device: 设备 }，都是 HMAC 后的值 */
-    beginVisit(referralCode, projectSlug, visitor, currentUserId) {
-      const sharer = db.prepare('SELECT * FROM users WHERE referral_code = ?').get(String(referralCode || '').toUpperCase())
+    /** 被邀请人打开链接时显示「xx 邀请你注册」，只返回昵称和奖励数 */
+    inviter(referralCode) {
+      const code = String(referralCode || '').trim().toUpperCase()
+      if (!/^[A-Z0-9]{6,8}$/.test(code)) return null
+      const sharer = db.prepare("SELECT username, nickname FROM users WHERE referral_code = ? AND status = 'active'").get(code)
+      if (!sharer) return null
       const settings = publicSettings()
-      if (!settings.sharingEnabled || !sharer || sharer.status !== 'active') return null
-      if (currentUserId && Number(currentUserId) === Number(sharer.id)) return { rejected: true, reason: 'self' }
-      if (isSharerOwn(sharer.id, visitor.network, visitor.device)) return { rejected: true, reason: 'self' }
-      const slug = String(projectSlug || '').trim()
-      if (!/^[a-z0-9-]{1,60}$/.test(slug)) return null
-      const visitToken = `visit_${crypto.randomBytes(24).toString('base64url')}`
-      db.prepare(`
-        INSERT INTO share_visits (sharer_user_id, visit_token_hash, project_slug, visitor_hash, network_hash, device_hash, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `).run(sharer.id, tokenHash(visitToken), slug, visitor.visitor, visitor.network || '', visitor.device || '', nowIso())
-      return { visitToken, qualificationSeconds: settings.qualificationSeconds }
-    },
-
-    qualifyVisit(visitToken, interacted) {
-      return transaction(() => {
-        const visit = db.prepare('SELECT * FROM share_visits WHERE visit_token_hash = ?').get(tokenHash(visitToken || ''))
-        if (!visit || visit.status !== 'pending') return { rewarded: false, reason: 'invalid' }
-        const settings = publicSettings()
-        const reject = (reason) => {
-          db.prepare("UPDATE share_visits SET status = 'rejected', reject_reason = ? WHERE id = ?").run(reason, visit.id)
-          return { rewarded: false, reason }
-        }
-        if (!settings.sharingEnabled) return reject('disabled')
-        if (!interacted) return reject('no_interaction')
-        if (Date.now() - Date.parse(visit.created_at) < settings.qualificationSeconds * 1000) return { rewarded: false, reason: 'too_early' }
-        const sharer = findUserById.get(visit.sharer_user_id)
-        if (!sharer || sharer.status !== 'active') return reject('blocked')
-        // 访问开始后分享者才在这个网络/设备上登录，也算本人
-        if (isSharerOwn(sharer.id, visit.network_hash, visit.device_hash)) return reject('self')
-        // 同一网络（或同一设备）在去重周期内只奖励一次，换浏览器、换 UA 不算新访客
-        const cutoff = new Date(Date.now() - settings.visitorDedupeDays * 86400000).toISOString()
-        const duplicate = db.prepare(`
-          SELECT 1 FROM share_visits
-          WHERE sharer_user_id = ? AND status = 'rewarded' AND qualified_at >= ?
-            AND (visitor_hash = ? OR (network_hash <> '' AND network_hash = ?) OR (device_hash <> '' AND device_hash = ?))
-          LIMIT 1
-        `).get(visit.sharer_user_id, cutoff, visit.visitor_hash, visit.network_hash, visit.device_hash)
-        if (duplicate) return reject('duplicate')
-        const rewardedToday = db.prepare(`
-          SELECT COUNT(*) AS total FROM share_visits
-          WHERE sharer_user_id = ? AND status = 'rewarded' AND qualified_at >= ?
-        `).get(visit.sharer_user_id, chinaDayStartIso()).total
-        if (rewardedToday >= settings.dailyRewardLimit) return reject('daily_limit')
-        const qualifiedAt = nowIso()
-        db.prepare(`
-          UPDATE share_visits SET status = 'rewarded', qualified_at = ?, reward_points = ? WHERE id = ?
-        `).run(qualifiedAt, settings.pointsPerQualifiedVisit, visit.id)
-        const awarded = addTransaction(
-          visit.sharer_user_id,
-          settings.pointsPerQualifiedVisit,
-          'share_reward',
-          String(visit.id),
-          `分享项目 ${visit.project_slug} 产生有效访问`,
-          'system',
-        )
-        return { rewarded: true, points: settings.pointsPerQualifiedVisit, balance: awarded.balance }
-      })
+      return { nickname: sharer.nickname || sharer.username, sharingEnabled: settings.sharingEnabled, pointsPerInvite: settings.pointsPerQualifiedVisit }
     },
 
     accountSummary(userId) {
       const user = findUserById.get(userId)
       const settings = publicSettings()
-      const total = db.prepare("SELECT COUNT(*) AS total FROM share_visits WHERE sharer_user_id = ? AND status = 'rewarded'").get(userId).total
-      const today = db.prepare(`SELECT COUNT(*) AS total FROM share_visits WHERE sharer_user_id = ? AND status = 'rewarded' AND qualified_at >= ?`).get(userId, chinaDayStartIso()).total
-      return { points: user.points_balance, totalQualifiedVisits: total, rewardedToday: today, dailyRewardLimit: settings.dailyRewardLimit, settings }
+      const total = db.prepare("SELECT COUNT(*) AS total FROM referrals WHERE sharer_user_id = ? AND status = 'rewarded'").get(userId).total
+      return { points: user.points_balance, totalInvites: total, rewardedToday: rewardedToday(userId), dailyRewardLimit: settings.dailyRewardLimit, settings }
     },
 
     pointTransactions(userId, limit = 50) {
       return db.prepare(`SELECT id, amount, balance_after AS balanceAfter, type, reference_id AS referenceId, reason, created_at AS createdAt FROM point_transactions WHERE user_id = ? ORDER BY id DESC LIMIT ?`).all(userId, Math.min(Math.max(limit, 1), 100))
     },
 
-    shareVisits(userId, limit = 50) {
-      return db.prepare(`SELECT id, project_slug AS projectSlug, status, created_at AS createdAt, qualified_at AS qualifiedAt, reward_points AS rewardPoints, reject_reason AS rejectReason FROM share_visits WHERE sharer_user_id = ? ORDER BY id DESC LIMIT ?`).all(userId, Math.min(Math.max(limit, 1), 100))
+    /** 分享者的邀请记录 */
+    referrals(userId, limit = 50) {
+      const rows = db.prepare(`
+        SELECT r.id, r.project_slug AS projectSlug, r.status, r.reject_reason AS rejectReason, r.reward_points AS rewardPoints,
+          r.created_at AS createdAt, u.username
+        FROM referrals r JOIN users u ON u.id = r.invitee_user_id
+        WHERE r.sharer_user_id = ? ORDER BY r.id DESC LIMIT ?
+      `).all(userId, Math.min(Math.max(limit, 1), 100))
+      return rows.map(({ username, ...row }) => ({ ...row, invitee: maskUsername(username) }))
     },
 
     adminSettings() {
@@ -462,7 +445,7 @@ function createAccountStore(filename) {
       return {
         user: publicUser(user),
         transactions: this.pointTransactions(userId, 100),
-        visits: this.shareVisits(userId, 100),
+        referrals: this.referrals(userId, 100),
       }
     },
 
@@ -498,8 +481,8 @@ function createAccountStore(filename) {
       const note = String(reason || '').trim()
       if (!note) return { invalid: { error: '请填写撤销原因', field: 'reason' } }
       return transaction(() => {
-        const original = db.prepare("SELECT * FROM point_transactions WHERE id = ? AND type = 'share_reward'").get(transactionId)
-        if (!original) return { invalid: { error: '只能撤销存在的分享奖励' } }
+        const original = db.prepare("SELECT * FROM point_transactions WHERE id = ? AND type IN ('share_reward', 'invite_reward')").get(transactionId)
+        if (!original) return { invalid: { error: '只能撤销存在的分享或邀请奖励' } }
         const already = db.prepare("SELECT 1 FROM point_transactions WHERE type = 'reward_revoke' AND reference_id = ?").get(String(transactionId))
         if (already) return { invalid: { error: '这笔奖励已经撤销' } }
         const result = addTransaction(original.user_id, -original.amount, 'reward_revoke', String(transactionId), note, 'admin')

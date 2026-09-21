@@ -41,16 +41,13 @@
 .share-manual input { min-height: 46px; padding: 0 13px; border: 1px solid #d9dce3; border-radius: 10px; font-size: 16px; }
 /* 弹窗内容区留白，与联系弹窗 .contact-body 一致 */
 .modal-body { padding: 8px 32px 29px; }
-.referral-badge { position: fixed; inset: auto; right: 24px; bottom: 24px; margin: 0; color: var(--text); z-index: 40; width: min(320px, calc(100vw - 32px)); display: flex; align-items: flex-start; gap: 10px; padding: 14px 14px 16px 18px; border-radius: 16px; background: #fffdf9; border: 1px solid #eadfd2; box-shadow: 0 12px 32px #3a2a1a26; overflow: hidden; }
-.referral-badge-body { flex: 1; min-width: 0; }
-.referral-badge strong { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-.referral-badge p { margin-top: 4px; color: #626874; font-size: 13px; line-height: 1.7; }
-.referral-count { color: var(--blue); font-size: 20px; font-variant-numeric: tabular-nums; }
-.referral-badge.rewarded strong { color: #167342; }
-.referral-badge-close { flex: 0 0 auto; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: #8a8f99; }
-.referral-badge-bar { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--blue); transition: width 250ms linear; }
-.referral-badge.rewarded .referral-badge-bar { background: #1f9d57; }
-.referral-badge.not_counted .referral-badge-bar { background: #b9bdc6; }
+.invite-badge { position: fixed; right: 24px; bottom: 24px; z-index: 40; width: min(320px, calc(100vw - 32px)); display: flex; align-items: flex-start; gap: 10px; padding: 16px 14px 16px 18px; border-radius: 16px; background: #fffdf9; border: 1px solid #eadfd2; box-shadow: 0 12px 32px #3a2a1a26; }
+.invite-badge-body { flex: 1; min-width: 0; }
+.invite-badge strong { font-weight: 600; }
+.invite-badge p { margin: 4px 0 12px; color: #626874; font-size: 13px; line-height: 1.7; }
+.invite-badge-close { flex: 0 0 auto; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: #8a8f99; }
+.auth-invite { margin: 18px 0; padding: 14px 16px; border-radius: 12px; background: #fbf1e8; color: #5a4a3e; line-height: 1.8; }
+.auth-invite strong { display: block; color: var(--blue); font-weight: 600; }
 .account-page { min-height: 70vh; }
 .account-page .page-heading { margin-bottom: 42px; }
 .account-empty { max-width: 620px; padding: 36px; border: 1px solid #e3e4e8; border-radius: 20px; background: #fff; }
@@ -82,7 +79,8 @@
   .share-card { grid-template-columns: 104px 1fr; gap: 14px; padding: 12px; }
   .share-card p { font-size: 14px; }
 }
-/* 手机上详情页底部有常驻咨询栏，计时条放在它上面 */
 @media (max-width: 767px) {
-  .referral-badge { left: 16px; right: 16px; width: auto; bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .invite-badge { left: 16px; right: 16px; width: auto; bottom: calc(16px + env(safe-area-inset-bottom)); }
+  /* 详情页底部有常驻咨询栏，邀请入口放在它上面 */
+  body.has-cta-bar .invite-badge { bottom: calc(84px + env(safe-area-inset-bottom)); }
 }
