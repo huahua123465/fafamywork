@@ -13,6 +13,8 @@ export interface SiteUser {
 const TOKEN_KEY = 'portfolio-user-token'
 export const currentUser = ref<SiteUser | null>(null)
 export const authOpen = ref(false)
+/** 登录弹窗底部「暂不登录」按钮：从分享入口打开时改成直接普通分享 */
+export const authSkip = ref<{ label: string; action: () => void } | null>(null)
 let pendingAction: (() => void | Promise<void>) | null = null
 
 export function userToken() {
@@ -67,8 +69,9 @@ function finishAuth(data: { token: string; user: SiteUser }) {
   return data.user
 }
 
-export function openAuth(afterLogin?: () => void | Promise<void>) {
+export function openAuth(afterLogin?: () => void | Promise<void>, skip?: { label: string; action: () => void }) {
   pendingAction = afterLogin || null
+  authSkip.value = skip || null
   authOpen.value = true
 }
 
@@ -77,9 +80,16 @@ export function closeAuth() {
   pendingAction = null
 }
 
-export function requireUser(action: () => void | Promise<void>) {
+/** 同步调用 skip.action，保留点击手势，复制和系统分享才不会被浏览器拦下 */
+export function skipAuth() {
+  const skip = authSkip.value
+  closeAuth()
+  skip?.action()
+}
+
+export function requireUser(action: () => void | Promise<void>, skip?: { label: string; action: () => void }) {
   if (currentUser.value) return void action()
-  openAuth(action)
+  openAuth(action, skip)
 }
 
 export async function logoutUser() {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
 import { notify } from '../composables/ui'
+import { describeReason } from '../utils/sharing'
 
 const props = defineProps<{ token: string }>()
 const loading = ref(false)
@@ -84,7 +85,7 @@ onMounted(load)
       <div class="reward-subsection"><div class="reward-heading"><h3>用户</h3><div><input v-model.trim="search" placeholder="搜索用户名或昵称" /><button type="button" @click="load">搜索</button></div></div>
         <div class="reward-table"><div v-for="user in users" :key="user.id" class="reward-row"><span><strong>{{ user.nickname || user.username }}</strong><small>@{{ user.username }} · {{ user.status === 'active' ? '正常' : '已停用' }}</small></span><b>{{ user.points }} 积分</b><button type="button" @click="adjust(user)">调整积分</button><button type="button" @click="toggleStatus(user)">{{ user.status === 'active' ? '停用' : '恢复' }}</button></div><p v-if="!users.length">暂无用户。</p></div>
       </div>
-      <div class="reward-subsection"><h3>最近积分流水</h3><div class="reward-table"><div v-for="item in transactions.slice(0, 30)" :key="item.id" class="reward-row"><span><strong>@{{ item.username }}</strong><small>{{ item.reason }} · {{ new Date(item.createdAt).toLocaleString('zh-CN') }}</small></span><b>{{ item.amount > 0 ? '+' : '' }}{{ item.amount }}</b><button v-if="item.type === 'share_reward'" type="button" @click="revoke(item)">撤销奖励</button></div><p v-if="!transactions.length">暂无积分流水。</p></div></div>
+      <div class="reward-subsection"><h3>最近积分流水</h3><div class="reward-table"><div v-for="item in transactions.slice(0, 30)" :key="item.id" class="reward-row"><span><strong>@{{ item.username }}</strong><small>{{ describeReason(item.reason) }} · {{ new Date(item.createdAt).toLocaleString('zh-CN') }}</small></span><b>{{ item.amount > 0 ? '+' : '' }}{{ item.amount }}</b><button v-if="item.type === 'share_reward'" type="button" @click="revoke(item)">撤销奖励</button></div><p v-if="!transactions.length">暂无积分流水。</p></div></div>
       <details class="reward-subsection"><summary>管理员操作记录（{{ logs.length }}）</summary><div class="reward-table"><div v-for="item in logs.slice(0, 50)" :key="item.id" class="reward-row"><span><strong>{{ item.action }}</strong><small>{{ item.reason }} · {{ new Date(item.createdAt).toLocaleString('zh-CN') }}</small></span></div></div></details>
     </template>
   </fieldset>

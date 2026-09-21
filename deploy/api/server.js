@@ -314,6 +314,15 @@ setInterval(() => {
   userLoginBudget.clear()
 }, 15 * 60 * 1000).unref()
 
+// 分享访问与有效访问确认：同一 IP 每 10 分钟各 30 次，正常访客远用不到，挡住批量刷待确认记录。
+const shareVisitBudget = new Map()
+const shareQualifyBudget = new Map()
+const SHARE_BUDGET = 30
+setInterval(() => {
+  shareVisitBudget.clear()
+  shareQualifyBudget.clear()
+}, 10 * 60 * 1000).unref()
+
 function budgetExceeded(budget, ip, maximum) {
   const used = budget.get(ip) || 0
   if (used >= maximum) return true
@@ -550,6 +559,7 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/shares/visit' && req.method === 'POST') {
     const ua = String(req.headers['user-agent'] || '')
     if (!ua || BOT_RE.test(ua)) return send(res, 200, { eligible: false })
+    if (budgetExceeded(shareVisitBudget, ip, SHARE_BUDGET)) return send(res, 200, { eligible: false })
     let body
     try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
     const currentUser = accounts.authenticate(bearer(req))
@@ -559,6 +569,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (url.pathname === '/api/shares/qualify' && req.method === 'POST') {
+    if (budgetExceeded(shareQualifyBudget, ip, SHARE_BUDGET)) return send(res, 200, { rewarded: false, reason: 'rate_limited' })
     let body
     try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
     const result = accounts.qualifyVisit(body.visitToken, body.interacted === true)

@@ -232,6 +232,20 @@ describe('分享积分与管理员控制', () => {
     expect(await bot.json()).toEqual({ eligible: false })
   })
 
+  it('分享访问和有效访问确认按 IP 限速', async () => {
+    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
+    const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
+    const headers = { 'User-Agent': 'Mozilla/5.0 Flood', 'X-Forwarded-For': '10.30.3.1' }
+    const visits = []
+    for (let i = 0; i < 31; i++) visits.push(await (await fetch(`${base}/api/shares/visit`, json('POST', body, headers))).json())
+    expect(visits[29]).toMatchObject({ eligible: true })
+    expect(visits[30]).toEqual({ eligible: false })
+    const qualifies = []
+    for (let i = 0; i < 31; i++) qualifies.push(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken: 'nope', interacted: true }, headers))).json())
+    expect(qualifies[29]).toMatchObject({ reason: 'invalid' })
+    expect(qualifies[30]).toMatchObject({ rewarded: false, reason: 'rate_limited' })
+  })
+
   it('管理员可以撤销奖励、调整积分、停用用户并查询审计记录', async () => {
     const auth = { Authorization: `Bearer ${adminToken}` }
     const users = (await (await fetch(`${base}/api/admin/users?search=reward_user`, { headers: auth })).json()).users

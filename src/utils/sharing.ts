@@ -1,4 +1,6 @@
 import { authHeaders, userApi } from './user-session'
+import { copyText } from './clipboard'
+import { projects } from '../content/projects'
 
 export interface ShareOffer {
   referralCode: string
@@ -58,9 +60,37 @@ export function trackReferralVisit(projectSlug: string, referralCode: unknown) {
   }
 }
 
-export async function ordinaryShare(title: string, url = window.location.href) {
+/**
+ * 分享结果：shared 走了系统分享面板，copied 已复制，manual 复制失败需要用户手动复制。
+ * 站点是 http://IP，不是安全上下文：电脑浏览器没有 navigator.share 和 navigator.clipboard，
+ * 微信内置浏览器也没有 navigator.share，所以复制必须走 clipboard.ts 的兜底。
+ */
+export type ShareOutcome = 'shared' | 'copied' | 'manual'
+
+export async function shareLink(data: { title: string; text?: string; url: string }): Promise<ShareOutcome> {
+  if (navigator.share) {
+    try {
+      await navigator.share(data)
+      return 'shared'
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') throw e
+      // 其余错误（权限、系统不支持）退回复制
+    }
+  }
+  return (await copyText(data.url)) ? 'copied' : 'manual'
+}
+
+export function ordinaryShareUrl(url = window.location.href) {
   const clean = new URL(url)
   clean.searchParams.delete('ref')
-  if (navigator.share) await navigator.share({ title, url: clean.toString() })
-  else await navigator.clipboard.writeText(clean.toString())
+  return clean.toString()
+}
+
+export function projectName(slug: string) {
+  return projects.find((p) => p.slug === slug)?.name || slug
+}
+
+/** 积分流水里的原因由服务端写入项目 slug，展示时换成项目名称 */
+export function describeReason(reason: string) {
+  return reason.replace(/分享项目 ([a-z0-9-]+) /, (_, slug: string) => `分享项目「${projectName(slug)}」`)
 }

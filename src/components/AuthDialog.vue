@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 import Modal from './Modal.vue'
-import { authOpen, closeAuth, loginUser, registerUser } from '../utils/user-session'
+import { authOpen, authSkip, closeAuth, loginUser, registerUser, skipAuth } from '../utils/user-session'
 
 const mode = ref<'login' | 'register'>('login')
 const busy = ref(false)
@@ -39,7 +39,7 @@ async function submit() {
 </script>
 
 <template>
-  <Modal :open="authOpen" :title="title" @close="closeAuth">
+  <Modal :open="authOpen" :title="title" @close="closeAuth"><div class="modal-body">
     <div class="auth-switch" role="tablist">
       <button :class="{ active: mode === 'login' }" type="button" @click="switchMode('login')">登录</button>
       <button :class="{ active: mode === 'register' }" type="button" @click="switchMode('register')">注册</button>
@@ -54,6 +54,6 @@ async function submit() {
       <p v-if="error" class="form-error" role="alert">{{ error }}</p>
       <button class="button" type="submit" :disabled="busy">{{ busy ? '处理中…' : title }}</button>
     </form>
-    <button class="text-link auth-skip" type="button" @click="closeAuth">暂不登录，继续浏览</button>
-  </Modal>
+    <button class="text-link auth-skip" type="button" @click="skipAuth">{{ authSkip?.label || '暂不登录，继续浏览' }}</button>
+  </div></Modal>
 </template>

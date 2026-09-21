@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import Icon from '../components/Icon.vue'
 import { changeUserPassword, currentUser, logoutUser, openAuth, userApi } from '../utils/user-session'
 import { notify } from '../composables/ui'
+import { describeReason, projectName } from '../utils/sharing'
 
 const router = useRouter()
 const summary = ref<any>(null)
@@ -65,8 +66,8 @@ onMounted(load)
         <article><small>累计有效访问</small><strong>{{ summary?.totalQualifiedVisits || 0 }}</strong></article>
         <article><small>今日进度</small><strong>{{ summary?.rewardedToday || 0 }} / {{ summary?.dailyRewardLimit || 0 }}</strong></article>
       </div>
-      <section class="account-panel"><h2>积分明细</h2><div v-if="transactions.length" class="account-list"><div v-for="item in transactions" :key="item.id"><span>{{ item.reason }}<small>{{ new Date(item.createdAt).toLocaleString('zh-CN') }}</small></span><strong :class="{ negative: item.amount < 0 }">{{ item.amount > 0 ? '+' : '' }}{{ item.amount }}</strong></div></div><p v-else>还没有积分记录，分享项目后会显示在这里。</p></section>
-      <section class="account-panel"><h2>分享记录</h2><div v-if="visits.length" class="account-list"><div v-for="item in visits" :key="item.id"><span>{{ item.projectSlug }}<small>{{ new Date(item.createdAt).toLocaleString('zh-CN') }}</small></span><strong>{{ item.status === 'rewarded' ? `+${item.rewardPoints}` : item.status === 'pending' ? '待确认' : '未奖励' }}</strong></div></div><p v-else>还没有分享访问记录。</p></section>
+      <section class="account-panel"><h2>积分明细</h2><div v-if="transactions.length" class="account-list"><div v-for="item in transactions" :key="item.id"><span>{{ describeReason(item.reason) }}<small>{{ new Date(item.createdAt).toLocaleString('zh-CN') }}</small></span><strong :class="{ negative: item.amount < 0 }">{{ item.amount > 0 ? '+' : '' }}{{ item.amount }}</strong></div></div><p v-else>还没有积分记录，分享项目后会显示在这里。</p></section>
+      <section class="account-panel"><h2>分享记录</h2><div v-if="visits.length" class="account-list"><div v-for="item in visits" :key="item.id"><span>{{ projectName(item.projectSlug) }}<small>{{ new Date(item.createdAt).toLocaleString('zh-CN') }}</small></span><strong :class="{ muted: item.status !== 'rewarded' }">{{ item.status === 'rewarded' ? `+${item.rewardPoints}` : item.status === 'pending' ? '待确认' : '未奖励' }}</strong></div></div><p v-else>还没有分享访问记录。</p></section>
       <section class="account-panel"><h2>修改密码</h2><form class="password-form" @submit.prevent="changePassword"><label><span>当前密码</span><input v-model="password.current" type="password" autocomplete="current-password" required /></label><label><span>新密码</span><input v-model="password.next" type="password" autocomplete="new-password" minlength="8" required /></label><label><span>确认新密码</span><input v-model="password.confirm" type="password" autocomplete="new-password" minlength="8" required /></label><button class="button" :disabled="changing">{{ changing ? '修改中…' : '修改密码' }} <Icon name="right" :size="17" /></button></form></section>
     </div>
   </section>
