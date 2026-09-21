@@ -28,6 +28,14 @@
 .share-login-callout h3, .share-reward-box h3 { margin-bottom: 8px; }
 .share-login-callout .button, .share-reward-box .button { margin-top: 14px; }
 .share-normal { width: 100%; margin-top: 10px; }
+.share-rules { margin: 10px 0 0; padding-left: 1.2em; color: #626874; line-height: 1.8; font-size: 14px; }
+.share-rules li { list-style: disc; }
+.share-result { margin-top: 18px; padding: 16px 18px; border-radius: 15px; background: #ecf8f0; border: 1px solid #bfe5cc; display: grid; gap: 8px; }
+.share-result strong { color: #167342; font-weight: 600; }
+.share-result p { color: #43574b; line-height: 1.8; }
+.share-result input { min-height: 42px; padding: 0 12px; border: 1px solid #cfe3d6; border-radius: 10px; background: #fff; font-size: 16px; color: #43574b; }
+.share-result.error { background: #fff1f0; border-color: #f3c9c5; }
+.share-result.error strong { color: #a62a20; }
 .share-manual { margin-top: 18px; display: grid; gap: 8px; }
 .share-manual p { color: #626874; line-height: 1.8; }
 .share-manual input { min-height: 46px; padding: 0 13px; border: 1px solid #d9dce3; border-radius: 10px; font-size: 16px; }

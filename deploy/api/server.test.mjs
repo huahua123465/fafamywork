@@ -196,7 +196,7 @@ describe('分享积分与管理员控制', () => {
     sharerToken = (await registered.json()).token
     const share = await fetch(`${base}/api/shares/create`, json('POST', { projectSlug: 'smart-todo' }, { Authorization: `Bearer ${sharerToken}` }))
     expect(share.status).toBe(200)
-    expect(await share.json()).toMatchObject({ projectSlug: 'smart-todo', pointsPerVisit: 5, remainingToday: 1 })
+    expect(await share.json()).toMatchObject({ projectSlug: 'smart-todo', pointsPerVisit: 5, remainingToday: 1, qualificationSeconds: 0, visitorDedupeDays: 30 })
   })
 
   it('有效访问只奖励一次，并执行访客去重和每日上限', async () => {

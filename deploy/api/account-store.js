@@ -343,6 +343,8 @@ function createAccountStore(filename) {
         projectSlug: slug,
         pointsPerVisit: settings.pointsPerQualifiedVisit,
         remainingToday: Math.max(0, settings.dailyRewardLimit - rewardedToday),
+        qualificationSeconds: settings.qualificationSeconds,
+        visitorDedupeDays: settings.visitorDedupeDays,
       }
     },
 

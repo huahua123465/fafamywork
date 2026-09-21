@@ -7,6 +7,8 @@ export interface ShareOffer {
   projectSlug: string
   pointsPerVisit: number
   remainingToday: number
+  qualificationSeconds: number
+  visitorDedupeDays: number
 }
 
 export async function createRewardShare(projectSlug: string) {
