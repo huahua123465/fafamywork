@@ -2,7 +2,7 @@
 :root {
   font-synthesis: none;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.8;
   font-size: 16px;
 }
 * {
@@ -60,7 +60,7 @@ p {
 h1,
 h2,
 h3 {
-  line-height: 1.35;
+  line-height: 1.45;
   letter-spacing: normal;
 }
 button:focus-visible,

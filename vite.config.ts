@@ -88,9 +88,9 @@ function seoFiles(siteUrl: string): Plugin {
           .join('\n') +
         `\n</urlset>\n`
 
-      // /admin 与 /insights 不需要被收录
+      // 登录态页面不需要被收录
       const robots =
-        `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /insights\n\nSitemap: ${base}/sitemap.xml\n`
+        `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /insights\nDisallow: /account\n\nSitemap: ${base}/sitemap.xml\n`
 
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap })
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots })
@@ -101,5 +101,8 @@ function seoFiles(siteUrl: string): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_')
   const siteUrl = env.VITE_SITE_URL || 'http://localhost:5173'
-  return { plugins: [vue(), projectData(), seoFiles(siteUrl)] }
+  return {
+    plugins: [vue(), projectData(), seoFiles(siteUrl)],
+    server: { proxy: { '/api': 'http://127.0.0.1:3000' } },
+  }
 })

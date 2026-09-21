@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { projects } from '../content/projects'
 import { findProject } from '../content/project-details'
@@ -13,9 +13,13 @@ import { safeUrl } from '../utils/projects'
 import { describeTechnology } from '../content/technology'
 import PurchaseGuide from '../components/PurchaseGuide.vue'
 import BuyingSummary from '../components/BuyingSummary.vue'
+import ShareDialog from '../components/ShareDialog.vue'
+import { trackReferralVisit } from '../utils/sharing'
 const route = useRoute(),
   router = useRouter()
 const project = computed(() => findProject(route.params.slug))
+const shareOpen = ref(false)
+let stopReferralTracking: () => void = () => undefined
 const related = computed(() =>
   projects
     .filter((p) => p.id !== project.value?.id)
@@ -27,8 +31,14 @@ const related = computed(() =>
     .slice(0, 3),
 )
 // 常驻咨询栏是 fixed 定位，给 <body> 打标记让页脚留出高度，避免挡住页脚最后一行
-onMounted(() => document.body.classList.add('has-cta-bar'))
-onBeforeUnmount(() => document.body.classList.remove('has-cta-bar'))
+onMounted(() => {
+  document.body.classList.add('has-cta-bar')
+  if (project.value) stopReferralTracking = trackReferralVisit(project.value.slug, route.query.ref)
+})
+onBeforeUnmount(() => {
+  document.body.classList.remove('has-cta-bar')
+  stopReferralTracking()
+})
 
 function preview() {
   router.replace({ query: { ...route.query, view: 'preview' } })
@@ -72,7 +82,7 @@ function closePreview() {
             ><Icon name="github" :size="17" /> 查看源码 <Icon name="arrow" :size="15" /></a
           ><button v-else class="text-link" @click="openContact">
             咨询这个项目 <Icon name="chevron" :size="16" />
-          </button>
+          </button><button class="text-link" @click="shareOpen = true"><Icon name="share" :size="17" /> 分享赚积分</button>
         </div>
         <p class="detail-meta">
           <span>{{ project.category }}</span
@@ -230,6 +240,6 @@ function closePreview() {
         <span>{{ project.price || site.priceNote || '价格与交付范围请咨询' }}</span>
       </div>
       <button class="button small" @click="openContact">咨询这个项目</button>
-    </div></template
+    </div><ShareDialog :open="shareOpen" :project="project" @close="shareOpen = false" /></template
   ><NotFound v-else />
 </template>

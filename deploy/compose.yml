@@ -18,19 +18,20 @@ services:
       retries: 3
 
   api:
-    image: node:22-alpine
+    build:
+      context: ./api
+    image: fafamywork-api:local
     container_name: fafamywork-api
     restart: unless-stopped
-    command: ["node", "/app/server.js"]
     environment:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?需要在 .env 里设置 ADMIN_PASSWORD}
       TOKEN_SECRET: ${TOKEN_SECRET:?需要在 .env 里设置 TOKEN_SECRET}
       DATA_FILE: /data/profile.json
+      DB_FILE: /data/app.db
     volumes:
-      - /root/fafamywork/deploy/api:/app:ro
       - /root/fafamywork/deploy/data:/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
       interval: 30s
       timeout: 5s
       retries: 3

@@ -52,11 +52,11 @@ npm run format  # 格式化源代码与文档
 
 - 前端：`src/pages/Admin.vue` 是编辑界面，`src/utils/profile.ts` 负责启动时拉取并合并到 `author` / `site`。
   `src/content/author.ts` 与 `site.ts` 里保留的是「默认值」，只在对应字段留空时生效。
-- 后端：`deploy/api/server.js`，零依赖 Node 服务，把资料存成一个 JSON 文件；
+- 后端：`deploy/api/server.js`，公开资料保存在 JSON 文件，普通用户与会话保存在 SQLite 数据库；
   字段走白名单校验，邮箱和链接格式不对会返回出错字段，登录失败会逐步限速（15 分钟后清零）。
   手机号一栏不校验格式，可以填微信号等账号，只有电话号码才会生成拨号链接。
 - 「参考价格」也在 `/admin` 填写，显示在项目速览与购买说明页；单个项目可在数据里填 `price` 覆盖。
-- 管理密码在 `deploy/.env` 里（`ADMIN_PASSWORD`），照着 `deploy/.env.example` 建即可；改完在 `deploy/` 下执行 `docker compose up -d api` 生效。
+- 管理密码在 `deploy/.env` 里（`ADMIN_PASSWORD`），照着 `deploy/.env.example` 建即可；改完在 `deploy/` 下执行 `docker compose up -d --build api` 生效。
   `.env` 与 `data/`（存放资料本体）都不提交到 git。
 
 `/admin` 已在 `robots.txt` 里 `Disallow`，路由也带 `noindex`。
@@ -92,4 +92,4 @@ cd deploy && docker compose up -d
 注意：`dist/` 是 nginx 的 bind mount，**不要 `rm -rf dist`**，否则容器会指向已删除的目录导致全站 404；`npm run build` 自己会清空目录内容，是安全的。
 
 nginx 按预渲染出的 `<路径>/index.html` 返回页面，找不到文件的地址返回真实 404 状态码；HTML 一律 `no-cache`，`/assets/` 长期缓存。
-改了 `deploy/nginx.conf` 需要 `docker compose exec web nginx -s reload`，改了 `deploy/api/server.js` 需要 `docker compose restart api`。
+改了 `deploy/nginx.conf` 需要 `docker compose exec web nginx -s reload`；改了 `deploy/api/` 下的服务代码需要 `docker compose up -d --build api`。

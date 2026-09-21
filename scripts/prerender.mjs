@@ -51,14 +51,15 @@ try {
     if (page === template || !page.includes(`<div id="app">${html.slice(0, 40)}`)) throw new Error(`${url} 没有写入内容`)
     writeHtml(file, page)
   }
-  // 管理页和统计页只需要正确的 head（noindex），内容依赖登录态，不预渲染
+  // 管理页、统计页和用户中心只需要正确的 head（noindex），内容依赖登录态，不预渲染
   for (const [url, file] of [
     ['/admin', 'admin/index.html'],
     ['/insights', 'insights/index.html'],
+    ['/account', 'account/index.html'],
   ]) {
     writeHtml(file, entry.renderHead(template, entry.metaFor(url), siteUrl))
   }
-  console.log(`[prerender] 生成 ${pages.length + 2} 个静态页面 → ${outDir}`)
+  console.log(`[prerender] 生成 ${pages.length + 3} 个静态页面 → ${outDir}`)
 } finally {
   await vite.close()
 }

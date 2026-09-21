@@ -277,10 +277,14 @@
 }
 .detail-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 26px;
   margin-top: 27px;
+}
+.detail-actions > * {
+  flex-shrink: 0;
 }
 .detail-meta {
   display: flex;
@@ -681,7 +685,7 @@
 }
 .process-line > span {
   font-size: 30px;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -0.05em;
 }
 .process-grid h3 {
@@ -906,7 +910,7 @@
     margin-top: 15px;
   }
   .detail-actions {
-    gap: 18px;
+    gap: 12px 18px;
     margin-top: 23px;
   }
   .detail-actions .text-link {

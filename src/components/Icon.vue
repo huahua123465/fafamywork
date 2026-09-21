@@ -35,6 +35,7 @@ import {
   Layers,
   Sun,
   MoreHorizontal,
+  Share2,
 } from 'lucide-vue-next'
 defineProps<{ name: string; size?: number }>()
 const icons: Record<string, any> = {
@@ -73,6 +74,7 @@ const icons: Record<string, any> = {
   layers: Layers,
   sun: Sun,
   more: MoreHorizontal,
+  share: Share2,
 }
 </script>
 <template>

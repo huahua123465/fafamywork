@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 import Icon from '../components/Icon.vue'
+import AdminRewards from '../components/AdminRewards.vue'
 import {
   ApiError,
   applyProfile,
@@ -309,6 +310,8 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', warnUnsaved))
 
       <p v-if="loadError" class="admin-error" role="alert">{{ loadError }}</p>
       <p v-if="loading" class="admin-loading">正在读取当前资料…</p>
+
+      <AdminRewards :token="token" />
 
       <fieldset class="admin-group">
         <legend>买家留言<span v-if="unread" class="inbox-badge">{{ unread }}</span></legend>

@@ -1,5 +1,5 @@
 'use strict'
-// 个人资料 API：零依赖，把资料存成一个 JSON 文件。
+// 站点 API：公开资料仍存为 JSON；普通用户、会话和积分设置使用 SQLite。
 // GET  /api/profile  公开读取（站点启动时拉取）
 // POST /api/login    用密码换 token
 // GET  /api/session  检查 token 是否仍有效
@@ -12,9 +12,11 @@ const http = require('node:http')
 const fs = require('node:fs')
 const path = require('node:path')
 const crypto = require('node:crypto')
+const { createAccountStore } = require('./account-store')
 
 const PORT = Number(process.env.PORT || 3000)
 const DATA_FILE = process.env.DATA_FILE || '/data/profile.json'
+const DB_FILE = process.env.DB_FILE || path.join(path.dirname(DATA_FILE), 'app.db')
 const PASSWORD = process.env.ADMIN_PASSWORD || ''
 const SECRET = process.env.TOKEN_SECRET || crypto.randomBytes(32).toString('hex')
 const TOKEN_TTL_MS = 12 * 60 * 60 * 1000
@@ -26,6 +28,8 @@ if (!PASSWORD) {
   console.error('缺少 ADMIN_PASSWORD 环境变量，拒绝启动')
   process.exit(1)
 }
+
+const accounts = createAccountStore(DB_FILE)
 
 // ---- 字段白名单：只接受这些键，其余一律丢弃 ----
 const TEXT_FIELDS = {
@@ -287,9 +291,12 @@ setInterval(flushStats, STATS_FLUSH_MS).unref()
 for (const signal of ['SIGTERM', 'SIGINT']) {
   process.on(signal, () => {
     flushStats()
+    accounts.close()
     process.exit(0)
   })
 }
+
+setInterval(() => accounts.cleanup(), 60 * 60 * 1000).unref()
 
 const bump = (obj, key, max = MAX_KEYS_PER_DAY) => {
   if (key in obj || Object.keys(obj).length < max) obj[key] = (obj[key] || 0) + 1
@@ -298,6 +305,21 @@ const bump = (obj, key, max = MAX_KEYS_PER_DAY) => {
 // 同一 IP 每 10 分钟最多记 200 个事件，超出的静默丢弃
 const trackBudget = new Map()
 setInterval(() => trackBudget.clear(), 10 * 60 * 1000).unref()
+
+// 普通账号接口按 IP 做固定窗口限速。它只作为第一层保护，数据库约束仍负责最终一致性。
+const registerBudget = new Map()
+const userLoginBudget = new Map()
+setInterval(() => {
+  registerBudget.clear()
+  userLoginBudget.clear()
+}, 15 * 60 * 1000).unref()
+
+function budgetExceeded(budget, ip, maximum) {
+  const used = budget.get(ip) || 0
+  if (used >= maximum) return true
+  budget.set(ip, used + 1)
+  return false
+}
 
 function recordEvent(event, ip, ua, host) {
   const date = today()
@@ -392,6 +414,10 @@ function bearer(req) {
   return String(req.headers.authorization || '').replace(/^Bearer\s+/i, '')
 }
 
+function visitorHash(ip, userAgent) {
+  return crypto.createHmac('sha256', SECRET).update(`${ip}\n${userAgent}`).digest('hex')
+}
+
 function readBody(req, limit = 64 * 1024) {
   return new Promise((resolve, reject) => {
     let size = 0
@@ -439,6 +465,186 @@ const server = http.createServer(async (req, res) => {
     noteLogin(ip, ok)
     if (!ok) return send(res, 401, { error: '密码不正确' })
     return send(res, 200, { token: issueToken(), expiresIn: TOKEN_TTL_MS })
+  }
+
+  if (url.pathname === '/api/auth/register' && req.method === 'POST') {
+    if (budgetExceeded(registerBudget, ip, 5)) {
+      return send(res, 429, { error: '注册尝试过于频繁，请稍后再试' })
+    }
+    let body
+    try {
+      body = await readBody(req, 8 * 1024)
+    } catch {
+      return send(res, 400, { error: '请求格式错误' })
+    }
+    // 蜜罐字段：正常页面不会填写，机器人提交时返回成功但不创建账号。
+    if (text(body.website, 10)) return send(res, 200, { ok: true })
+    try {
+      const result = accounts.register(body)
+      if (result.invalid) return send(res, 400, result.invalid)
+      return send(res, 201, result)
+    } catch (error) {
+      console.error('用户注册失败', error)
+      return send(res, 500, { error: '注册暂时不可用，请稍后再试' })
+    }
+  }
+
+  if (url.pathname === '/api/auth/login' && req.method === 'POST') {
+    if (budgetExceeded(userLoginBudget, ip, 10)) {
+      return send(res, 429, { error: '登录尝试过于频繁，请稍后再试' })
+    }
+    let body
+    try {
+      body = await readBody(req, 8 * 1024)
+    } catch {
+      return send(res, 400, { error: '请求格式错误' })
+    }
+    try {
+      const result = accounts.login(body.username, body.password)
+      if (!result) return send(res, 401, { error: '用户名或密码不正确' })
+      if (result.blocked) return send(res, 403, { error: '账号已被停用，请联系管理员' })
+      userLoginBudget.delete(ip)
+      return send(res, 200, result)
+    } catch (error) {
+      console.error('用户登录失败', error)
+      return send(res, 500, { error: '登录暂时不可用，请稍后再试' })
+    }
+  }
+
+  if (url.pathname === '/api/auth/me' && req.method === 'GET') {
+    const user = accounts.authenticate(bearer(req))
+    if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
+    const { sessionId, ...publicData } = user
+    return send(res, 200, { user: publicData })
+  }
+
+  if (url.pathname === '/api/auth/logout' && req.method === 'POST') {
+    accounts.logout(bearer(req))
+    return send(res, 200, { ok: true })
+  }
+
+  if (url.pathname === '/api/auth/change-password' && req.method === 'POST') {
+    const user = accounts.authenticate(bearer(req))
+    if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
+    let body
+    try {
+      body = await readBody(req, 8 * 1024)
+    } catch {
+      return send(res, 400, { error: '请求格式错误' })
+    }
+    const result = accounts.changePassword(user.id, body.currentPassword, body.nextPassword)
+    if (result.invalid) return send(res, 400, result.invalid)
+    return send(res, 200, { ok: true, loginRequired: true })
+  }
+
+  if (url.pathname === '/api/shares/create' && req.method === 'POST') {
+    const user = accounts.authenticate(bearer(req))
+    if (!user) return send(res, 401, { error: '登录后才能创建积分分享链接' })
+    let body
+    try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
+    const result = accounts.createShare(user.id, body.projectSlug)
+    if (result.invalid) return send(res, 400, result.invalid)
+    return send(res, 200, result)
+  }
+
+  if (url.pathname === '/api/shares/visit' && req.method === 'POST') {
+    const ua = String(req.headers['user-agent'] || '')
+    if (!ua || BOT_RE.test(ua)) return send(res, 200, { eligible: false })
+    let body
+    try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
+    const currentUser = accounts.authenticate(bearer(req))
+    const result = accounts.beginVisit(body.referralCode, body.projectSlug, visitorHash(ip, ua), currentUser?.id)
+    if (!result || result.rejected) return send(res, 200, { eligible: false })
+    return send(res, 201, { eligible: true, ...result })
+  }
+
+  if (url.pathname === '/api/shares/qualify' && req.method === 'POST') {
+    let body
+    try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
+    const result = accounts.qualifyVisit(body.visitToken, body.interacted === true)
+    return send(res, 200, result)
+  }
+
+  if (url.pathname === '/api/account/share-summary' && req.method === 'GET') {
+    const user = accounts.authenticate(bearer(req))
+    if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
+    return send(res, 200, accounts.accountSummary(user.id))
+  }
+
+  if (url.pathname === '/api/account/point-transactions' && req.method === 'GET') {
+    const user = accounts.authenticate(bearer(req))
+    if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
+    return send(res, 200, { transactions: accounts.pointTransactions(user.id) })
+  }
+
+  if (url.pathname === '/api/account/share-visits' && req.method === 'GET') {
+    const user = accounts.authenticate(bearer(req))
+    if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
+    return send(res, 200, { visits: accounts.shareVisits(user.id) })
+  }
+
+  if (url.pathname === '/api/admin/points/settings') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    if (req.method === 'GET') return send(res, 200, accounts.adminSettings())
+    if (req.method === 'PUT') {
+      let body
+      try { body = await readBody(req) } catch { return send(res, 400, { error: '请求格式错误' }) }
+      const result = accounts.updateSettings(body)
+      if (result.invalid) return send(res, 400, result.invalid)
+      return send(res, 200, result)
+    }
+  }
+
+  if (url.pathname === '/api/admin/users' && req.method === 'GET') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    return send(res, 200, { users: accounts.adminUsers(url.searchParams.get('search') || '') })
+  }
+
+  const userDetailMatch = url.pathname.match(/^\/api\/admin\/users\/(\d+)$/)
+  if (userDetailMatch && req.method === 'GET') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    const result = accounts.adminUser(Number(userDetailMatch[1]))
+    return result ? send(res, 200, result) : send(res, 404, { error: '用户不存在' })
+  }
+
+  const statusMatch = url.pathname.match(/^\/api\/admin\/users\/(\d+)\/status$/)
+  if (statusMatch && req.method === 'POST') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    let body
+    try { body = await readBody(req) } catch { return send(res, 400, { error: '请求格式错误' }) }
+    const result = accounts.setUserStatus(Number(statusMatch[1]), body.status, body.reason)
+    if (result.invalid) return send(res, 400, result.invalid)
+    return send(res, 200, result)
+  }
+
+  const pointsMatch = url.pathname.match(/^\/api\/admin\/users\/(\d+)\/points$/)
+  if (pointsMatch && req.method === 'POST') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    let body
+    try { body = await readBody(req) } catch { return send(res, 400, { error: '请求格式错误' }) }
+    const result = accounts.adjustPoints(Number(pointsMatch[1]), body.amount, body.reason)
+    if (result.invalid) return send(res, 400, result.invalid)
+    return send(res, 200, result)
+  }
+
+  if (url.pathname === '/api/admin/point-transactions' && req.method === 'GET') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    return send(res, 200, { transactions: accounts.adminTransactions() })
+  }
+
+  const revokeMatch = url.pathname.match(/^\/api\/admin\/point-transactions\/(\d+)\/revoke$/)
+  if (revokeMatch && req.method === 'POST') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    let body
+    try { body = await readBody(req) } catch { return send(res, 400, { error: '请求格式错误' }) }
+    const result = accounts.revokeTransaction(Number(revokeMatch[1]), body.reason)
+    if (result.invalid) return send(res, 400, result.invalid)
+    return send(res, 200, result)
+  }
+
+  if (url.pathname === '/api/admin/audit-logs' && req.method === 'GET') {
+    if (!verifyToken(bearer(req))) return send(res, 401, { error: '登录已过期，请重新登录' })
+    return send(res, 200, { logs: accounts.auditLogs() })
   }
 
   if (url.pathname === '/api/track' && req.method === 'POST') {
@@ -591,4 +797,4 @@ const server = http.createServer(async (req, res) => {
   send(res, 404, { error: 'not found' })
 })
 
-server.listen(PORT, () => console.log(`profile api on :${PORT}, data=${DATA_FILE}`))
+server.listen(PORT, () => console.log(`site api on :${PORT}, profile=${DATA_FILE}, database=${DB_FILE}`))

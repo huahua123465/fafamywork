@@ -47,8 +47,8 @@
 }
 .hero-copy h1 {
   font-size: clamp(34px, 3.8vw, 56px);
-  font-weight: 500;
-  line-height: 1.42;
+  font-weight: 600;
+  line-height: 1.45;
   letter-spacing: normal;
   text-wrap: balance;
 }
@@ -87,8 +87,8 @@
 }
 .about-copy h1 {
   font-size: clamp(30px, 3vw, 44px);
-  font-weight: 500;
-  line-height: 1.5;
+  font-weight: 600;
+  line-height: 1.45;
   letter-spacing: normal;
 }
 .about-copy h1 span { display: block; }

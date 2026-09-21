@@ -15,7 +15,16 @@ beforeAll(async () => {
   const port = 20000 + Math.floor(Math.random() * 20000)
   base = `http://127.0.0.1:${port}`
   child = spawn(process.execPath, [join(import.meta.dirname, 'server.js')], {
-    env: { ...process.env, PORT: String(port), ADMIN_PASSWORD: PASSWORD, TOKEN_SECRET: 'secret', DATA_DIR: dir, DATA_FILE: join(dir, 'profile.json'), STATS_FLUSH_MS: '50' },
+    env: {
+      ...process.env,
+      PORT: String(port),
+      ADMIN_PASSWORD: PASSWORD,
+      TOKEN_SECRET: 'secret',
+      DATA_DIR: dir,
+      DATA_FILE: join(dir, 'profile.json'),
+      DB_FILE: join(dir, 'app.db'),
+      STATS_FLUSH_MS: '50',
+    },
     stdio: 'pipe',
   })
   let output = ''
@@ -31,8 +40,12 @@ beforeAll(async () => {
   }
   throw new Error(`API 没有启动：${output}`)
 }, 30_000)
-afterAll(() => {
-  child?.kill()
+afterAll(async () => {
+  if (child && child.exitCode === null) {
+    const exited = new Promise((resolve) => child.once('exit', resolve))
+    child.kill()
+    await exited
+  }
   rmSync(dir, { recursive: true, force: true })
 })
 
@@ -81,6 +94,163 @@ describe('资料接口', () => {
     for (let i = 0; i < 5; i++) expect((await wrong()).status).toBe(401)
     expect((await wrong()).status).toBe(429)
     expect(await token('10.8.8.8')).toBeTruthy()
+  })
+})
+
+describe('普通用户账号接口', () => {
+  const register = (body, ip = '10.20.0.1') =>
+    fetch(`${base}/api/auth/register`, json('POST', body, { 'X-Forwarded-For': ip }))
+  const login = (body, ip = '10.20.0.2') =>
+    fetch(`${base}/api/auth/login`, json('POST', body, { 'X-Forwarded-For': ip }))
+
+  it('注册后返回用户和会话，但不泄露密码哈希', async () => {
+    const res = await register({ username: 'share_user', nickname: '分享用户', password: 'safe-pass-123' })
+    expect(res.status).toBe(201)
+    const data = await res.json()
+    expect(data.token).toMatch(/^usr_/)
+    expect(data.user).toMatchObject({ username: 'share_user', nickname: '分享用户', points: 0, status: 'active' })
+    expect(data.user.referralCode).toMatch(/^[A-Z0-9]{6,8}$/)
+    expect(JSON.stringify(data)).not.toContain('password')
+
+    const me = await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${data.token}` } })
+    expect(me.status).toBe(200)
+    expect((await me.json()).user.username).toBe('share_user')
+  })
+
+  it('校验注册字段并拒绝重复用户名', async () => {
+    let res = await register({ username: 'x', password: '123' }, '10.20.0.3')
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({ field: 'username' })
+
+    res = await register({ username: 'share_user', password: 'another-pass' }, '10.20.0.4')
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({ field: 'username' })
+  })
+
+  it('登录、退出和错误密码按预期处理', async () => {
+    expect((await login({ username: 'share_user', password: 'wrong-pass' })).status).toBe(401)
+    const res = await login({ username: 'SHARE_USER', password: 'safe-pass-123' })
+    expect(res.status).toBe(200)
+    const { token: userToken } = await res.json()
+    const auth = { Authorization: `Bearer ${userToken}` }
+    expect((await fetch(`${base}/api/auth/me`, { headers: auth })).status).toBe(200)
+    expect((await fetch(`${base}/api/auth/logout`, { method: 'POST', headers: auth })).status).toBe(200)
+    expect((await fetch(`${base}/api/auth/me`, { headers: auth })).status).toBe(401)
+  })
+
+  it('修改密码后撤销全部旧会话', async () => {
+    const first = await (await login({ username: 'share_user', password: 'safe-pass-123' }, '10.20.0.5')).json()
+    const second = await (await login({ username: 'share_user', password: 'safe-pass-123' }, '10.20.0.6')).json()
+    const changed = await fetch(
+      `${base}/api/auth/change-password`,
+      json(
+        'POST',
+        { currentPassword: 'safe-pass-123', nextPassword: 'new-safe-pass-456' },
+        { Authorization: `Bearer ${first.token}` },
+      ),
+    )
+    expect(changed.status).toBe(200)
+    expect((await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${first.token}` } })).status).toBe(401)
+    expect((await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${second.token}` } })).status).toBe(401)
+    expect((await login({ username: 'share_user', password: 'safe-pass-123' }, '10.20.0.7')).status).toBe(401)
+    expect((await login({ username: 'share_user', password: 'new-safe-pass-456' }, '10.20.0.8')).status).toBe(200)
+  })
+
+  it('限制同一 IP 的注册频率并让蜜罐提交不创建账号', async () => {
+    const ip = '10.20.0.9'
+    for (let i = 0; i < 5; i += 1) {
+      await register({ username: `bad_${i}`, password: 'x' }, ip)
+    }
+    expect((await register({ username: 'rate_limited', password: 'valid-pass-123' }, ip)).status).toBe(429)
+
+    const bot = await register(
+      { username: 'robot_user', password: 'valid-pass-123', website: 'spam.example' },
+      '10.20.0.10',
+    )
+    expect(bot.status).toBe(200)
+    expect((await login({ username: 'robot_user', password: 'valid-pass-123' }, '10.20.0.11')).status).toBe(401)
+  })
+})
+
+describe('分享积分与管理员控制', () => {
+  let adminToken = ''
+  let sharerToken = ''
+
+  it('管理员可以配置积分规则，用户可以创建专属分享', async () => {
+    adminToken = await token('10.30.0.1')
+    const adminAuth = { Authorization: `Bearer ${adminToken}` }
+    const configured = await fetch(`${base}/api/admin/points/settings`, json('PUT', {
+      sharingEnabled: true,
+      pointsPerQualifiedVisit: 5,
+      dailyRewardLimit: 1,
+      qualificationSeconds: 0,
+      visitorDedupeDays: 30,
+      registrationBonus: 0,
+    }, adminAuth))
+    expect(configured.status).toBe(200)
+    expect(await configured.json()).toMatchObject({ pointsPerQualifiedVisit: 5, dailyRewardLimit: 1 })
+
+    const registered = await fetch(`${base}/api/auth/register`, json('POST', {
+      username: 'reward_user', nickname: '奖励用户', password: 'reward-pass-123',
+    }, { 'X-Forwarded-For': '10.30.0.2' }))
+    sharerToken = (await registered.json()).token
+    const share = await fetch(`${base}/api/shares/create`, json('POST', { projectSlug: 'smart-todo' }, { Authorization: `Bearer ${sharerToken}` }))
+    expect(share.status).toBe(200)
+    expect(await share.json()).toMatchObject({ projectSlug: 'smart-todo', pointsPerVisit: 5, remainingToday: 1 })
+  })
+
+  it('有效访问只奖励一次，并执行访客去重和每日上限', async () => {
+    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
+    const referralCode = me.user.referralCode
+    const visitHeaders = { 'User-Agent': 'Mozilla/5.0 Real Visitor', 'X-Forwarded-For': '10.30.1.1' }
+    const begin = await fetch(`${base}/api/shares/visit`, json('POST', { referralCode, projectSlug: 'smart-todo' }, visitHeaders))
+    expect(begin.status).toBe(201)
+    const { visitToken } = await begin.json()
+    const qualify = await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken, interacted: true }))
+    expect(await qualify.json()).toMatchObject({ rewarded: true, points: 5, balance: 5 })
+    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken, interacted: true }))).json()).toMatchObject({ rewarded: false })
+
+    const duplicateBegin = await fetch(`${base}/api/shares/visit`, json('POST', { referralCode, projectSlug: 'smart-todo' }, visitHeaders))
+    const duplicateToken = (await duplicateBegin.json()).visitToken
+    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken: duplicateToken, interacted: true }))).json()).toMatchObject({ rewarded: false, reason: 'duplicate' })
+
+    const otherBegin = await fetch(`${base}/api/shares/visit`, json('POST', { referralCode, projectSlug: 'smart-todo' }, { ...visitHeaders, 'X-Forwarded-For': '10.30.1.2' }))
+    const otherToken = (await otherBegin.json()).visitToken
+    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken: otherToken, interacted: true }))).json()).toMatchObject({ rewarded: false, reason: 'daily_limit' })
+
+    const accountAuth = { Authorization: `Bearer ${sharerToken}` }
+    expect(await (await fetch(`${base}/api/account/share-summary`, { headers: accountAuth })).json()).toMatchObject({ points: 5, totalQualifiedVisits: 1, rewardedToday: 1 })
+    expect((await (await fetch(`${base}/api/account/point-transactions`, { headers: accountAuth })).json()).transactions).toHaveLength(1)
+  })
+
+  it('本人访问和机器人访问不创建奖励资格', async () => {
+    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
+    const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
+    const self = await fetch(`${base}/api/shares/visit`, json('POST', body, { Authorization: `Bearer ${sharerToken}`, 'User-Agent': 'Mozilla/5.0', 'X-Forwarded-For': '10.30.2.1' }))
+    expect(await self.json()).toEqual({ eligible: false })
+    const bot = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Googlebot', 'X-Forwarded-For': '10.30.2.2' }))
+    expect(await bot.json()).toEqual({ eligible: false })
+  })
+
+  it('管理员可以撤销奖励、调整积分、停用用户并查询审计记录', async () => {
+    const auth = { Authorization: `Bearer ${adminToken}` }
+    const users = (await (await fetch(`${base}/api/admin/users?search=reward_user`, { headers: auth })).json()).users
+    const user = users[0]
+    expect(user.points).toBe(5)
+    const detail = await fetch(`${base}/api/admin/users/${user.id}`, { headers: auth })
+    expect(detail.status).toBe(200)
+    expect(await detail.json()).toMatchObject({ user: { username: 'reward_user', points: 5 } })
+    const transactions = (await (await fetch(`${base}/api/admin/point-transactions`, { headers: auth })).json()).transactions
+    const reward = transactions.find((item) => item.type === 'share_reward' && item.userId === user.id)
+    expect((await fetch(`${base}/api/admin/point-transactions/${reward.id}/revoke`, json('POST', { reason: '测试撤销' }, auth))).status).toBe(200)
+    expect((await fetch(`${base}/api/admin/point-transactions/${reward.id}/revoke`, json('POST', { reason: '重复撤销' }, auth))).status).toBe(400)
+    expect((await fetch(`${base}/api/admin/users/${user.id}/points`, json('POST', { amount: 20, reason: '测试奖励' }, auth))).status).toBe(200)
+    expect((await fetch(`${base}/api/admin/users/${user.id}/status`, json('POST', { status: 'blocked', reason: '测试停用' }, auth))).status).toBe(200)
+    expect((await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).status).toBe(401)
+    const logs = (await (await fetch(`${base}/api/admin/audit-logs`, { headers: auth })).json()).logs
+    expect(logs.some((item) => item.action === 'reward.revoke')).toBe(true)
+    expect(logs.some((item) => item.action === 'points.adjust')).toBe(true)
+    expect(logs.some((item) => item.action === 'user.status')).toBe(true)
   })
 })
 

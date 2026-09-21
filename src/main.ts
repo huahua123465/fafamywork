@@ -7,6 +7,7 @@ import { applyHead, pageMeta, siteOrigin } from './utils/seo'
 import { trackView } from './utils/analytics'
 import { site } from './content/site'
 import { projects } from './content/projects'
+import { loadUserSession } from './utils/user-session'
 import './assets/main.css'
 import './assets/screenshots.css'
 import './assets/insights.css'
@@ -14,6 +15,7 @@ import './assets/ui-system.css'
 import './assets/warm-theme.css'
 import './assets/admin.css'
 import './assets/motion.css'
+import './assets/account.css'
 
 const router = createAppRouter(createWebHistory())
 router.afterEach((to) => {
@@ -26,6 +28,6 @@ router.afterEach((to) => {
 // 页面已由构建时预渲染出静态内容，等待期间访客看到的就是同样的界面；
 // loadProfile 内部有超时兜底，接口不可用时不会卡住。
 // 这里用 createApp 而非 hydrate：挂载时整体替换预渲染内容，避免资料更新后出现水合不一致。
-loadProfile().finally(() => {
+Promise.allSettled([loadProfile(), loadUserSession()]).finally(() => {
   createApp(App).use(router).mount('#app')
 })

@@ -3,8 +3,10 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Icon from './components/Icon.vue'
 import ContactDialog from './components/ContactDialog.vue'
+import AuthDialog from './components/AuthDialog.vue'
 import { site } from './content/site'
 import { openContact, toast, toastKind } from './composables/ui'
+import { currentUser, openAuth } from './utils/user-session'
 const menu = ref(false)
 const route = useRoute()
 function contactFromMenu() {
@@ -34,6 +36,8 @@ watch(
       <div class="nav-actions">
         <RouterLink class="icon-button" to="/projects?focus=search" aria-label="搜索项目"
           ><Icon name="search" :size="20" /></RouterLink
+        ><RouterLink v-if="currentUser" class="account-nav" to="/account"><span>{{ currentUser.points }} 积分</span>{{ currentUser.nickname || currentUser.username }}</RouterLink
+        ><button v-else class="account-nav" @click="openAuth()">登录</button
         ><button class="contact-nav" @click="openContact">联系我 <Icon name="arrow" :size="16" /></button
         ><button
           class="icon-button mobile-menu-button"
@@ -49,6 +53,8 @@ watch(
       <RouterLink to="/">首页</RouterLink><RouterLink to="/projects">全部项目</RouterLink
       ><RouterLink to="/about">关于我</RouterLink><RouterLink to="/buying-guide">购买说明</RouterLink
       ><button @click="contactFromMenu">联系我 <Icon name="arrow" :size="16" /></button>
+      <RouterLink v-if="currentUser" to="/account">我的积分（{{ currentUser.points }}）</RouterLink
+      ><button v-else @click="openAuth(); menu = false">登录或注册</button>
     </nav>
   </header>
   <main id="main" tabindex="-1"><RouterView v-slot="{ Component, route: pageRoute }"><Transition name="page" mode="out-in"><div :key="pageRoute.path" class="page-view"><component :is="Component" /></div></Transition></RouterView></main>
@@ -71,7 +77,7 @@ watch(
       </div>
     </div>
   </footer>
-  <ContactDialog /><Transition name="toast"
+  <ContactDialog /><AuthDialog /><Transition name="toast"
     ><div v-if="toast" class="toast" :role="toastKind === 'error' ? 'alert' : 'status'">
       <Icon :name="toastKind === 'error' ? 'info' : 'success'" :size="18" />{{ toast }}
     </div></Transition

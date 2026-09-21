@@ -7,6 +7,7 @@ export const routes = [
   { path: '/projects/:slug', component: () => import('../pages/ProjectDetail.vue') },
   { path: '/about', component: () => import('../pages/About.vue'), meta: { title: '关于我' } },
   { path: '/buying-guide', component: () => import('../pages/BuyingGuide.vue'), meta: { title: '购买说明' } },
+  { path: '/account', component: () => import('../pages/Account.vue'), meta: { title: '我的积分', noindex: true } },
   { path: '/insights', component: () => import('../pages/Insights.vue'), meta: { title: '访问统计', noindex: true } },
   {
     path: '/admin',
