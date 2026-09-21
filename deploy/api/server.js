@@ -427,6 +427,28 @@ function visitorHash(ip, userAgent) {
   return crypto.createHmac('sha256', SECRET).update(`${ip}\n${userAgent}`).digest('hex')
 }
 
+/** IPv4 取整个地址；IPv6 取 /64 网段（同一台设备会在网段内轮换地址） */
+function networkKey(ip) {
+  const addr = String(ip || '').replace(/^::ffff:/i, '')
+  if (!addr.includes(':')) return addr
+  const [head, tail = ''] = addr.split('::')
+  const h = head ? head.split(':') : []
+  const t = tail ? tail.split(':') : []
+  const groups = addr.includes('::') ? [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill('0'), ...t] : h
+  return `${groups.slice(0, 4).map((g) => parseInt(g || '0', 16).toString(16)).join(':')}::/64`
+}
+
+/** 请求方的网络与设备标记（HMAC 后才入库）。设备号由前端生成存在 localStorage，经 X-Device-Id 发来 */
+function clientMarks(req, ip) {
+  const key = networkKey(ip)
+  const deviceId = String(req.headers['x-device-id'] || '')
+  const hmac = (value) => crypto.createHmac('sha256', SECRET).update(value).digest('hex')
+  return {
+    network: key ? hmac(`net\n${key}`) : '',
+    device: /^[A-Za-z0-9_-]{16,64}$/.test(deviceId) ? hmac(`dev\n${deviceId}`) : '',
+  }
+}
+
 function readBody(req, limit = 64 * 1024) {
   return new Promise((resolve, reject) => {
     let size = 0
@@ -454,6 +476,7 @@ function readBody(req, limit = 64 * 1024) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost')
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress
+  const marks = clientMarks(req, ip)
 
   if (url.pathname === '/api/health') return send(res, 200, { ok: true })
 
@@ -489,7 +512,7 @@ const server = http.createServer(async (req, res) => {
     // 蜜罐字段：正常页面不会填写，机器人提交时返回成功但不创建账号。
     if (text(body.website, 10)) return send(res, 200, { ok: true })
     try {
-      const result = accounts.register(body)
+      const result = accounts.register(body, marks)
       if (result.invalid) return send(res, 400, result.invalid)
       return send(res, 201, result)
     } catch (error) {
@@ -509,7 +532,7 @@ const server = http.createServer(async (req, res) => {
       return send(res, 400, { error: '请求格式错误' })
     }
     try {
-      const result = accounts.login(body.username, body.password)
+      const result = accounts.login(body.username, body.password, marks)
       if (!result) return send(res, 401, { error: '用户名或密码不正确' })
       if (result.blocked) return send(res, 403, { error: '账号已被停用，请联系管理员' })
       userLoginBudget.delete(ip)
@@ -521,7 +544,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (url.pathname === '/api/auth/me' && req.method === 'GET') {
-    const user = accounts.authenticate(bearer(req))
+    const user = accounts.authenticate(bearer(req), marks)
     if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
     const { sessionId, ...publicData } = user
     return send(res, 200, { user: publicData })
@@ -533,7 +556,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (url.pathname === '/api/auth/change-password' && req.method === 'POST') {
-    const user = accounts.authenticate(bearer(req))
+    const user = accounts.authenticate(bearer(req), marks)
     if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
     let body
     try {
@@ -547,7 +570,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (url.pathname === '/api/shares/create' && req.method === 'POST') {
-    const user = accounts.authenticate(bearer(req))
+    const user = accounts.authenticate(bearer(req), marks)
     if (!user) return send(res, 401, { error: '登录后才能创建积分分享链接' })
     let body
     try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
@@ -562,8 +585,8 @@ const server = http.createServer(async (req, res) => {
     if (budgetExceeded(shareVisitBudget, ip, SHARE_BUDGET)) return send(res, 200, { eligible: false })
     let body
     try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
-    const currentUser = accounts.authenticate(bearer(req))
-    const result = accounts.beginVisit(body.referralCode, body.projectSlug, visitorHash(ip, ua), currentUser?.id)
+    const currentUser = accounts.authenticate(bearer(req), marks)
+    const result = accounts.beginVisit(body.referralCode, body.projectSlug, { visitor: visitorHash(ip, ua), ...marks }, currentUser?.id)
     if (!result || result.rejected) return send(res, 200, { eligible: false })
     return send(res, 201, { eligible: true, ...result })
   }
@@ -577,19 +600,19 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (url.pathname === '/api/account/share-summary' && req.method === 'GET') {
-    const user = accounts.authenticate(bearer(req))
+    const user = accounts.authenticate(bearer(req), marks)
     if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
     return send(res, 200, accounts.accountSummary(user.id))
   }
 
   if (url.pathname === '/api/account/point-transactions' && req.method === 'GET') {
-    const user = accounts.authenticate(bearer(req))
+    const user = accounts.authenticate(bearer(req), marks)
     if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
     return send(res, 200, { transactions: accounts.pointTransactions(user.id) })
   }
 
   if (url.pathname === '/api/account/share-visits' && req.method === 'GET') {
-    const user = accounts.authenticate(bearer(req))
+    const user = accounts.authenticate(bearer(req), marks)
     if (!user) return send(res, 401, { error: '登录已过期，请重新登录' })
     return send(res, 200, { visits: accounts.shareVisits(user.id) })
   }

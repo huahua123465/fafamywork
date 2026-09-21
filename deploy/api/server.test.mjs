@@ -232,6 +232,38 @@ describe('分享积分与管理员控制', () => {
     expect(await bot.json()).toEqual({ eligible: false })
   })
 
+  it('分享者退出登录、换浏览器或换网络后访问自己的链接仍不奖励', async () => {
+    const home = { 'X-Forwarded-For': '10.30.4.1', 'X-Device-Id': 'sharer-device-0001' }
+    const login = await fetch(`${base}/api/auth/login`, json('POST', { username: 'reward_user', password: 'reward-pass-123' }, home))
+    const { token, user } = await login.json()
+    await fetch(`${base}/api/auth/logout`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
+    const body = { referralCode: user.referralCode, projectSlug: 'smart-todo' }
+    // 同一网络，换浏览器（新 UA、没有设备号、未登录）
+    const sameNetwork = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0 Other Browser', 'X-Forwarded-For': '10.30.4.1' }))
+    expect(await sameNetwork.json()).toEqual({ eligible: false })
+    // 同一浏览器（设备号相同），切到手机流量
+    const sameDevice = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0', 'X-Forwarded-For': '10.99.0.1', 'X-Device-Id': 'sharer-device-0001' }))
+    expect(await sameDevice.json()).toEqual({ eligible: false })
+  })
+
+  it('访问开始后分享者才在同一网络登录，确认时拒绝', async () => {
+    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
+    const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
+    const begin = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0 Late', 'X-Forwarded-For': '10.30.5.1' }))
+    const { visitToken } = await begin.json()
+    await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}`, 'X-Forwarded-For': '10.30.5.1' } })
+    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken, interacted: true }))).json()).toMatchObject({ rewarded: false, reason: 'self' })
+  })
+
+  it('同一网络换 UA 不算新访客', async () => {
+    const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
+    const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
+    // 10.30.1.1 在前面的用例里已经产生过奖励
+    const begin = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0 Brand New UA', 'X-Forwarded-For': '10.30.1.1' }))
+    const { visitToken } = await begin.json()
+    expect(await (await fetch(`${base}/api/shares/qualify`, json('POST', { visitToken, interacted: true }))).json()).toMatchObject({ rewarded: false, reason: 'duplicate' })
+  })
+
   it('分享访问和有效访问确认按 IP 限速', async () => {
     const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
     const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }

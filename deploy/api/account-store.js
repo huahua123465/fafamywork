@@ -8,6 +8,9 @@ const { DatabaseSync } = require('node:sqlite')
 const USERNAME_RE = /^[a-zA-Z0-9_]{3,24}$/
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000
 const SCRYPT_OPTIONS = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }
+// 分享者最近用过的网络在这段时间内访问自己的链接不奖励；设备标记长期有效。
+// 网络窗口不宜太长：手机流量的公网 IP 是运营商共享的，记太久会误伤同一出口的真实访客。
+const SELF_NETWORK_DAYS = 7
 
 const nowIso = () => new Date().toISOString()
 const tokenHash = (token) => crypto.createHash('sha256').update(token).digest('hex')
@@ -127,6 +130,14 @@ function createAccountStore(filename) {
       created_at TEXT NOT NULL
     );
     CREATE INDEX IF NOT EXISTS idx_point_transactions_user ON point_transactions(user_id, created_at DESC);
+    CREATE TABLE IF NOT EXISTS user_marks (
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      kind TEXT NOT NULL CHECK (kind IN ('network', 'device')),
+      mark_hash TEXT NOT NULL,
+      last_seen_at TEXT NOT NULL,
+      PRIMARY KEY (user_id, kind, mark_hash)
+    );
+    CREATE INDEX IF NOT EXISTS idx_user_marks_mark ON user_marks(kind, mark_hash);
     CREATE TABLE IF NOT EXISTS admin_audit_logs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       action TEXT NOT NULL,
@@ -137,6 +148,13 @@ function createAccountStore(filename) {
       created_at TEXT NOT NULL
     );
   `)
+  // 旧库补列：share_visits 记录访客网络和设备，用于防分享者自刷与按网络去重
+  const visitColumns = new Set(db.prepare('PRAGMA table_info(share_visits)').all().map((c) => c.name))
+  if (!visitColumns.has('network_hash')) db.exec("ALTER TABLE share_visits ADD COLUMN network_hash TEXT NOT NULL DEFAULT ''")
+  if (!visitColumns.has('device_hash')) db.exec("ALTER TABLE share_visits ADD COLUMN device_hash TEXT NOT NULL DEFAULT ''")
+  db.exec('CREATE INDEX IF NOT EXISTS idx_share_visits_network ON share_visits(sharer_user_id, network_hash, qualified_at)')
+  db.exec('CREATE INDEX IF NOT EXISTS idx_share_visits_device ON share_visits(sharer_user_id, device_hash, qualified_at)')
+
   db.prepare(`
     INSERT INTO point_settings (id, updated_at) VALUES (1, ?)
     ON CONFLICT(id) DO NOTHING
@@ -182,6 +200,28 @@ function createAccountStore(filename) {
     return { id: Number(info.lastInsertRowid), balance }
   }
 
+  const upsertMark = db.prepare(`
+    INSERT INTO user_marks (user_id, kind, mark_hash, last_seen_at) VALUES (?, ?, ?, ?)
+    ON CONFLICT(user_id, kind, mark_hash) DO UPDATE SET last_seen_at = excluded.last_seen_at
+  `)
+  /** 记下账号用过的网络和设备（都是服务端 HMAC 后的值），marks 缺省时不记 */
+  function noteMarks(userId, marks) {
+    if (!marks) return
+    const seen = nowIso()
+    if (marks.network) upsertMark.run(userId, 'network', marks.network, seen)
+    if (marks.device) upsertMark.run(userId, 'device', marks.device, seen)
+  }
+  /** 访客网络或设备是否属于分享者本人 */
+  function isSharerOwn(sharerId, network, device) {
+    const since = new Date(Date.now() - SELF_NETWORK_DAYS * 86400000).toISOString()
+    if (network && db.prepare(`
+      SELECT 1 FROM user_marks WHERE user_id = ? AND kind = 'network' AND mark_hash = ? AND last_seen_at >= ?
+    `).get(sharerId, network, since)) return true
+    return Boolean(device && db.prepare(`
+      SELECT 1 FROM user_marks WHERE user_id = ? AND kind = 'device' AND mark_hash = ?
+    `).get(sharerId, device))
+  }
+
   function newReferralCode() {
     for (let i = 0; i < 20; i += 1) {
       const code = crypto.randomBytes(6).toString('base64url').replace(/[-_]/g, '').slice(0, 8).toUpperCase()
@@ -210,7 +250,7 @@ function createAccountStore(filename) {
     }
   }
 
-  const registerTransaction = (input) =>
+  const registerTransaction = (input, marks) =>
     transaction(() => {
       const settings = db.prepare('SELECT registration_bonus FROM point_settings WHERE id = 1').get()
       const info = insertUser.run(
@@ -225,11 +265,12 @@ function createAccountStore(filename) {
         addTransaction(Number(info.lastInsertRowid), settings.registration_bonus, 'register_bonus', null, '新用户注册奖励', 'system')
       }
       const user = findUserById.get(info.lastInsertRowid)
+      noteMarks(user.id, marks)
       return { user: publicUser(user), ...issueSession(user.id) }
     })
 
   return {
-    register(input) {
+    register(input, marks) {
       const invalid = validateRegistration(input)
       if (invalid) return { invalid }
       const normalized = {
@@ -238,7 +279,7 @@ function createAccountStore(filename) {
         password: String(input.password),
       }
       try {
-        return registerTransaction(normalized)
+        return registerTransaction(normalized, marks)
       } catch (error) {
         if (String(error.message).includes('UNIQUE constraint failed: users.username')) {
           return { invalid: { error: '这个用户名已经被注册', field: 'username' } }
@@ -247,21 +288,23 @@ function createAccountStore(filename) {
       }
     },
 
-    login(username, password) {
+    login(username, password, marks) {
       const user = findUserByName.get(String(username || '').trim())
       if (!user || !verifyPassword(String(password || ''), user.password_hash)) return null
       if (user.status !== 'active') return { blocked: true }
       const loggedAt = nowIso()
       db.prepare('UPDATE users SET last_login_at = ? WHERE id = ?').run(loggedAt, user.id)
+      noteMarks(user.id, marks)
       return { user: publicUser(user), ...issueSession(user.id) }
     },
 
-    authenticate(token) {
+    authenticate(token, marks) {
       if (!String(token || '').startsWith('usr_')) return null
       const current = nowIso()
       const user = findSession.get(tokenHash(token), current)
       if (!user || user.status !== 'active') return null
       db.prepare('UPDATE user_sessions SET last_used_at = ? WHERE id = ?').run(current, user.session_id)
+      noteMarks(user.id, marks)
       return { ...publicUser(user), sessionId: user.session_id }
     },
 
@@ -303,18 +346,20 @@ function createAccountStore(filename) {
       }
     },
 
-    beginVisit(referralCode, projectSlug, visitorHash, currentUserId) {
+    /** visitor：{ visitor: 网络+UA, network: 网络, device: 设备 }，都是 HMAC 后的值 */
+    beginVisit(referralCode, projectSlug, visitor, currentUserId) {
       const sharer = db.prepare('SELECT * FROM users WHERE referral_code = ?').get(String(referralCode || '').toUpperCase())
       const settings = publicSettings()
       if (!settings.sharingEnabled || !sharer || sharer.status !== 'active') return null
       if (currentUserId && Number(currentUserId) === Number(sharer.id)) return { rejected: true }
+      if (isSharerOwn(sharer.id, visitor.network, visitor.device)) return { rejected: true }
       const slug = String(projectSlug || '').trim()
       if (!/^[a-z0-9-]{1,60}$/.test(slug)) return null
       const visitToken = `visit_${crypto.randomBytes(24).toString('base64url')}`
       db.prepare(`
-        INSERT INTO share_visits (sharer_user_id, visit_token_hash, project_slug, visitor_hash, created_at)
-        VALUES (?, ?, ?, ?, ?)
-      `).run(sharer.id, tokenHash(visitToken), slug, visitorHash, nowIso())
+        INSERT INTO share_visits (sharer_user_id, visit_token_hash, project_slug, visitor_hash, network_hash, device_hash, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `).run(sharer.id, tokenHash(visitToken), slug, visitor.visitor, visitor.network || '', visitor.device || '', nowIso())
       return { visitToken, qualificationSeconds: settings.qualificationSeconds }
     },
 
@@ -332,11 +377,16 @@ function createAccountStore(filename) {
         if (Date.now() - Date.parse(visit.created_at) < settings.qualificationSeconds * 1000) return { rewarded: false, reason: 'too_early' }
         const sharer = findUserById.get(visit.sharer_user_id)
         if (!sharer || sharer.status !== 'active') return reject('blocked')
+        // 访问开始后分享者才在这个网络/设备上登录，也算本人
+        if (isSharerOwn(sharer.id, visit.network_hash, visit.device_hash)) return reject('self')
+        // 同一网络（或同一设备）在去重周期内只奖励一次，换浏览器、换 UA 不算新访客
         const cutoff = new Date(Date.now() - settings.visitorDedupeDays * 86400000).toISOString()
         const duplicate = db.prepare(`
           SELECT 1 FROM share_visits
-          WHERE sharer_user_id = ? AND visitor_hash = ? AND status = 'rewarded' AND qualified_at >= ? LIMIT 1
-        `).get(visit.sharer_user_id, visit.visitor_hash, cutoff)
+          WHERE sharer_user_id = ? AND status = 'rewarded' AND qualified_at >= ?
+            AND (visitor_hash = ? OR (network_hash <> '' AND network_hash = ?) OR (device_hash <> '' AND device_hash = ?))
+          LIMIT 1
+        `).get(visit.sharer_user_id, cutoff, visit.visitor_hash, visit.network_hash, visit.device_hash)
         if (duplicate) return reject('duplicate')
         const rewardedToday = db.prepare(`
           SELECT COUNT(*) AS total FROM share_visits

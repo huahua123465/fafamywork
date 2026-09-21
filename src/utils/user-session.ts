@@ -22,9 +22,30 @@ export function userToken() {
   return localStorage.getItem(TOKEN_KEY) || ''
 }
 
+const DEVICE_KEY = 'portfolio-device-id'
+
+/**
+ * 本浏览器的随机设备号，退出登录也保留。服务端据此认出「分享者自己的浏览器」，
+ * 退出登录后再打开自己的链接不会得积分。http 下没有 crypto.randomUUID，用 getRandomValues。
+ */
+export function deviceId() {
+  try {
+    let id = localStorage.getItem(DEVICE_KEY) || ''
+    if (!/^[A-Za-z0-9_-]{16,64}$/.test(id)) {
+      const bytes = crypto.getRandomValues(new Uint8Array(16))
+      id = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
+      localStorage.setItem(DEVICE_KEY, id)
+    }
+    return id
+  } catch {
+    return ''
+  }
+}
+
 export function authHeaders(): Record<string, string> {
   const token = userToken()
-  return token ? { Authorization: `Bearer ${token}` } : {}
+  const device = deviceId()
+  return { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(device ? { 'X-Device-Id': device } : {}) }
 }
 
 async function parse(res: Response) {
@@ -49,13 +70,13 @@ export async function loadUserSession() {
 
 export async function registerUser(input: { username: string; nickname: string; password: string; website?: string }) {
   return finishAuth(await parse(await fetch('/api/auth/register', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
+    method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeaders() }, body: JSON.stringify(input),
   })))
 }
 
 export async function loginUser(username: string, password: string) {
   return finishAuth(await parse(await fetch('/api/auth/login', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }),
+    method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeaders() }, body: JSON.stringify({ username, password }),
   })))
 }
 
@@ -109,8 +130,7 @@ export async function changeUserPassword(currentPassword: string, nextPassword: 
 
 export async function userApi(path: string, options: RequestInit = {}) {
   const headers = new Headers(options.headers)
-  const token = userToken()
-  if (token) headers.set('Authorization', `Bearer ${token}`)
+  for (const [name, value] of Object.entries(authHeaders())) headers.set(name, value)
   const res = await fetch(path, { ...options, headers, cache: 'no-store' })
   if (res.status === 401) {
     localStorage.removeItem(TOKEN_KEY)
