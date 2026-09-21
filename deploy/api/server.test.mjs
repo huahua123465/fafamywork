@@ -227,7 +227,7 @@ describe('分享积分与管理员控制', () => {
     const me = await (await fetch(`${base}/api/auth/me`, { headers: { Authorization: `Bearer ${sharerToken}` } })).json()
     const body = { referralCode: me.user.referralCode, projectSlug: 'smart-todo' }
     const self = await fetch(`${base}/api/shares/visit`, json('POST', body, { Authorization: `Bearer ${sharerToken}`, 'User-Agent': 'Mozilla/5.0', 'X-Forwarded-For': '10.30.2.1' }))
-    expect(await self.json()).toEqual({ eligible: false })
+    expect(await self.json()).toEqual({ eligible: false, reason: 'self' })
     const bot = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Googlebot', 'X-Forwarded-For': '10.30.2.2' }))
     expect(await bot.json()).toEqual({ eligible: false })
   })
@@ -240,10 +240,10 @@ describe('分享积分与管理员控制', () => {
     const body = { referralCode: user.referralCode, projectSlug: 'smart-todo' }
     // 同一网络，换浏览器（新 UA、没有设备号、未登录）
     const sameNetwork = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0 Other Browser', 'X-Forwarded-For': '10.30.4.1' }))
-    expect(await sameNetwork.json()).toEqual({ eligible: false })
+    expect(await sameNetwork.json()).toEqual({ eligible: false, reason: 'self' })
     // 同一浏览器（设备号相同），切到手机流量
     const sameDevice = await fetch(`${base}/api/shares/visit`, json('POST', body, { 'User-Agent': 'Mozilla/5.0', 'X-Forwarded-For': '10.99.0.1', 'X-Device-Id': 'sharer-device-0001' }))
-    expect(await sameDevice.json()).toEqual({ eligible: false })
+    expect(await sameDevice.json()).toEqual({ eligible: false, reason: 'self' })
   })
 
   it('访问开始后分享者才在同一网络登录，确认时拒绝', async () => {

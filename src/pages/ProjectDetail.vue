@@ -14,6 +14,7 @@ import { describeTechnology } from '../content/technology'
 import PurchaseGuide from '../components/PurchaseGuide.vue'
 import BuyingSummary from '../components/BuyingSummary.vue'
 import ShareDialog from '../components/ShareDialog.vue'
+import ReferralBadge from '../components/ReferralBadge.vue'
 import { trackReferralVisit } from '../utils/sharing'
 const route = useRoute(),
   router = useRouter()
@@ -240,6 +241,6 @@ function closePreview() {
         <span>{{ project.price || site.priceNote || '价格与交付范围请咨询' }}</span>
       </div>
       <button class="button small" @click="openContact">咨询这个项目</button>
-    </div><ShareDialog :open="shareOpen" :project="project" @close="shareOpen = false" /></template
+    </div><ShareDialog :open="shareOpen" :project="project" @close="shareOpen = false" /><ReferralBadge /></template
   ><NotFound v-else />
 </template>

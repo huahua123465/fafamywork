@@ -587,7 +587,9 @@ const server = http.createServer(async (req, res) => {
     try { body = await readBody(req, 4 * 1024) } catch { return send(res, 400, { error: '请求格式错误' }) }
     const currentUser = accounts.authenticate(bearer(req), marks)
     const result = accounts.beginVisit(body.referralCode, body.projectSlug, { visitor: visitorHash(ip, ua), ...marks }, currentUser?.id)
-    if (!result || result.rejected) return send(res, 200, { eligible: false })
+    // 本人访问告诉前端原因（访客页会显示「不计积分」），爬虫、限速等情况不解释
+    if (!result) return send(res, 200, { eligible: false })
+    if (result.rejected) return send(res, 200, { eligible: false, reason: result.reason })
     return send(res, 201, { eligible: true, ...result })
   }
 

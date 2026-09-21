@@ -353,8 +353,8 @@ function createAccountStore(filename) {
       const sharer = db.prepare('SELECT * FROM users WHERE referral_code = ?').get(String(referralCode || '').toUpperCase())
       const settings = publicSettings()
       if (!settings.sharingEnabled || !sharer || sharer.status !== 'active') return null
-      if (currentUserId && Number(currentUserId) === Number(sharer.id)) return { rejected: true }
-      if (isSharerOwn(sharer.id, visitor.network, visitor.device)) return { rejected: true }
+      if (currentUserId && Number(currentUserId) === Number(sharer.id)) return { rejected: true, reason: 'self' }
+      if (isSharerOwn(sharer.id, visitor.network, visitor.device)) return { rejected: true, reason: 'self' }
       const slug = String(projectSlug || '').trim()
       if (!/^[a-z0-9-]{1,60}$/.test(slug)) return null
       const visitToken = `visit_${crypto.randomBytes(24).toString('base64url')}`

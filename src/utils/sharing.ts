@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import { authHeaders, userApi } from './user-session'
 import { copyText } from './clipboard'
 import { projects } from '../content/projects'
@@ -23,6 +24,22 @@ export function rewardShareUrl(offer: ShareOffer) {
   return url.toString()
 }
 
+/** 访客通过专属链接打开时的计分进度，详情页右下角的计时条读取它 */
+export type ReferralState =
+  | { phase: 'counting'; total: number; remaining: number; interacted: boolean }
+  | { phase: 'submitting' }
+  | { phase: 'rewarded'; points: number }
+  | { phase: 'not_counted'; message: string }
+export const referralState = ref<ReferralState | null>(null)
+
+const NOT_COUNTED: Record<string, string> = {
+  self: '这是分享者本人的网络或设备，自己打开不计积分。',
+  duplicate: '这个网络或设备近期已经为 TA 计过分，这次不重复计算。',
+  daily_limit: '分享者今天的奖励次数已满，这次不计积分。',
+  disabled: '分享积分活动已暂停。',
+}
+const notCounted = (reason: unknown) => ({ phase: 'not_counted' as const, message: NOT_COUNTED[String(reason)] || '这次访问没有计入积分。' })
+
 export function trackReferralVisit(projectSlug: string, referralCode: unknown) {
   const ref = String(referralCode || '').trim().toUpperCase()
   if (!ref || !/^[A-Z0-9]{6,8}$/.test(ref)) return () => undefined
@@ -30,35 +47,65 @@ export function trackReferralVisit(projectSlug: string, referralCode: unknown) {
   let ready = false
   let interacted = false
   let submitted = false
-  let timer: ReturnType<typeof setTimeout> | undefined
+  let stopped = false
+  let tick: ReturnType<typeof setInterval> | undefined
+  const set = (state: ReferralState | null) => { if (!stopped) referralState.value = state }
 
   const qualify = async () => {
     if (submitted || !ready || !interacted || !visitToken) return
     submitted = true
-    await fetch('/api/shares/qualify', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ visitToken, interacted: true }), keepalive: true,
-    }).catch(() => undefined)
+    set({ phase: 'submitting' })
+    try {
+      const res = await fetch('/api/shares/qualify', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ visitToken, interacted: true }), keepalive: true,
+      })
+      const data = await res.json()
+      set(data.rewarded ? { phase: 'rewarded', points: Number(data.points) || 0 } : notCounted(data.reason))
+    } catch {
+      set(notCounted(''))
+    }
   }
-  const interaction = () => { interacted = true; void qualify() }
-  window.addEventListener('scroll', interaction, { passive: true, once: true })
-  window.addEventListener('click', interaction, { passive: true, once: true })
-  window.addEventListener('keydown', interaction, { once: true })
+  const interaction = () => {
+    if (interacted) return
+    interacted = true
+    const current = referralState.value
+    if (current?.phase === 'counting') set({ ...current, interacted: true })
+    void qualify()
+  }
+  // iOS 上点空白处不会冒泡 click，补 touchstart
+  const events = ['scroll', 'click', 'keydown', 'touchstart'] as const
+  events.forEach((name) => window.addEventListener(name, interaction, { passive: true }))
 
   void fetch('/api/shares/visit', {
     method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify({ referralCode: ref, projectSlug }),
   }).then((res) => res.json()).then((data) => {
-    if (!data.eligible) return
+    if (!data.eligible) {
+      if (data.reason) set(notCounted(data.reason))
+      return
+    }
     visitToken = data.visitToken
-    timer = setTimeout(() => { ready = true; void qualify() }, Math.max(0, Number(data.qualificationSeconds) || 15) * 1000)
+    const total = Math.max(0, Number(data.qualificationSeconds) || 15)
+    const deadline = Date.now() + total * 1000
+    const update = () => {
+      const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
+      if (!submitted) set({ phase: 'counting', total, remaining, interacted })
+      if (remaining === 0) {
+        clearInterval(tick)
+        ready = true
+        void qualify()
+      }
+    }
+    update()
+    tick = setInterval(update, 250)
   }).catch(() => undefined)
 
   return () => {
-    clearTimeout(timer)
-    window.removeEventListener('scroll', interaction)
-    window.removeEventListener('click', interaction)
-    window.removeEventListener('keydown', interaction)
+    stopped = true
+    clearInterval(tick)
+    events.forEach((name) => window.removeEventListener(name, interaction))
+    referralState.value = null
   }
 }
 
